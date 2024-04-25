@@ -7,6 +7,11 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <TextBox HorizontalAlignment="Left" Margin="320,81,0,0" TextWrapping="Wrap" Text="käytäjätunnus" VerticalAlignment="Top" Width="120" Name="userName"/>
+        <TextBox HorizontalAlignment="Left" Margin="320,126,0,0" TextWrapping="Wrap" Text="Salasanaa" VerticalAlignment="Top" Width="120" Name="Pass"/>
+        <Button Content="Kirjoudu" HorizontalAlignment="Left" Margin="330,169,0,0" VerticalAlignment="Top" Width="100" Click="makeconnetion"/>
+
+
+
     </Grid>
 </Window>

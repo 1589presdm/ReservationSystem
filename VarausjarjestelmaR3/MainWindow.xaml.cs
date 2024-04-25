@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySqlConnector;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,15 +15,51 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace VarausjarjestelmaR3
-{
+    {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {
-        public MainWindow()
         {
+        private string connectionString = "Server=127.0.0.1; Port=3306; User ID=opiskelija; Pwd=opiskelija1; Database=varausjärjestelmä;";
+
+
+        public MainWindow ()
+            {
             InitializeComponent();
-        }
+            }
+
+        private void makeconnetion (object sender, RoutedEventArgs e)
+            {
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+                {
+                connection.Open();
+                string query = "select * from users where userName = @user and passwordf = @pass";
+                MySqlCommand mySqlCommand = new MySqlCommand(query, connection);
+                mySqlCommand.Parameters.AddWithValue("@user", userName.Text);
+                mySqlCommand.Parameters.AddWithValue("@pass", Pass.Text);
+
+                try
+                    {
+                    var Reader = mySqlCommand.ExecuteReader();
+                    Reader.Read();
+                        {
+                        string user = Reader.GetString("userName");
+                        string pass = Reader.GetString("passwordf");
+
+                        if (user == userName.Text && pass == Pass.Text)
+                            {
+                            MessageBox.Show("hello " + user);
+                            }
+                        }
+                    }
+
+                catch
+                    {
+                    MessageBox.Show("ei ole oikein ");
+                    }
+                }
+
+            }
+        } 
     }
-}
