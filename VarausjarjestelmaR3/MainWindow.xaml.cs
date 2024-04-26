@@ -29,10 +29,23 @@ namespace VarausjarjestelmaR3
             InitializeComponent();
             }
 
-        private void makeconnetion (object sender, RoutedEventArgs e)
-            {
+        /// <summary>
+        /// Väliaikainen "ohita kirjautuminen", poistetaan myöhemmin
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void LoginBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+            MainView main = new MainView();
+            main.Show();
+            this.Close();
+        }
+
+        private void makeconnetion(object sender, RoutedEventArgs e)
+        {
             using (MySqlConnection connection = new MySqlConnection(connectionString))
-                {
+            {
                 connection.Open();
                 string query = "select * from users where userName = @user and passwordf = @pass";
                 MySqlCommand mySqlCommand = new MySqlCommand(query, connection);
@@ -40,26 +53,26 @@ namespace VarausjarjestelmaR3
                 mySqlCommand.Parameters.AddWithValue("@pass", Pass.Text);
 
                 try
-                    {
+                {
                     var Reader = mySqlCommand.ExecuteReader();
                     Reader.Read();
-                        {
+                    {
                         string user = Reader.GetString("userName");
                         string pass = Reader.GetString("passwordf");
 
                         if (user == userName.Text && pass == Pass.Text)
-                            {
+                        {
                             MessageBox.Show("hello " + user);
-                            }
                         }
-                    }
-
-                catch
-                    {
-                    MessageBox.Show("ei ole oikein ");
                     }
                 }
 
+                catch
+                {
+                    MessageBox.Show("ei ole oikein ");
+                }
             }
-        } 
+
+        }
+    } 
     }

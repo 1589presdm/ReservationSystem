@@ -1,0 +1,120 @@
+﻿<Window x:Class="VarausjarjestelmaR3.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VarausjarjestelmaR3"
+        mc:Ignorable="d"
+        Title="Varausjärjestelmä" Height="500" Width="850">
+    <Window.Resources>
+        <Style x:Key="MyButton" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" BorderThickness="0" BorderBrush="Black" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.8" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+	
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="4*"/>
+        </Grid.ColumnDefinitions>
+
+		<!--Tee varaus painike-->
+        <StackPanel>
+            <Button Margin="10,0,10,0" Background="White" BorderThickness="0" Style="{StaticResource MyButton}" Click="MakeAReservationBtn_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="icons/booking.png" Width="25" Height="25">
+                        <Image.Effect>
+                            <DropShadowEffect Opacity="0.1" BlurRadius="3" ShadowDepth="2"/>
+                        </Image.Effect>
+                    </Image>
+                    <Label Content="Tee varaus" FontSize="15" FontWeight="Medium" Margin="5,10,10,10"/>
+                </StackPanel>
+            </Button>
+
+			<!--Varaukset painike-->
+            <Button Margin="10,0,10,0" Background="White" BorderThickness="0" Style="{StaticResource MyButton}" Click="ReservationsBtn_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="icons/reservation.png" Width="25" Height="25">
+                        <Image.Effect>
+                            <DropShadowEffect Opacity="0.1" BlurRadius="3" ShadowDepth="2"/>
+                        </Image.Effect>
+                    </Image>
+                    <Label Content="Varaukset" FontSize="15" FontWeight="Medium" Margin="5,10,10,10"/>
+                </StackPanel>
+            </Button>
+
+			<!--Toimipisteet painike-->
+            <Button Margin="10,0,10,0" Background="White" BorderThickness="0" Style="{StaticResource MyButton}" Click="OfficesBtn_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="icons/office.png" Width="25" Height="25">
+                        <Image.Effect>
+                            <DropShadowEffect Opacity="0.1" BlurRadius="3" ShadowDepth="2"/>
+                        </Image.Effect>
+                    </Image>
+                    <Label Content="Toimipisteet" FontSize="15" FontWeight="Medium" Margin="5,10,10,10"/>
+                </StackPanel>
+            </Button>
+
+			<!--Palvelut painike-->
+            <Button Margin="10,0,10,0" Background="White" BorderThickness="0" Style="{StaticResource MyButton}" Click="ServicesBtn_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="icons/service.png" Width="25" Height="25">
+                        <Image.Effect>
+                            <DropShadowEffect Opacity="0.1" BlurRadius="3" ShadowDepth="2"/>
+                        </Image.Effect>
+                    </Image>
+                    <Label Content="Palvelut" FontSize="15" FontWeight="Medium" Margin="5,10,10,10"/>
+                </StackPanel>
+            </Button>
+
+			<!--Asiakkaat painike-->
+            <Button Margin="10,0,10,0" Background="White" BorderThickness="0" Style="{StaticResource MyButton}" Click="CustomersBtn_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="icons/customers.png" Width="25" Height="25">
+                        <Image.Effect>
+                            <DropShadowEffect Opacity="0.1" BlurRadius="3" ShadowDepth="2"/>
+                        </Image.Effect>
+                    </Image>
+                    <Label Content="Asiakkaat" FontSize="15" FontWeight="Medium" Margin="5,10,10,10"/>
+                </StackPanel>
+            </Button>
+
+			<!--Laskut painike-->
+            <Button Margin="10,0,10,0" Background="White" BorderThickness="0" Style="{StaticResource MyButton}" Click="InvoicesBtn_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="icons/invoices.png" Width="25" Height="25">
+                        <Image.Effect>
+                            <DropShadowEffect Opacity="0.1" BlurRadius="3" ShadowDepth="2"/>
+                        </Image.Effect>
+                    </Image>
+                    <Label Content="Laskut" FontSize="15" FontWeight="Medium" Margin="5,10,10,10"/>
+                </StackPanel>
+            </Button>
+
+        </StackPanel>
+
+        
+
+
+
+        <ContentControl x:Name="contentControl" Grid.Column="1"/>
+
+
+
+    </Grid>
+</Window>

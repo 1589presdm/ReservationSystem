@@ -1,0 +1,77 @@
+﻿<UserControl x:Class="VarausjarjestelmaR3.MakeAReservation"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VarausjarjestelmaR3"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="7*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" >
+            <ComboBox Margin="50,40,10,50" Height="25">
+                <ComboBoxItem Content="Paikkakunta" IsSelected="True"/>
+            </ComboBox>
+            <Label Content="Mistä" Margin="0,40,0,50"/>
+            <DatePicker Margin="0,40,10,50" Height="25"/>
+            <Label Content="Mihin" Margin="0,40,0,50"/>
+            <DatePicker Margin="0,40,20,50" Height="25"/>
+            <Button Content="Etsi" Margin="0,40,0,50" Width="40" Height="25"/>
+        </StackPanel>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <ListBox>
+                <ListBoxItem>
+                    <TextBlock Text="Tila1"/>
+                </ListBoxItem>
+                <ListBoxItem>
+                    <TextBlock Text="Tila2"/>
+                </ListBoxItem>
+                <ListBoxItem>
+                    <TextBlock Text="Tila3"/>
+                </ListBoxItem>
+            </ListBox>
+
+            <ListBox Grid.Column="1">
+                <ListBoxItem>
+                    <CheckBox>
+                        <TextBlock Text="Laite"/>
+                    </CheckBox>
+                </ListBoxItem>
+                <ListBoxItem>
+                    <CheckBox>
+                        <TextBlock Text="Laite2"/>
+                    </CheckBox>
+                </ListBoxItem>
+            </ListBox>
+
+            <ListBox Grid.Column="2">
+                <ListBoxItem >
+                    <CheckBox>
+                        <TextBlock Text="Palvelu"/>
+                    </CheckBox>
+                </ListBoxItem>
+                <ListBoxItem>
+                    <CheckBox>
+                        <TextBlock Text="Palvelu2"/>
+                    </CheckBox>
+                </ListBoxItem>
+            </ListBox>
+        </Grid>
+        
+        <Button Grid.Row="3" Content="Varaa" HorizontalAlignment="Right" Width="70" Margin="10"/>
+        
+    </Grid>
+</UserControl>
