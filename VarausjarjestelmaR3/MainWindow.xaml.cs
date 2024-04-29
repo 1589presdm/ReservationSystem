@@ -48,7 +48,7 @@ namespace VarausjarjestelmaR3
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 connection.Open();
-                string query = "select kayttajaID, salasana from tyontekija where kayttajaID = @user and salasana = @pass";
+                string query = "select kayttajaID, salasana, kaytto_oikeus from tyontekija where kayttajaID = @user and salasana = @pass";
                 MySqlCommand mySqlCommand = new MySqlCommand(query, connection);
                 mySqlCommand.Parameters.AddWithValue("@user", userName.Text);
                 mySqlCommand.Parameters.AddWithValue("@pass", Pass.Text);
@@ -61,10 +61,13 @@ namespace VarausjarjestelmaR3
                     {
                         string user = Reader.GetString("kayttajaID");
                         string pass = Reader.GetString("salasana");
-
+                        int Access = Reader.GetInt32("kaytto_oikeus");
                         if (user == userName.Text && pass == Pass.Text)
                         {
-                            mainView.ShowDialog();  
+                            this.Close();
+                            mainView.check_user(Access);
+                            mainView.ShowDialog();
+                            
                         }
                     }
                 }

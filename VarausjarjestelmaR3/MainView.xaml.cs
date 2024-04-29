@@ -54,5 +54,19 @@ namespace VarausjarjestelmaR3
             contentControl.Content = new Invoices();
         }
 
-    }
+
+        public void check_user (int Access)
+            {
+            if(Access == 1)
+                {
+                Acces.Visibility = Visibility.Visible;
+                }
+            else if(Access == 2)
+                {
+                Acces.Visibility = Visibility.Collapsed;
+                }
+
+            }
+        }
+
 }
