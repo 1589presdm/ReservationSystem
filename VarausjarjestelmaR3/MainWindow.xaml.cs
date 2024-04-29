@@ -21,7 +21,8 @@ namespace VarausjarjestelmaR3
     /// </summary>
     public partial class MainWindow : Window
         {
-        private string connectionString = "Server=127.0.0.1; Port=3306; User ID=opiskelija; Pwd=opiskelija1; Database=varausjärjestelmä;";
+        private string connectionString = "Server=127.0.0.1; Port=3306; User ID=opiskelija; Pwd=opiskelija1; Database=vuokratoimistot;";
+        private MainView mainView = new MainView();
 
 
         public MainWindow ()
@@ -47,29 +48,30 @@ namespace VarausjarjestelmaR3
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 connection.Open();
-                string query = "select * from users where userName = @user and passwordf = @pass";
+                string query = "select kayttajaID, salasana from tyontekija where kayttajaID = @user and salasana = @pass";
                 MySqlCommand mySqlCommand = new MySqlCommand(query, connection);
                 mySqlCommand.Parameters.AddWithValue("@user", userName.Text);
                 mySqlCommand.Parameters.AddWithValue("@pass", Pass.Text);
+                var Reader = mySqlCommand.ExecuteReader();
 
                 try
                 {
-                    var Reader = mySqlCommand.ExecuteReader();
+
                     Reader.Read();
                     {
-                        string user = Reader.GetString("userName");
-                        string pass = Reader.GetString("passwordf");
+                        string user = Reader.GetString("kayttajaID");
+                        string pass = Reader.GetString("salasana");
 
                         if (user == userName.Text && pass == Pass.Text)
                         {
-                            MessageBox.Show("hello " + user);
+                            mainView.ShowDialog();  
                         }
                     }
                 }
 
                 catch
                 {
-                    MessageBox.Show("ei ole oikein ");
+                    MessageBox.Show("Käyttäjätunnus tai salasana on väärin ");
                 }
             }
 

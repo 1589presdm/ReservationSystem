@@ -15,7 +15,7 @@
         <StackPanel Grid.Row="1" Grid.Column="1">
             <Label Content="Kirjaudu sisään" Margin="88,10,50,10" />
             <Label Content="Käyttäjätunnus" Margin="88,10,80,0"/>
-            <TextBox Name="userName" Width="250" Height="25"/>
+            <TextBox Name="userName" Width="250" Height="25" />
             <Label Content="Salasana" Margin="88,10,80,0"/>
             <TextBox Name="Pass" Width="250" Height="25"/>
             <Button Content="Kirjaudu" Margin="10" Height="25" Width="250" Click="makeconnetion"/>
