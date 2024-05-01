@@ -5,15 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VarausjarjestelmaR3"
         mc:Ignorable="d"
-        Title="MainWindow" Height="300" Width="450">
+        Title="Kirjautuminen" Height="300" Width="450">
     <Grid>
         <!--  <TextBox HorizontalAlignment="Left" Margin="320,81,0,0" TextWrapping="Wrap" Text="käytäjätunnus" VerticalAlignment="Top" Width="120" Name="userName"/>-->
         <!--<TextBox HorizontalAlignment="Left" Margin="320,126,0,0" TextWrapping="Wrap" Text="Salasanaa" VerticalAlignment="Top" Width="120" Name="Pass"/>-->
        <!-- <Button Content="Kirjoudu" HorizontalAlignment="Left" Margin="330,169,0,0" VerticalAlignment="Top" Width="100" Click="makeconnetion"/> -->
 
         <!--Sisäänkirjautuminen-->
+        <GroupBox Header="Kirjaudu sisään">
         <StackPanel Grid.Row="1" Grid.Column="1">
-            <Label Content="Kirjaudu sisään" Margin="88,10,50,10" />
+            <!--<Label Content="Kirjaudu sisään" Margin="88,10,50,10" />-->
             <Label Content="Käyttäjätunnus" Margin="88,10,80,0"/>
             <TextBox Name="userName" Width="250" Height="25" />
             <Label Content="Salasana" Margin="88,10,80,0"/>
@@ -23,6 +24,7 @@
             <Button Content="Ohita kirjautuminen" Click="LoginBtn_Click"/>
 
         </StackPanel>
+        </GroupBox>
 
     </Grid>
 </Window>
