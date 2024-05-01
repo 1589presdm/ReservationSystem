@@ -81,6 +81,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\Company.cs" />
+    <Compile Include="Classes\Customer.cs" />
+    <Compile Include="Classes\Employee.cs" />
+    <Compile Include="Classes\Invoice.cs" />
+    <Compile Include="Classes\Office.cs" />
+    <Compile Include="Classes\Reservation.cs" />
+    <Compile Include="Classes\Room.cs" />
+    <Compile Include="Classes\Service.cs" />
     <Compile Include="Customers.xaml.cs" />
     <Compile Include="Invoices.xaml.cs">
       <DependentUpon>Invoices.xaml</DependentUpon>
@@ -167,5 +175,6 @@
     <Resource Include="Icons\reservation.png" />
     <Resource Include="Icons\service.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
