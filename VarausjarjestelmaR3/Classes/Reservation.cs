@@ -25,6 +25,6 @@ namespace VarausjarjestelmaR3.Classes
         public int PalveluvarausID { get; set; }
         public Service Palvelu {  get; set; }
         public int Kpl {  get; set; }
-        public Reservation Varaus { get; set; }
+        public int VarausID { get; set; }
     }
 }
