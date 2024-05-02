@@ -42,6 +42,8 @@ namespace VarausjarjestelmaR3
 
 
         //Metodeja tietojen hakuun tietokannasta; toiminta vielä paljolti testaamatta.
+
+        //Haetaan yritys ID-numeron perusteella:
         public Company GetCompany(int yritysID)
         {
             Company yritys = new Company();
@@ -72,7 +74,8 @@ namespace VarausjarjestelmaR3
                 return yritys;
             }
         }
-
+        
+        //Haetaan kaikki tietokannassa olevat yritykset listalle:
         public ObservableCollection<Company> GetAllCompanies()
         {
             var yritykset = new ObservableCollection<Company>();
@@ -102,6 +105,7 @@ namespace VarausjarjestelmaR3
             return yritykset;
         }
 
+        //Haetaan toimipiste ID-numeron perusteella:
         public Office GetOffice(int toimipisteID)
         {
             Office toimipiste = new Office();
@@ -134,6 +138,7 @@ namespace VarausjarjestelmaR3
             }
         }
 
+        //Haetaan kaikki toimipisteet listalle:
         public ObservableCollection<Office> GetAllOffices()
         {
             var toimipisteet = new ObservableCollection<Office>();
@@ -165,6 +170,7 @@ namespace VarausjarjestelmaR3
             return toimipisteet;
         }
 
+        //Haetaan vuokrattava huone ID-numeron perusteella:
         public Room GetRoom(int huoneID)
         {
             Room huone = new Room();
@@ -195,6 +201,7 @@ namespace VarausjarjestelmaR3
             }
         }
 
+        //Haetaan kaikki vuokrattavat huoneet listalle:
         public ObservableCollection<Room> GetAllRooms()
         {
             var huoneet = new ObservableCollection<Room>();
@@ -224,6 +231,7 @@ namespace VarausjarjestelmaR3
             return huoneet;
         }
 
+        //Haetaan palvelu ID-numeron perusteella:
         public Service GetService(int palveluID)
         {
             Service palvelu = new Service();
@@ -254,6 +262,7 @@ namespace VarausjarjestelmaR3
             return palvelu;
         }
 
+        //Haetaan kaikki palvelut listalle:
         public ObservableCollection<Service> GetAllServices()
         {
             var palvelut = new ObservableCollection<Service>();
@@ -283,6 +292,7 @@ namespace VarausjarjestelmaR3
             return palvelut;
         }
 
+        //Haetaan työntekijä ID-numeron perusteella:
         public Employee GetEmployee(int tyontekijaID)
         {
             Employee tyontekija = new Employee();
@@ -315,6 +325,7 @@ namespace VarausjarjestelmaR3
             return tyontekija;
         }
 
+        //Haetaan kaikki työntekijät listalle:
         public ObservableCollection<Employee> GetAllEmployees()
         {
             var tyontekijat = new ObservableCollection<Employee>();
@@ -346,6 +357,7 @@ namespace VarausjarjestelmaR3
             return tyontekijat;
         }
 
+        //Haetaan asiakas ID-numeron perusteella:
         public Customer GetCustomer(int asiakasID)
         {
             Customer asiakas = new Customer();
@@ -377,6 +389,7 @@ namespace VarausjarjestelmaR3
             }
         }
 
+        //Haetaan kaikki asiakkaat listalle:
         public ObservableCollection<Customer> GetAllCustomers()
         {
             var asiakkaat = new ObservableCollection<Customer>();
@@ -407,6 +420,7 @@ namespace VarausjarjestelmaR3
             return asiakkaat;
         }
 
+        //Haetaan varaus ID-numeron perusteella:
         public Reservation GetReservation(int varausID)
         {
             Reservation varaus = new Reservation();
@@ -440,6 +454,7 @@ namespace VarausjarjestelmaR3
             }
         }
 
+        //Haetaan kaikki varauksen palvelut listalle:
         public ObservableCollection<ReservationServices> GetReservationServices(int varausID)
         {
             var varauksenPalvelut = new ObservableCollection<ReservationServices>();
@@ -469,6 +484,7 @@ namespace VarausjarjestelmaR3
             }
         }
 
+        //Haetaan kaikki varaukset listalle:
         public ObservableCollection<Reservation> GetAllReservations()
         {
             var varaukset = new ObservableCollection<Reservation>();
@@ -500,6 +516,7 @@ namespace VarausjarjestelmaR3
             return varaukset;
         }
 
+        //Haetaan lasku ID-numeron perusteella:
         public Invoice GetInvoice(int laskunumero)
         {
             Invoice lasku = new Invoice();
@@ -531,6 +548,7 @@ namespace VarausjarjestelmaR3
             }
         }
 
+        //Haetaan kaikki laskut listalle:
         public ObservableCollection<Invoice> GetAllInvoices()
         {
             var laskut = new ObservableCollection<Invoice>();

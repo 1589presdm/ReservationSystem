@@ -1,18 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using VarausjarjestelmaR3.Classes;
 
 namespace VarausjarjestelmaR3
@@ -22,44 +11,49 @@ namespace VarausjarjestelmaR3
     /// </summary>
     public partial class Reservations : UserControl
     {
+        Repository repo;
+        ObservableCollection<Reservation> varaukset;
+        ObservableCollection<Reservation> menneet;
+        ObservableCollection<Reservation> nykyiset;
+        ObservableCollection<Reservation> tulevat;
+
         public Reservations()
         {
             InitializeComponent();
 
             Repository repo = new Repository();
+            
+            varaukset = repo.GetAllReservations();
 
-            var varaukset = repo.GetAllReservations();
+            menneet = new ObservableCollection<Reservation>();
+            nykyiset = new ObservableCollection<Reservation>(); 
+            tulevat = new ObservableCollection<Reservation>();
 
-            dgVaraukset.DataContext = varaukset;
-            dgVaraukset.ItemsSource = varaukset;
+            OrganiseReservationsByTime(varaukset);
 
-            //Repository-metodien testailua:
-            //int yritysID = 1;
-            //int toimipisteID = 1;
-            //int huoneID = 1;
-            //int palveluID = 1;
-            //int tyontekijaID = 1;
-            //int asiakasID = 1;
-            //int varausID = 1;
-            //int laskunumero = 1;
+            lvMenneetVaraukset.ItemsSource = menneet;
+            lvNytVaraukset.ItemsSource = nykyiset;
+            lvTulevatVaraukset.ItemsSource = tulevat;
+        }
 
-            //repo.GetCompany(yritysID);
-            //repo.GetAllCompanies();
-            //repo.GetOffice(toimipisteID);
-            //repo.GetAllOffices();
-            //repo.GetRoom(huoneID);
-            //repo.GetAllRooms();
-            //repo.GetService(palveluID);
-            //repo.GetAllServices();
-            //repo.GetEmployee(tyontekijaID);
-            //repo.GetAllEmployees();
-            //repo.GetCustomer(asiakasID);
-            //repo.GetAllCustomers();
-            //repo.GetReservation(varausID);
-            //repo.GetReservationServices(varausID);
-            //repo.GetAllReservations();
-            //repo.GetInvoice(laskunumero);
-            //repo.GetAllInvoices();
+        //Lajitellaan varaukset päivämäärien mukaan menneisiin, nykyisiin ja tuleviin:
+        public void OrganiseReservationsByTime(ObservableCollection<Reservation> varaukset)
+        {
+            foreach (var varaus in varaukset)
+            {
+                if (varaus.VarausPaattyy < DateTime.Now)
+                {
+                    menneet.Add(varaus);
+                } else if (varaus.VarausAlkaa <= DateTime.Now && varaus.VarausPaattyy >= DateTime.Now) {
+                    nykyiset.Add(varaus);
+                } else if (varaus.VarausAlkaa > DateTime.Now)
+                {
+                    tulevat.Add(varaus);
+                } else
+                {
+                    MessageBox.Show("Tapahtui virhe.");
+                }
+            }
         }
     }
 }

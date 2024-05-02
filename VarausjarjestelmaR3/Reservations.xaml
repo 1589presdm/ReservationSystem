@@ -7,58 +7,115 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
+        
+        <!--Omissa välilehdissään menneet, tämänhetkiset ja tulevat varaukset.-->
+        
+        <TabControl>
+            <TabItem Header="Menneet varaukset">
+                <ListView Grid.Column="0" Grid.Row="0" Name="lvMenneetVaraukset">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                            <Setter Property="BorderBrush" Value="LightGray"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="ID" DisplayMemberBinding="{Binding VarausID}" />
+                            <GridViewColumn Header="Varaus alkaa" DisplayMemberBinding="{Binding VarausAlkaa, StringFormat={}{0:dd.MM.yyyy}}" />
+                            <GridViewColumn Header="Varaus päättyy" DisplayMemberBinding="{Binding VarausPaattyy, StringFormat={}{0:dd.MM.yyyy}}" />
+                            <GridViewColumn Header="Varauspäivä" DisplayMemberBinding="{Binding Varauspaiva, StringFormat={}{0:dd.MM.yyyy}}" />
+                            <GridViewColumn Header="Lisätiedot" DisplayMemberBinding="{Binding Lisatiedot}" />
+                            <GridViewColumn Header="Asiakas" DisplayMemberBinding="{Binding Asiakas.Nimi}" />
+                            <GridViewColumn Header="Varauksen palvelut" Width="150">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ListView ItemsSource="{Binding VarauksenPalvelut}">
+                                            <ListView.View>
+                                                <GridView>
+                                                    <GridViewColumn Header="Palvelu" DisplayMemberBinding="{Binding Palvelu.Tuote}" Width="95" />
+                                                    <GridViewColumn Header="Kpl" DisplayMemberBinding="{Binding Kpl}" Width="30" />
+                                                </GridView>
+                                            </ListView.View>
+                                        </ListView>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </TabItem>
+            
+            <TabItem Header="Nyt varattuna">
+                <ListView Grid.Column="0" Grid.Row="0" Name="lvNytVaraukset">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                            <Setter Property="BorderBrush" Value="LightGray"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="ID" DisplayMemberBinding="{Binding VarausID}" />
+                            <GridViewColumn Header="Varaus alkaa" DisplayMemberBinding="{Binding VarausAlkaa, StringFormat={}{0:dd.MM.yyyy}}" />
+                            <GridViewColumn Header="Varaus päättyy" DisplayMemberBinding="{Binding VarausPaattyy, StringFormat={}{0:dd.MM.yyyy}}" />
+                            <GridViewColumn Header="Varauspäivä" DisplayMemberBinding="{Binding Varauspaiva, StringFormat={}{0:dd.MM.yyyy}}" />
+                            <GridViewColumn Header="Lisätiedot" DisplayMemberBinding="{Binding Lisatiedot}" />
+                            <GridViewColumn Header="Asiakas" DisplayMemberBinding="{Binding Asiakas.Nimi}" />
+                            <GridViewColumn Header="Varauksen palvelut" Width="150">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ListView ItemsSource="{Binding VarauksenPalvelut}">
+                                            <ListView.View>
+                                                <GridView>
+                                                    <GridViewColumn Header="Palvelu" DisplayMemberBinding="{Binding Palvelu.Tuote}" Width="95" />
+                                                    <GridViewColumn Header="Kpl" DisplayMemberBinding="{Binding Kpl}" Width="30" />
+                                                </GridView>
+                                            </ListView.View>
+                                        </ListView>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </TabItem>
 
-        <DataGrid Grid.Column="0" Grid.Row="0" AutoGenerateColumns="False" Name="dgVaraukset">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="VarausID" Binding="{Binding VarausID}" />
-                <DataGridTextColumn Header="Varaus alkaa" Binding="{Binding VarausAlkaa, StringFormat={}{0:dd.MM.yyyy}}" />
-                <DataGridTextColumn Header="Varaus päättyy" Binding="{Binding VarausPaattyy, StringFormat={}{0:dd.MM.yyyy}}" />
-                <DataGridTextColumn Header="Varauspäivä" Binding="{Binding Varauspaiva, StringFormat={}{0:dd.MM.yyyy}}" />
-                <DataGridTextColumn Header="Lisätiedot" Binding="{Binding Lisatiedot}" />
-                <DataGridTextColumn Header="Asiakas" Binding="{Binding Asiakas.Nimi}" />
-                <DataGridTemplateColumn Header="Varauksen palvelut" Width="150">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding VarauksenPalvelut}">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Palvelu" Binding="{Binding Palvelu.Tuote}" Width="100" />
-                                    <DataGridTextColumn Header="Kpl" Binding="{Binding Kpl}" Width="35" />
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
-
-
-        <!--Vaihtoehtoisesti voi kokeilla ListView-muodossa:-->
-        <!--<ListView Name="dgVaraukset">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="VarausID" DisplayMemberBinding="{Binding VarausID}" />
-                    <GridViewColumn Header="Varaus alkaa" DisplayMemberBinding="{Binding VarausAlkaa, StringFormat={}{0:dd.MM.yyyy}}" />
-                    <GridViewColumn Header="Varaus päättyy" DisplayMemberBinding="{Binding VarausPaattyy, StringFormat={}{0:dd.MM.yyyy}}" />
-                    <GridViewColumn Header="Varauspäivä" DisplayMemberBinding="{Binding Varauspaiva, StringFormat={}{0:dd.MM.yyyy}}" />
-                    <GridViewColumn Header="Lisätiedot" DisplayMemberBinding="{Binding Lisatiedot}" />
-                    <GridViewColumn Header="Asiakas" DisplayMemberBinding="{Binding Asiakas.Nimi}" />
-                    <GridViewColumn Header="Varauksen palvelut" Width="150">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <ListView ItemsSource="{Binding VarauksenPalvelut}">
-                                    <ListView.View>
-                                        <GridView>
-                                            <GridViewColumn Header="Palvelu" DisplayMemberBinding="{Binding Palvelu.Tuote}" Width="100" />
-                                            <GridViewColumn Header="Kpl" DisplayMemberBinding="{Binding Kpl}" Width="35" />
-                                        </GridView>
-                                    </ListView.View>
-                                </ListView>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>-->
-
+            <TabItem Header="Tulevat varaukset">
+                <ListView Grid.Column="0" Grid.Row="0" Name="lvTulevatVaraukset">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                            <Setter Property="BorderBrush" Value="LightGray"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="ID" DisplayMemberBinding="{Binding VarausID}" />
+                            <GridViewColumn Header="Varaus alkaa" DisplayMemberBinding="{Binding VarausAlkaa, StringFormat={}{0:dd.MM.yyyy}}" />
+                            <GridViewColumn Header="Varaus päättyy" DisplayMemberBinding="{Binding VarausPaattyy, StringFormat={}{0:dd.MM.yyyy}}" />
+                            <GridViewColumn Header="Varauspäivä" DisplayMemberBinding="{Binding Varauspaiva, StringFormat={}{0:dd.MM.yyyy}}" />
+                            <GridViewColumn Header="Lisätiedot" DisplayMemberBinding="{Binding Lisatiedot}" />
+                            <GridViewColumn Header="Asiakas" DisplayMemberBinding="{Binding Asiakas.Nimi}" />
+                            <GridViewColumn Header="Varauksen palvelut" Width="150">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ListView ItemsSource="{Binding VarauksenPalvelut}">
+                                            <ListView.View>
+                                                <GridView>
+                                                    <GridViewColumn Header="Palvelu" DisplayMemberBinding="{Binding Palvelu.Tuote}" Width="95" />
+                                                    <GridViewColumn Header="Kpl" DisplayMemberBinding="{Binding Kpl}" Width="30" />
+                                                </GridView>
+                                            </ListView.View>
+                                        </ListView>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </TabItem>
+        </TabControl>
+        
     </Grid>
 </UserControl>
