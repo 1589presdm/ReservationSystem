@@ -94,8 +94,14 @@
       <DependentUpon>Invoices.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainView.xaml.cs" />
+    <Compile Include="OffficeInfoList.xaml.cs">
+      <DependentUpon>OffficeInfoList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Offices.xaml.cs" />
     <Compile Include="Repository.cs" />
+    <Compile Include="RoomInfoList.xaml.cs">
+      <DependentUpon>RoomInfoList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Services.xaml.cs" />
     <Compile Include="MakeAReservation.cs" />
     <Compile Include="Reservations.xaml.cs" />
@@ -123,9 +129,17 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="OffficeInfoList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Offices.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RoomInfoList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Services.xaml">
       <Generator>MSBuild:Compile</Generator>
