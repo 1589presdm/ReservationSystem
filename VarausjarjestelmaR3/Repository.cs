@@ -74,7 +74,7 @@ namespace VarausjarjestelmaR3
                 return yritys;
             }
         }
-        
+
         //Haetaan kaikki tietokannassa olevat yritykset listalle:
         public ObservableCollection<Company> GetAllCompanies()
         {
