@@ -7,10 +7,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        
-        <!--Omissa välilehdissään menneet, tämänhetkiset ja tulevat varaukset.-->
-        
-        <TabControl>
+
+        <!--Omissa välilehdissään menneet, tämänhetkiset ja tulevat varaukset sekä varausten tarkastelu (tarkasteluun toteutetaan varauksen muokkaus/poisto).-->
+
+        <TabControl Name="tabControl">
             <TabItem Header="Menneet varaukset">
                 <ListView Grid.Column="0" Grid.Row="0" Name="lvMenneetVaraukset">
                     <ListView.ItemContainerStyle>
@@ -25,6 +25,7 @@
                             <GridViewColumn Header="Varaus alkaa" DisplayMemberBinding="{Binding VarausAlkaa, StringFormat={}{0:dd.MM.yyyy}}" />
                             <GridViewColumn Header="Varaus päättyy" DisplayMemberBinding="{Binding VarausPaattyy, StringFormat={}{0:dd.MM.yyyy}}" />
                             <GridViewColumn Header="Varauspäivä" DisplayMemberBinding="{Binding Varauspaiva, StringFormat={}{0:dd.MM.yyyy}}" />
+                            <GridViewColumn Header="Huone" DisplayMemberBinding="{Binding Huone.Nimi}" />
                             <GridViewColumn Header="Lisätiedot" DisplayMemberBinding="{Binding Lisatiedot}" />
                             <GridViewColumn Header="Asiakas" DisplayMemberBinding="{Binding Asiakas.Nimi}" />
                             <GridViewColumn Header="Varauksen palvelut" Width="150">
@@ -41,11 +42,19 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
+                            <GridViewColumn Header="Tarkastele" Width="80">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Name="Tarkastele" Content="Tarkastele" Click="Tarkastele_Click"  CommandParameter="{Binding}">
+                                        </Button>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                         </GridView>
                     </ListView.View>
                 </ListView>
             </TabItem>
-            
+
             <TabItem Header="Nyt varattuna">
                 <ListView Grid.Column="0" Grid.Row="0" Name="lvNytVaraukset">
                     <ListView.ItemContainerStyle>
@@ -60,6 +69,7 @@
                             <GridViewColumn Header="Varaus alkaa" DisplayMemberBinding="{Binding VarausAlkaa, StringFormat={}{0:dd.MM.yyyy}}" />
                             <GridViewColumn Header="Varaus päättyy" DisplayMemberBinding="{Binding VarausPaattyy, StringFormat={}{0:dd.MM.yyyy}}" />
                             <GridViewColumn Header="Varauspäivä" DisplayMemberBinding="{Binding Varauspaiva, StringFormat={}{0:dd.MM.yyyy}}" />
+                            <GridViewColumn Header="Huone" DisplayMemberBinding="{Binding Huone.Nimi}" />
                             <GridViewColumn Header="Lisätiedot" DisplayMemberBinding="{Binding Lisatiedot}" />
                             <GridViewColumn Header="Asiakas" DisplayMemberBinding="{Binding Asiakas.Nimi}" />
                             <GridViewColumn Header="Varauksen palvelut" Width="150">
@@ -73,6 +83,14 @@
                                                 </GridView>
                                             </ListView.View>
                                         </ListView>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Tarkastele" Width="80">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Name="Tarkastele" Content="Tarkastele" Click="Tarkastele_Click"  CommandParameter="{Binding}">
+                                        </Button>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -95,6 +113,7 @@
                             <GridViewColumn Header="Varaus alkaa" DisplayMemberBinding="{Binding VarausAlkaa, StringFormat={}{0:dd.MM.yyyy}}" />
                             <GridViewColumn Header="Varaus päättyy" DisplayMemberBinding="{Binding VarausPaattyy, StringFormat={}{0:dd.MM.yyyy}}" />
                             <GridViewColumn Header="Varauspäivä" DisplayMemberBinding="{Binding Varauspaiva, StringFormat={}{0:dd.MM.yyyy}}" />
+                            <GridViewColumn Header="Huone" DisplayMemberBinding="{Binding Huone.Nimi}" />
                             <GridViewColumn Header="Lisätiedot" DisplayMemberBinding="{Binding Lisatiedot}" />
                             <GridViewColumn Header="Asiakas" DisplayMemberBinding="{Binding Asiakas.Nimi}" />
                             <GridViewColumn Header="Varauksen palvelut" Width="150">
@@ -111,11 +130,56 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
+                            <GridViewColumn Header="Tarkastele" Width="80">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Name="Tarkastele" Content="Tarkastele" Click="Tarkastele_Click"  CommandParameter="{Binding}">
+                                        </Button>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                         </GridView>
                     </ListView.View>
                 </ListView>
             </TabItem>
+
+            <TabItem Header="Tarkastele varausta">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="200" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Column="0" Grid.Row="0">
+                        <Label Content="Varausnumero: " Height="30" />
+                        <Label Content="Varaus alkaa: " Height="30" />
+                        <Label Content="Varaus päättyy: " Height="30" />
+                        <Label Content="Varauksen tekopäivämäärä: " Height="30" />
+                        <Label Content="Varattu huone: " Height="30" />
+                        <Label Content="Asiakas: " Height="30" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Grid.Row="0" >
+                        <TextBox Name="ID" Text="{Binding VarausID}" Height="30" />
+                        <TextBox Name="VarausAlkaa" Text="{Binding VarausAlkaa, StringFormat={}{0:dd.MM.yyyy}}" Height="30" />
+                        <TextBox Name="VarausPaattyy" Text="{Binding VarausPaattyy, StringFormat={}{0:dd.MM.yyyy}}" Height="30" />
+                        <TextBox Name="Varauspvm" Text="{Binding Varauspaiva, StringFormat={}{0:dd.MM.yyyy}}" Height="30" />
+                        <TextBox Name="Huone" Text="{Binding Huone.Nimi}" Height="30" />
+                        <TextBox Name="Asiakas" Text="{Binding Asiakas.Nimi}" Height="30" />
+                    </StackPanel>
+                    <GroupBox Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Header="Palvelut: " >
+                        <StackPanel Name="stackPanelPalvelut">
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Header="Lisätiedot: ">
+                        <TextBox Name="Lisatiedot" Text="{Binding Lisatiedot}" />
+                    </GroupBox>
+                </Grid>
+            </TabItem>
         </TabControl>
-        
+
     </Grid>
 </UserControl>
