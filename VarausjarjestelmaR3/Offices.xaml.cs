@@ -24,7 +24,7 @@ namespace VarausjarjestelmaR3
     public partial class Offices : UserControl
         {
         private string connectionString = "Server=127.0.0.1; Port=3306; User ID=opiskelija; Pwd=opiskelija1; Database=vuokratoimistot;";
-
+        // Alustetaan tarvittavat luokat ja listat
         public List<Classes.Office> toimipistet = new List<Classes.Office>() { };
         Classes.Office toimipiste;
         Classes.Room room;
@@ -39,19 +39,13 @@ namespace VarausjarjestelmaR3
             InitializeComponent();
 
             }
-
-        private void Check (object sender, RoutedEventArgs e)
-            {
-
-            }
-
-
+        // Metodi, joka suoritetaan, kun uusi toimipiste lisätään
         private void AddNewOffice (object sender, RoutedEventArgs e)
             {
             bool check = checker();
             if (check)
                 {
-
+                // Suoritetaan tietokantakysely ja lisätään uusi toimipiste
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
                     {
                     connection.Open();
@@ -86,6 +80,8 @@ namespace VarausjarjestelmaR3
                 }
 
             }
+
+        // Metodi, joka tarkistaa syötteiden oikeellisuuden
         private bool checker ()
             {
             return true;
@@ -106,7 +102,7 @@ namespace VarausjarjestelmaR3
                 MessageBox.Show("Toimipiste " + combListOfDelete.Text + " poistettu ");
                 }
             }
-
+        // Metodi, joka suoritetaan käyttöliittymän latautuessa
         private void onLoaded (object sender, RoutedEventArgs e)
             {
 
@@ -151,6 +147,7 @@ namespace VarausjarjestelmaR3
 
             }
 
+        // Metodi, joka näyttää valitun toimipisteen tiedot
         private void ShowOfficeInfo (object sender, RoutedEventArgs e)
             {
             using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -194,6 +191,7 @@ namespace VarausjarjestelmaR3
                 }
             }
 
+        // Metodi, joka muuttaa valitun toimipisteen tietoja
         private void Chnage (object sender, RoutedEventArgs e)
             {
             using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -215,12 +213,11 @@ namespace VarausjarjestelmaR3
                 LoadedEvent.Equals(true);
                 }
             }
-        //---------------------------------------------------------------------------------------------------
 
+
+        // Metodi, joka lisää uuden huoneen tietokantaan
         private void AddNewRoom (object sender, RoutedEventArgs e)
             {
-
-
             bool check = checker();
             if (check)
                 {
@@ -256,10 +253,9 @@ namespace VarausjarjestelmaR3
                 {
                 MessageBox.Show("täytä puutteet!");
                 }
-
-
             }
 
+        // Metodi, joka näyttää valitun huoneen tiedot
         private void RoomInfo (object sender, RoutedEventArgs e)
             {
             using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -301,6 +297,8 @@ namespace VarausjarjestelmaR3
 
                 }
             }
+
+        // Metodi, joka poistaa valitun huoneen tietokannasta
         private void DeleteRoomBtn (object sender, RoutedEventArgs e)
             {
             using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -315,7 +313,7 @@ namespace VarausjarjestelmaR3
                 MessageBox.Show("Huone " + RoomcombListOfDelete.Text + " poistettu ");
                 }
             }
-
+        // Metodi, joka muuttaa valitun huoneen tietoja
         private void ChangeRoomBtn (object sender, RoutedEventArgs e)
             {
             using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -337,56 +335,4 @@ namespace VarausjarjestelmaR3
                 }
             }
         }
-    //public class toimipiste
-    //    {
-    //    public int ToimipisteID { get; set; }
-    //    public string ToimipisteNimi { get; set; }
-    //    public string Paikkakunta { get; set; }
-    //    public string Katuosoite { get; set; }
-    //    public string Postinumero { get; set; }
-    //    public string Postitoimipaikka { get; set; }
-    //    public string Puhelin { get; set; }
-
-
-
-    //    }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
