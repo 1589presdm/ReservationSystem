@@ -52,10 +52,46 @@
                     <Canvas>
                         <ComboBox Name="combListOfHistory" Height="24" Width="212"  SelectedValue="{Binding TyontekijaID}"  SelectedValuePath="TyontekijaID" DisplayMemberPath="Nimi" Canvas.Left="334" Canvas.Top="61" HorizontalAlignment="Left" VerticalAlignment="Center"  />
                         <Label Content="Ketä etsit?" HorizontalAlignment="Left" VerticalAlignment="Center" Width="199" Height="26" Canvas.Left="100" Canvas.Top="61"/>
-                        <Button  Content="Muokkaa" HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="75" Canvas.Left="346" Canvas.Top="343" Visibility="Collapsed"/>
-                        <Button Content="Etsi" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Canvas.Left="570" Canvas.Top="61"  />
-                        <ContentControl  Grid.Column="1" Height="195" Width="595" Canvas.Left="100" Canvas.Top="125" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <Button Content="Etsi" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Canvas.Left="570" Canvas.Top="61" Click="ShowHestory" />
+
+
+                        <ListView Grid.Column="0" Grid.Row="0" Name="Varaukset" Canvas.Left="16" Canvas.Top="140">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                    <Setter Property="BorderBrush" Value="LightGray"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding VarausID}" />
+                                    <GridViewColumn Header="Varaus alkaa" DisplayMemberBinding="{Binding VarausAlkaa, StringFormat={}{0:dd.MM.yyyy}}" />
+                                    <GridViewColumn Header="Varaus päättyy" DisplayMemberBinding="{Binding VarausPaattyy, StringFormat={}{0:dd.MM.yyyy}}" />
+                                    <GridViewColumn Header="Varauspäivä" DisplayMemberBinding="{Binding Varauspaiva, StringFormat={}{0:dd.MM.yyyy}}" />
+                                    <GridViewColumn Header="Huone" DisplayMemberBinding="{Binding Huone.Nimi}" />
+                                    <GridViewColumn Header="Lisätiedot" DisplayMemberBinding="{Binding Lisatiedot}" />
+                                    <GridViewColumn Header="Asiakas" DisplayMemberBinding="{Binding Asiakas.Nimi}" />
+                                    <GridViewColumn Header="Varauksen palvelut" Width="150">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <ListView ItemsSource="{Binding VarauksenPalvelut}">
+                                                    <ListView.View>
+                                                        <GridView>
+                                                            <GridViewColumn Header="Palvelu" DisplayMemberBinding="{Binding Palvelu.Tuote}" Width="95" />
+                                                            <GridViewColumn Header="Kpl" DisplayMemberBinding="{Binding Kpl}" Width="30" />
+                                                        </GridView>
+                                                    </ListView.View>
+                                                </ListView>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+
+
                     </Canvas>
+
                 </TabItem>
             </TabControl>
         </TabItem>

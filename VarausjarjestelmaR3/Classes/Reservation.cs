@@ -27,4 +27,21 @@ namespace VarausjarjestelmaR3.Classes
         public int Kpl {  get; set; }
         public int VarausID { get; set; }
     }
-}
+
+    public class ReservationForEmplyoeeHis
+        {
+        public int VarausID { get; set; }
+        public DateTime VarausAlkaa { get; set; }
+        public DateTime VarausPaattyy { get; set; }
+        public DateTime Varauspaiva { get; set; }
+        public Room Huone { get; set; }
+        public String Lisatiedot { get; set; }
+        public Customer Asiakas { get; set; }
+        public Employee Tyontekija { get; set; }
+        public ObservableCollection<ReservationServices> VarauksenPalvelut { get; set; }
+        }
+
+
+
+
+    }

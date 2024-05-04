@@ -515,6 +515,38 @@ namespace VarausjarjestelmaR3
 
             return varaukset;
         }
+        public ObservableCollection<Reservation> GetAllReservationsforEmployee (int EmployeeId)
+            {
+            var varaukset = new ObservableCollection<Reservation>();
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM asiakkaan_varaus where tyontekijaID = @tyontekijaID", conn);
+                cmd.Parameters.AddWithValue("@tyontekijaID", Convert.ToInt32(EmployeeId));
+
+                var dr = cmd.ExecuteReader();
+
+                while (dr.Read())
+                    {
+                    varaukset.Add(new Reservation
+                        {
+                        VarausID = dr.GetInt32("varausID"),
+                        VarausAlkaa = dr.GetDateTime("varaus_alkaa"),
+                        VarausPaattyy = dr.GetDateTime("varaus_paattyy"),
+                        Varauspaiva = dr.GetDateTime("varauspvm"),
+                        Huone = GetRoom(dr.GetInt32("huoneen_numeroID")),
+                        Lisatiedot = dr.GetString("lisatiedot"),
+                        Asiakas = GetCustomer(dr.GetInt32("asiakasID")),
+                        Tyontekija = GetEmployee(dr.GetInt32("tyontekijaID")),
+                        VarauksenPalvelut = GetReservationServices(dr.GetInt32("varausID")),
+                        });
+                    }
+                }
+
+            return varaukset;
+            }
+
 
         //Haetaan lasku ID-numeron perusteella:
         public Invoice GetInvoice(int laskunumero)
@@ -577,6 +609,7 @@ namespace VarausjarjestelmaR3
 
             return laskut;
         }
+
     }
 }
 

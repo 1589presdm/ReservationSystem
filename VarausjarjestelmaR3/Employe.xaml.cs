@@ -1,6 +1,7 @@
 ﻿using MySqlConnector;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using VarausjarjestelmaR3.Classes;
 
 namespace VarausjarjestelmaR3
     {
@@ -25,6 +27,8 @@ namespace VarausjarjestelmaR3
         EmployeeInfoList EmployeeInfoList = new EmployeeInfoList();
         EmployeeInfoList EmployeeInfoListForChange = new EmployeeInfoList();
         EmployeeInfoList EmployeeInfoListForDel = new EmployeeInfoList();
+        ObservableCollection<Reservation> List_varaukset;
+
         private string connectionString = "Server=127.0.0.1; Port=3306; User ID=opiskelija; Pwd=opiskelija1; Database=vuokratoimistot;";
 
         public Employe ()
@@ -198,9 +202,16 @@ namespace VarausjarjestelmaR3
             Employee_loaded();
             }
 
+        private void ShowHestory (object sender, RoutedEventArgs e)
+            {
+            Classes.ReservationForEmplyoeeHis reservation = new Classes.ReservationForEmplyoeeHis();
+            Repository repo = new Repository();
 
+            List_varaukset = repo.GetAllReservationsforEmployee(Convert.ToInt32(combListOfHistory.SelectedValue));
+            Varaukset.ItemsSource = List_varaukset;
+           
 
-
+            }
         }
 
 
