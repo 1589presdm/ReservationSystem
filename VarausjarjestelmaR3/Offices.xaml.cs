@@ -25,10 +25,8 @@ namespace VarausjarjestelmaR3
         {
         private string connectionString = "Server=127.0.0.1; Port=3306; User ID=opiskelija; Pwd=opiskelija1; Database=vuokratoimistot;";
         // Alustetaan tarvittavat luokat ja listat
-        public List<Classes.Office> toimipistet = new List<Classes.Office>() { };
         Classes.Office toimipiste;
         Classes.Room room;
-        List<Classes.Room> rooms = new List<Classes.Room>();
         OffficeInfoList OffficeInfoListForChng = new OffficeInfoList();
         OffficeInfoList OffficeInfoListForAdd = new OffficeInfoList();
         RoomInfoList RoomInfoList = new RoomInfoList();
@@ -72,7 +70,8 @@ namespace VarausjarjestelmaR3
                         }
 
                     }
-
+                Offices_Loaded();
+                
                 }
             else
                 {
@@ -101,9 +100,18 @@ namespace VarausjarjestelmaR3
 
                 MessageBox.Show("Toimipiste " + combListOfDelete.Text + " poistettu ");
                 }
+            Offices_Loaded();
             }
         // Metodi, joka suoritetaan käyttöliittymän latautuessa
         private void onLoaded (object sender, RoutedEventArgs e)
+            {
+            Offices_Loaded();
+
+
+            }
+
+
+        private void Offices_Loaded ()
             {
 
             using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -113,6 +121,8 @@ namespace VarausjarjestelmaR3
 
                 MySqlCommand command = new MySqlCommand(query, connection);
                 var Reader = command.ExecuteReader();
+                List<Classes.Office> toimipistet = new List<Classes.Office>() { };
+
                 while (Reader.Read())
                     {
                     toimipistet.Add(new Classes.Office() { ToimipisteID = Reader.GetInt32("toimipisteID"), ToimipisteNimi = Reader.GetString("toimipiste_nimi") });
@@ -121,7 +131,7 @@ namespace VarausjarjestelmaR3
                 combListOfDelete.ItemsSource = toimipistet;
                 combListOfChange.ItemsSource = toimipistet;
                 RoomInfoList.ToimipisteNimi.ItemsSource = toimipistet;
-                RoomInfoListForChange.ToimipisteNimi.ItemsSource= toimipistet;
+                RoomInfoListForChange.ToimipisteNimi.ItemsSource = toimipistet;
                 }
 
             using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -133,12 +143,13 @@ namespace VarausjarjestelmaR3
                 MySqlCommand command = new MySqlCommand(queryForRooms, connection);
                 command = new MySqlCommand(queryForRooms, connection);
                 var ReaderForRooms = command.ExecuteReader();
+                List<Classes.Room> rooms = new List<Classes.Room>();
                 while (ReaderForRooms.Read())
                     {
                     rooms.Add(new Classes.Room() { HuoneenNumeroID = ReaderForRooms.GetInt32("huoneen_numeroID"), Nimi = ReaderForRooms.GetString("nimi") });
                     }
                 RoomcombListOfDelete.ItemsSource = rooms;
-                RoomcombListOfChange.ItemsSource= rooms;
+                RoomcombListOfChange.ItemsSource = rooms;
 
                 }
 
@@ -146,6 +157,7 @@ namespace VarausjarjestelmaR3
             RoomUserControlAddSec.Content = RoomInfoList;
 
             }
+
 
         // Metodi, joka näyttää valitun toimipisteen tiedot
         private void ShowOfficeInfo (object sender, RoutedEventArgs e)
@@ -210,8 +222,8 @@ namespace VarausjarjestelmaR3
                 command.ExecuteNonQuery();
 
                 MessageBox.Show("muokattu!");
-                LoadedEvent.Equals(true);
                 }
+            Offices_Loaded();
             }
 
 
@@ -247,6 +259,7 @@ namespace VarausjarjestelmaR3
                         }
 
                     }
+                Offices_Loaded();
 
                 }
             else
@@ -312,6 +325,9 @@ namespace VarausjarjestelmaR3
 
                 MessageBox.Show("Huone " + RoomcombListOfDelete.Text + " poistettu ");
                 }
+            Offices_Loaded();
+
+
             }
         // Metodi, joka muuttaa valitun huoneen tietoja
         private void ChangeRoomBtn (object sender, RoutedEventArgs e)
@@ -333,6 +349,8 @@ namespace VarausjarjestelmaR3
                 MessageBox.Show("muokattu!");
 
                 }
+            Offices_Loaded();
+
             }
         }
     }
