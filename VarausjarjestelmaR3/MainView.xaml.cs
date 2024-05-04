@@ -67,6 +67,11 @@ namespace VarausjarjestelmaR3
                 }
 
             }
+
+        private void EmployeeBtn_Click (object sender, RoutedEventArgs e)
+            {
+            contentControl.Content = new Employe();
+            }
         }
 
 }

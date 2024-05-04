@@ -31,6 +31,8 @@ namespace VarausjarjestelmaR3
         OffficeInfoList OffficeInfoListForAdd = new OffficeInfoList();
         RoomInfoList RoomInfoList = new RoomInfoList();
         RoomInfoList RoomInfoListForChange = new RoomInfoList();
+        RoomInfoList RoomInfoListForDel = new RoomInfoList();
+        OffficeInfoList offficeInfoListDel = new OffficeInfoList();
 
         public Offices ()
             {
@@ -63,6 +65,7 @@ namespace VarausjarjestelmaR3
                         {
                         command.ExecuteNonQuery();
                         MessageBox.Show("Toimipiste lisätty onnistuneesti.");
+                        OffficeInfoListForAdd.DataContext = new Classes.Office();
                         }
                     catch (Exception ex)
                         {
@@ -71,7 +74,7 @@ namespace VarausjarjestelmaR3
 
                     }
                 Offices_Loaded();
-                
+
                 }
             else
                 {
@@ -96,10 +99,18 @@ namespace VarausjarjestelmaR3
 
                 MySqlCommand command = new MySqlCommand(query, connection);
                 command.Parameters.AddWithValue("@toimipisteID", combListOfDelete.SelectedValue);
-                command.ExecuteNonQuery();
+                try
+                    {
+                    command.ExecuteNonQuery();
+                    MessageBox.Show("Toimipiste " + combListOfDelete.Text + " poistettu ");
+                    }
+                catch (Exception ex)
+                    {
+                    MessageBox.Show("Virhe: " + ex.Message);
 
-                MessageBox.Show("Toimipiste " + combListOfDelete.Text + " poistettu ");
+                    }
                 }
+            offficeInfoListDel.DataContext = new Classes.Office();
             Offices_Loaded();
             }
         // Metodi, joka suoritetaan käyttöliittymän latautuessa
@@ -132,6 +143,7 @@ namespace VarausjarjestelmaR3
                 combListOfChange.ItemsSource = toimipistet;
                 RoomInfoList.ToimipisteNimi.ItemsSource = toimipistet;
                 RoomInfoListForChange.ToimipisteNimi.ItemsSource = toimipistet;
+                RoomInfoListForDel.ToimipisteNimi.ItemsSource = toimipistet;
                 }
 
             using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -178,14 +190,12 @@ namespace VarausjarjestelmaR3
                     command.Parameters.AddWithValue("@toimipisteID", combListOfDelete.SelectedValue);
                     }
 
+                command.ExecuteNonQuery();
                 var Reader = command.ExecuteReader();
                 while (Reader.Read())
                     {
                     toimipiste = new Classes.Office() { ToimipisteNimi = Reader.GetString("toimipiste_nimi"), Katuosoite = Reader.GetString("katuosoite"), Paikkakunta = Reader.GetString("paikkakunta"), Postinumero = Reader.GetString("postinumero"), Postitoimipaikka = Reader.GetString("postitoimipaikka"), Puhelin = Reader.GetString("puhelin") };
                     }
-
-
-
                 if (changeSection.IsSelected)
                     {
                     OffficeInfoListForChng.DataContext = toimipiste;
@@ -194,14 +204,15 @@ namespace VarausjarjestelmaR3
                     }
                 else if (deleteSection.IsSelected)
                     {
-                    OffficeInfoList offficeInfoList = new OffficeInfoList();
-                    offficeInfoList.DataContext = toimipiste;
-                    toimiposteContentControl.Content = offficeInfoList;
+                    offficeInfoListDel.DataContext = toimipiste;
+                    toimiposteContentControl.Content = offficeInfoListDel;
                     deleteBtn.Visibility = Visibility.Visible;
                     }
-
                 }
+
+
             }
+        
 
         // Metodi, joka muuttaa valitun toimipisteen tietoja
         private void Chnage (object sender, RoutedEventArgs e)
@@ -219,10 +230,16 @@ namespace VarausjarjestelmaR3
                 command.Parameters.AddWithValue("@Postitoimipaikka", OffficeInfoListForChng.txtPostitoimipaikka.Text);
                 command.Parameters.AddWithValue("@Puhelin", OffficeInfoListForChng.txtPuhelin.Text);
                 command.Parameters.AddWithValue("@toimipisteID", combListOfChange.SelectedValue);
-                command.ExecuteNonQuery();
 
-                MessageBox.Show("muokattu!");
+                try{
+                    command.ExecuteNonQuery();
+                    MessageBox.Show("muokattu!");
+                    }
+                catch(Exception ex) { 
+                    MessageBox.Show("Virhe: " + ex.Message);
+                    }
                 }
+            OffficeInfoListForChng.DataContext = new Classes.Office();
             Offices_Loaded();
             }
 
@@ -259,6 +276,7 @@ namespace VarausjarjestelmaR3
                         }
 
                     }
+                RoomInfoList.DataContext = new Classes.Room();
                 Offices_Loaded();
 
                 }
@@ -294,9 +312,9 @@ namespace VarausjarjestelmaR3
                     }
                 if (RoomDeleteSec.IsSelected)
                     {
-                    RoomInfoList.DataContext = room;
-                    RoomInfoList.ToimipisteNimi.SelectedValue = room.Toimipiste.ToimipisteID;
-                    HuoneContentControl.Content = RoomInfoList;
+                    RoomInfoListForDel.DataContext = room;
+                    RoomInfoListForDel.ToimipisteNimi.SelectedValue = room.Toimipiste.ToimipisteID;
+                    HuoneContentControl.Content = RoomInfoListForDel;
                     RoomDeleteBtn.Visibility = Visibility.Visible;
                     }
 
@@ -307,9 +325,11 @@ namespace VarausjarjestelmaR3
                     HuoneContentControlForChange.Content = RoomInfoListForChange;
                     RoomChangeBtn.Visibility = Visibility.Visible;
                     }
+                }
+            
 
                 }
-            }
+            
 
         // Metodi, joka poistaa valitun huoneen tietokannasta
         private void DeleteRoomBtn (object sender, RoutedEventArgs e)
@@ -321,10 +341,19 @@ namespace VarausjarjestelmaR3
 
                 MySqlCommand command = new MySqlCommand(query, connection);
                 command.Parameters.AddWithValue("@huoneen_numeroID", RoomcombListOfDelete.SelectedValue);
-                command.ExecuteNonQuery();
 
-                MessageBox.Show("Huone " + RoomcombListOfDelete.Text + " poistettu ");
+                try
+                    {
+                    command.ExecuteNonQuery();
+
+                    MessageBox.Show("Huone " + RoomcombListOfDelete.Text + " poistettu ");
+                    }
+                catch (Exception ex)
+                    {
+                    MessageBox.Show("Virhe: " + ex.Message);
+                    }
                 }
+            RoomInfoListForDel.DataContext= new Classes.Room();
             Offices_Loaded();
 
 
@@ -344,11 +373,21 @@ namespace VarausjarjestelmaR3
                 command.Parameters.AddWithValue("@hlo_maara", RoomInfoListForChange.HloMaara.Text);
                 command.Parameters.AddWithValue("@toimipisteID", RoomInfoListForChange.ToimipisteNimi.SelectedValue);
                 command.Parameters.AddWithValue("@huoneen_numeroID", RoomcombListOfChange.SelectedValue);
-                command.ExecuteNonQuery();
 
-                MessageBox.Show("muokattu!");
+                try
+                    {
+                    
+                    command.ExecuteNonQuery();
+
+                    MessageBox.Show("muokattu!");
+                    }
+                catch (Exception ex)
+                    {
+                    MessageBox.Show("Virhe: " + ex.Message);
+                    }
 
                 }
+            RoomInfoListForChange.DataContext = new Classes.Room();
             Offices_Loaded();
 
             }

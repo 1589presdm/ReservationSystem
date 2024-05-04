@@ -90,6 +90,12 @@
     <Compile Include="Classes\Room.cs" />
     <Compile Include="Classes\Service.cs" />
     <Compile Include="Customers.xaml.cs" />
+    <Compile Include="Employe.xaml.cs">
+      <DependentUpon>Employe.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EmployeeInfoList.xaml.cs">
+      <DependentUpon>EmployeeInfoList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Invoices.xaml.cs">
       <DependentUpon>Invoices.xaml</DependentUpon>
     </Compile>
@@ -108,6 +114,14 @@
     <Page Include="Customers.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Employe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EmployeeInfoList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Invoices.xaml">
       <SubType>Designer</SubType>

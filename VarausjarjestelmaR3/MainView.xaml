@@ -105,7 +105,7 @@
                     <Label Content="Laskut" FontSize="15" FontWeight="Medium" Margin="5,10,10,10"/>
                 </StackPanel>
             </Button>
-            <Button Background="White" BorderThickness="0" Style="{StaticResource MyButton}"  Name="Acces" Width="155" Visibility="Hidden">
+            <Button Background="White" BorderThickness="0" Style="{StaticResource MyButton}"  Name="Acces" Width="155" Visibility="Visible" Click="EmployeeBtn_Click">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="/Icons/invoices.png" Width="25" Height="25">
                         <Image.Effect>
