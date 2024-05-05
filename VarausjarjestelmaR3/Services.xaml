@@ -12,13 +12,19 @@
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
 
-        <DataGrid>
-
+        <DataGrid x:Name="ServicesDataGrid" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Tuote" Binding="{Binding Tuote}" Width="2*"/>
+                <DataGridTextColumn Header="Hinta" Binding="{Binding PalvelunHinta}" Width="1*"/>
+                <DataGridTextColumn Header="ALV" Binding="{Binding AlvProsentti}" Width="1*"/>
+                <DataGridTextColumn Header="Määrä" Binding="{Binding Maara}" Width="1*"/>
+                <DataGridComboBoxColumn x:Name="ComOffices" Header="Toimipiste" DisplayMemberPath="ToimipisteNimi" SelectedItemBinding="{Binding Toimipiste}" Width="2*"/>
+            </DataGrid.Columns>
         </DataGrid>
 
         <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
-            <Button Content="Tallenna" Margin="10" Width="60"/>
-            <Button Content="Poista" Margin="10" Width="60"/>
+            <Button x:Name="SaveServicesBtn" Content="Tallenna" Margin="10" Width="60" Click="SaveServiceBtn_Click"/>
+            <Button Content="Poista" Margin="10" Width="60" Click="RemoveServiceBtn_Click"/>
         </StackPanel>
     </Grid>
 </UserControl>

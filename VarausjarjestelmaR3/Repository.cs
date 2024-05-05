@@ -263,7 +263,7 @@ namespace VarausjarjestelmaR3
         }
 
         //Haetaan kaikki palvelut listalle:
-        public ObservableCollection<Service> GetAllServices()
+        public ObservableCollection<Service> GetAllServices(ObservableCollection<Office> offices = null)
         {
             var palvelut = new ObservableCollection<Service>();
 
@@ -284,7 +284,8 @@ namespace VarausjarjestelmaR3
                         PalvelunHinta = dr.GetDouble("palvelun_hinta"),
                         AlvProsentti = dr.GetDouble("alv_prosentti"),
                         Maara = dr.GetInt32("maara"),
-                        Toimipiste = GetOffice(dr.GetInt32("toimipisteID")),
+                        Toimipiste = offices?.Any(x=>x.ToimipisteID == dr.GetInt32("toimipisteID")) == true ?
+                        offices.First(x => x.ToimipisteID == dr.GetInt32("toimipisteID")) : GetOffice(dr.GetInt32("toimipisteID")),
                     });
                 }
             }
@@ -608,6 +609,64 @@ namespace VarausjarjestelmaR3
             }
 
             return laskut;
+        }
+
+        /// <summary>
+        /// Palvelun poisto
+        /// </summary>
+        /// <param name="service"></param>
+        public void RemoveService(Service service)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("DELETE FROM palvelu WHERE palveluID=@PalveluID", conn);
+                cmd.Parameters.AddWithValue("@PalveluID", service.PalveluID);
+
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        /// <summary>
+        /// Palveluiden tallentaminen
+        /// </summary>
+        /// <param name="services"></param>
+        public void SaveServices(ObservableCollection<Service> services)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+
+                foreach (var service in services)
+                {
+                    if (service.PalveluID == 0)
+                    {
+                        MySqlCommand cmd = new MySqlCommand("INSERT INTO palvelu (tuote, palvelun_hinta, alv_prosentti, maara, toimipisteID) VALUES (@Tuote, @PalvelunHinta, @AlvProsentti, @Maara, @ToimipisteID)", conn);
+                        cmd.Parameters.AddWithValue("@Tuote", service.Tuote);
+                        cmd.Parameters.AddWithValue("@PalvelunHinta", service.PalvelunHinta);
+                        cmd.Parameters.AddWithValue("@AlvProsentti", service.AlvProsentti);
+                        cmd.Parameters.AddWithValue("@Maara", service.Maara);
+                        cmd.Parameters.AddWithValue("@ToimipisteID", service.Toimipiste.ToimipisteID);
+
+                        cmd.ExecuteNonQuery();
+                    }
+                    else
+                    {
+                        MySqlCommand cmd = new MySqlCommand("UPDATE palvelu SET tuote=@Tuote, palvelun_hinta=@PalvelunHinta, alv_prosentti=@AlvProsentti, maara=@Maara, toimipisteID=@ToimipisteID WHERE palveluID=@PalveluID", conn);
+                        cmd.Parameters.AddWithValue("@Tuote", service.Tuote);
+                        cmd.Parameters.AddWithValue("@PalvelunHinta", service.PalvelunHinta);
+                        cmd.Parameters.AddWithValue("@AlvProsentti", service.AlvProsentti);
+                        cmd.Parameters.AddWithValue("@Maara", service.Maara);
+                        cmd.Parameters.AddWithValue("@ToimipisteID", service.Toimipiste.ToimipisteID);
+                        cmd.Parameters.AddWithValue("@PalveluID", service.PalveluID);
+                        
+
+                        cmd.ExecuteNonQuery();
+                    }
+
+                }
+            }
         }
 
     }
