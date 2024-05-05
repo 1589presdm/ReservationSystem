@@ -194,8 +194,7 @@ namespace VarausjarjestelmaR3
         {
             if (savedInvoicesListView.SelectedItem is Invoice selectedInvoice)
             {
-                // Открыть диалоговое окно для редактирования выбранного счёта
-                // Здесь может быть вызов формы редактирования с передачей selectedInvoice как параметра
+                //En tiedä, onko laskun muokkaustoiminto välttämätön vai riittääkö vain mahdollisuus poistaa lasku
             }
         }
 
