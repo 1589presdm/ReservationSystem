@@ -284,7 +284,7 @@ namespace VarausjarjestelmaR3
                         PalvelunHinta = dr.GetDouble("palvelun_hinta"),
                         AlvProsentti = dr.GetDouble("alv_prosentti"),
                         Maara = dr.GetInt32("maara"),
-                        Toimipiste = offices?.Any(x=>x.ToimipisteID == dr.GetInt32("toimipisteID")) == true ?
+                        Toimipiste = offices?.Any(x => x.ToimipisteID == dr.GetInt32("toimipisteID")) == true ?
                         offices.First(x => x.ToimipisteID == dr.GetInt32("toimipisteID")) : GetOffice(dr.GetInt32("toimipisteID")),
                     });
                 }
@@ -516,12 +516,12 @@ namespace VarausjarjestelmaR3
 
             return varaukset;
         }
-        public ObservableCollection<Reservation> GetAllReservationsforEmployee (int EmployeeId)
-            {
+        public ObservableCollection<Reservation> GetAllReservationsforEmployee(int EmployeeId)
+        {
             var varaukset = new ObservableCollection<Reservation>();
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
-                {
+            {
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand("SELECT * FROM asiakkaan_varaus where tyontekijaID = @tyontekijaID", conn);
                 cmd.Parameters.AddWithValue("@tyontekijaID", Convert.ToInt32(EmployeeId));
@@ -529,9 +529,9 @@ namespace VarausjarjestelmaR3
                 var dr = cmd.ExecuteReader();
 
                 while (dr.Read())
-                    {
+                {
                     varaukset.Add(new Reservation
-                        {
+                    {
                         VarausID = dr.GetInt32("varausID"),
                         VarausAlkaa = dr.GetDateTime("varaus_alkaa"),
                         VarausPaattyy = dr.GetDateTime("varaus_paattyy"),
@@ -541,12 +541,12 @@ namespace VarausjarjestelmaR3
                         Asiakas = GetCustomer(dr.GetInt32("asiakasID")),
                         Tyontekija = GetEmployee(dr.GetInt32("tyontekijaID")),
                         VarauksenPalvelut = GetReservationServices(dr.GetInt32("varausID")),
-                        });
-                    }
+                    });
                 }
+            }
 
             return varaukset;
-            }
+        }
 
 
         //Haetaan lasku ID-numeron perusteella:
@@ -572,6 +572,7 @@ namespace VarausjarjestelmaR3
                         VerotonSumma = dr.GetDouble("veroton_summa"),
                         AlvEuroina = dr.GetDouble("alv_euroina"),
                         Loppusumma = dr.GetDouble("loppusumma"),
+                        AsiakasID = dr.GetInt32("asiakasID"),
                         Asiakas = GetCustomer(dr.GetInt32("asiakasID")),
                         Varaus = GetReservation(dr.GetInt32("varausID")),
                     };
@@ -582,6 +583,7 @@ namespace VarausjarjestelmaR3
         }
 
         //Haetaan kaikki laskut listalle:
+
         public ObservableCollection<Invoice> GetAllInvoices()
         {
             var laskut = new ObservableCollection<Invoice>();
@@ -595,16 +597,21 @@ namespace VarausjarjestelmaR3
 
                 while (dr.Read())
                 {
-                    laskut.Add(new Invoice
+                    //laskut.Add(new Invoice
+                    var invoice = new Invoice
                     {
                         Laskunumero = dr.GetInt32("laskuID"),
                         Laskutustapa = dr.GetString("laskutustapa"),
                         VerotonSumma = dr.GetDouble("veroton_summa"),
                         AlvEuroina = dr.GetDouble("alv_euroina"),
                         Loppusumma = dr.GetDouble("loppusumma"),
-                        Asiakas = GetCustomer(dr.GetInt32("asiakasID")),
+                        AsiakasID = dr.GetInt32("asiakasID"),
                         Varaus = GetReservation(dr.GetInt32("varausID")),
-                    });
+                        Asiakas = GetCustomer(dr.GetInt32("asiakasID")),
+                    };
+
+
+                    laskut.Add(invoice);
                 }
             }
 
@@ -660,7 +667,7 @@ namespace VarausjarjestelmaR3
                         cmd.Parameters.AddWithValue("@Maara", service.Maara);
                         cmd.Parameters.AddWithValue("@ToimipisteID", service.Toimipiste.ToimipisteID);
                         cmd.Parameters.AddWithValue("@PalveluID", service.PalveluID);
-                        
+
 
                         cmd.ExecuteNonQuery();
                     }
@@ -669,6 +676,53 @@ namespace VarausjarjestelmaR3
             }
         }
 
+        public void SaveInvoice(Invoice invoice) //menetelmä laskutietojen tallentamiseksi tietokanta
+        {
+            using (var conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                var cmd = new MySqlCommand("INSERT INTO lasku (laskuID, laskutustapa, veroton_summa, alv_euroina, loppusumma, asiakasID, varausID) VALUES (@Laskunumero, @Laskutustapa, @VerotonSumma, @AlvEuroina, @Loppusumma, @AsiakasID, @VarausID)", conn);
+
+                cmd.Parameters.AddWithValue("@Laskunumero", invoice.Laskunumero);
+                cmd.Parameters.AddWithValue("@Laskutustapa", invoice.Laskutustapa);
+                cmd.Parameters.AddWithValue("@VerotonSumma", invoice.VerotonSumma);
+                cmd.Parameters.AddWithValue("@AlvEuroina", invoice.AlvEuroina);
+                cmd.Parameters.AddWithValue("@Loppusumma", invoice.Loppusumma);
+                cmd.Parameters.AddWithValue("@AsiakasID", invoice.AsiakasID);
+                cmd.Parameters.AddWithValue("@VarausID", invoice.VarausID);
+
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        //menetelmä tilinumeron automaattista lisäämistä varten 
+        public int GetMaxInvoiceNumber()
+        {
+            using (var conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                var cmd = new MySqlCommand("SELECT MAX(laskuID) FROM lasku", conn);
+                object result = cmd.ExecuteScalar();
+                if (result != DBNull.Value)
+                    return Convert.ToInt32(result) + 1;
+                return 1; //jos merkintöjä ei ole, numerointi aloitetaan numerosta 1
+            }
+        }
+
+
+
+        public void DeleteInvoice(int invoiceNumber)
+        {
+            using (var conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                var cmd = new MySqlCommand("DELETE FROM lasku WHERE laskuID = @Laskunumero", conn);
+                cmd.Parameters.AddWithValue("@Laskunumero", invoiceNumber);
+                cmd.ExecuteNonQuery();
+            }
+        }
     }
+
 }
+
 
