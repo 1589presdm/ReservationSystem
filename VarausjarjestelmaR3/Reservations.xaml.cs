@@ -58,9 +58,9 @@ namespace VarausjarjestelmaR3
             }
         }
 
-        //Valitun varauksen avaus Tarkastele-välilehdessä:
+        //Valitun varauksen avaus Muokkaa-välilehdessä:
         //Tällä hetkellä valitut palvelut näytetään CheckBoxeissa, mutta pitäisi muuttaa sellaiseen systeemiin, että myös varatut määrät näkyvät.
-        private void Tarkastele_Click(object sender, RoutedEventArgs e)
+        private void Muokkaa_Click(object sender, RoutedEventArgs e)
         {
             stackPanelPalvelut.Children.Clear();
 
@@ -101,6 +101,18 @@ namespace VarausjarjestelmaR3
             }
 
             tabControl.SelectedIndex = 3;
+        }
+
+        private void TallennaMuokkaus_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Varauksen muutokset tallennettu.");
+            tabControl.SelectedIndex = 1;
+        }
+
+        private void PoistaVaraus_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Varaus poistettu.");
+            tabControl.SelectedIndex = 1;
         }
     }
 }

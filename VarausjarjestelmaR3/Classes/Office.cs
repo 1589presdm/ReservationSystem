@@ -16,5 +16,10 @@ namespace VarausjarjestelmaR3.Classes
         public String Postitoimipaikka { get; set; }
         public String Puhelin {  get; set; }
         public Company Yritys { get; set; }
+
+        public override string ToString()
+        {
+            return ToimipisteNimi;
+        }
     }
 }

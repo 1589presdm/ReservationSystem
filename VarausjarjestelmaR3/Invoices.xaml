@@ -7,7 +7,123 @@
              mc:Ignorable="d" 
              d:DesignHeight="550" d:DesignWidth="800">
     <Grid Margin="20">
- 
-     
+        <TabControl>
+            <!-- välilehti laskujen luomista varten -->
+            <TabItem Header="Laskut">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Content="Laskun numero" Grid.Row="0"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" Margin="5" Width="200" x:Name="invoiceNumberTextBox"/>
+
+                    <!-- Company Information -->
+                    <Label Content="Laskuttaja" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+       FontSize="16" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <Label Content="Nimi" Grid.Row="2" Grid.Column="0"/>
+                    <Label Content="Puhelin" Grid.Row="3" Grid.Column="0"/>
+                    <Label Content="Katuosoite" Grid.Row="4" Grid.Column="0"/>
+                    <Label Content="Postinumero" Grid.Row="5" Grid.Column="0"/>
+                    <Label Content="Postitoimipaikka" Grid.Row="6" Grid.Column="0"/>
+                    <Label Content="Sahkoposti" Grid.Row="7" Grid.Column="0"/>
+
+                    <TextBox Grid.Row="2" Grid.Column="1" Text="Vuokratoimistot Oy" Margin="5" IsReadOnly="True"/>
+                    <TextBox Grid.Row="3" Grid.Column="1" Text="050 1234567" Margin="5" IsReadOnly="True"/>
+                    <TextBox Grid.Row="4" Grid.Column="1" Text="Karjalankatu 3" Margin="5" IsReadOnly="True"/>
+                    <TextBox Grid.Row="5" Grid.Column="1" Text="80200" Margin="5" IsReadOnly="True"/>
+                    <TextBox Grid.Row="6" Grid.Column="1" Text="Joensuu" Margin="5" IsReadOnly="True"/>
+                    <TextBox Grid.Row="7" Grid.Column="1" Text="vuokratoimistot@vuokratoimistot.fi" Margin="5" IsReadOnly="True"/>
+
+                    <!-- Customer Information -->
+                    <Label Content="Asiakas" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2"
+                     FontSize="16" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBox x:Name="asiakasIDTextBox" Width="30" HorizontalAlignment="Right"  Grid.Row="1" Grid.Column="4" Margin="5" TextChanged="AsiakasIDTextBox_TextChanged"/>
+                    <TextBox Grid.Row="2" Grid.Column="3" Margin="5" x:Name="customerNameTextBox"/>
+                    <TextBox Grid.Row="3" Grid.Column="3" Margin="5" x:Name="customerPhoneTextBox"/>
+                    <TextBox Grid.Row="4" Grid.Column="3" Margin="5" x:Name="customerAddressTextBox"/>
+                    <TextBox Grid.Row="5" Grid.Column="3" Margin="5" x:Name="customerPostalCodeTextBox"/>
+                    <TextBox Grid.Row="6" Grid.Column="3" Margin="5" x:Name="customerCityTextBox"/>
+                    <TextBox Grid.Row="7" Grid.Column="3" Margin="5" x:Name="customerEmailTextBox"/>
+
+                    <!-- Invoice Details -->
+                    <StackPanel Grid.Row="14" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="5">
+                        <RadioButton x:Name="radioCash" Content="Käteisenä" Margin="5,0" GroupName="PaymentMethod" Checked="PaymentMethod_Checked" />
+                        <RadioButton x:Name="radioCard" Content="Kortilla" Margin="5,0" GroupName="PaymentMethod" Checked="PaymentMethod_Checked"/>
+                    </StackPanel>
+                    <Label Content="VarausID" Grid.Row="14" Grid.Column="3" Margin="5,0"/>
+                    <TextBox x:Name="varausIDTextBox" Grid.Row="14" Grid.Column="4" Margin="5" Width="30"/>
+
+
+                    <Label Content="Varattu" Grid.Row="15" Grid.Column="0"/>
+                    <ListView x:Name="invoicesListView" Grid.Row="15" Grid.Column="1" Grid.ColumnSpan="3" Margin="5" Width="Auto" SelectionChanged="InvoicesListView_SelectionChanged">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Laskunumero" Width="100" DisplayMemberBinding="{Binding Laskunumero}"/>
+                                <GridViewColumn Header="Varaus alkaa" Width="300" DisplayMemberBinding="{Binding Varaus.VarausAlkaa, StringFormat={}{0:dd.MM.yyyy}}"/>
+                                <GridViewColumn Header="Hinta" Width="100" DisplayMemberBinding="{Binding VerotonSumma}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+
+                    <Label Content="Veroton summa" Grid.Row="16"/>
+                    <TextBox x:Name="amountExVATTextBox" Grid.Row="16" Grid.Column="1" Margin="5" Width="200"/>
+
+                    <Label Content="ALV" Grid.Row="17"/>
+                    <TextBox x:Name="vatTextBox" Grid.Row="17" Grid.Column="1" Margin="5" Width="200"/>
+
+                    <Label Content="Loppusumma" Grid.Row="18"/>
+                    <TextBox x:Name="totalAmountTextBox" Grid.Row="18" Grid.Column="1" Margin="5" Width="200"/>
+
+                    <Button Grid.Row="19" Grid.Column="0" Grid.ColumnSpan="4" Content="Tallenna" 
+                     HorizontalAlignment="Right" Margin="5" Width="120" Height="30" Click="SaveInvoice_Click"/>
+                </Grid>
+            </TabItem>
+
+            <!-- uusi välilehti tallennettujen tilien tarkastelua ja hallintaa varten -->
+            <TabItem Header="Tallennetut tilit">
+                <Grid>
+                    <ListView x:Name="savedInvoicesListView" Margin="10">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Laskunumero" Width="100" DisplayMemberBinding="{Binding Laskunumero}"/>
+                                <GridViewColumn Header="Asiakas" Width="300" DisplayMemberBinding="{Binding Asiakas.Nimi}"/>
+                                <GridViewColumn Header="Loppusumma" Width="100" DisplayMemberBinding="{Binding Loppusumma}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10">
+                        <Button Content="Muokkaa" Margin="5" Width="100"/>
+                        <Button Content="Poista" Margin="5" Width="100" Click="DeleteInvoice_Click"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>
