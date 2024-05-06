@@ -74,7 +74,7 @@ namespace VarausjarjestelmaR3
 
                 catch
                 {
-                    MessageBox.Show("Käyttäjätunnus tai salasana on väärin ");
+                    MessageBox.Show("Käyttäjätunnus tai salasana on väärin.", "Virhe!", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
 

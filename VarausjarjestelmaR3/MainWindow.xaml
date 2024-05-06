@@ -21,7 +21,7 @@
             <TextBox Name="Pass" Width="250" Height="25"/>
             <Button Content="Kirjaudu" Margin="10" Height="25" Width="250" Click="makeconnetion"/>
 
-            <Button Content="Ohita kirjautuminen" Click="LoginBtn_Click"/>
+            <Button Content="Ohita kirjautuminen" Click="LoginBtn_Click" Visibility="Visible"/>
 
         </StackPanel>
         </GroupBox>
