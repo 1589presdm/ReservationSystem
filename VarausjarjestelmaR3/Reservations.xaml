@@ -8,7 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
 
-        <!--Omissa välilehdissään menneet, tämänhetkiset ja tulevat varaukset sekä varausten tarkastelu (tarkasteluun toteutetaan varauksen muokkaus/poisto).-->
+        <!--Omissa välilehdissään menneet, tämänhetkiset ja tulevat varaukset sekä varausten muokkaus/poisto.-->
 
         <TabControl Name="tabControl">
             <TabItem Header="Menneet varaukset">
@@ -45,7 +45,7 @@
                             <GridViewColumn Header="Tarkastele" Width="80">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Name="Tarkastele" Content="Tarkastele" Click="Tarkastele_Click"  CommandParameter="{Binding}">
+                                        <Button Name="Muokkaa" Content="Muokkaa" Click="Muokkaa_Click"  CommandParameter="{Binding}">
                                         </Button>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -89,7 +89,7 @@
                             <GridViewColumn Header="Tarkastele" Width="80">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Name="Tarkastele" Content="Tarkastele" Click="Tarkastele_Click"  CommandParameter="{Binding}">
+                                        <Button Name="Muokkaa" Content="Muokkaa" Click="Muokkaa_Click"  CommandParameter="{Binding}">
                                         </Button>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -133,7 +133,7 @@
                             <GridViewColumn Header="Tarkastele" Width="80">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Name="Tarkastele" Content="Tarkastele" Click="Tarkastele_Click"  CommandParameter="{Binding}">
+                                        <Button Name="Muokkaa" Content="Muokkaa" Click="Muokkaa_Click"  CommandParameter="{Binding}">
                                         </Button>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -143,7 +143,7 @@
                 </ListView>
             </TabItem>
 
-            <TabItem Header="Tarkastele varausta">
+            <TabItem Header="Muokkaa varausta">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
@@ -175,8 +175,12 @@
                         </StackPanel>
                     </GroupBox>
                     <GroupBox Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Header="Lisätiedot: ">
-                        <TextBox Name="Lisatiedot" Text="{Binding Lisatiedot}" />
+                        <TextBox Name="Lisatiedot" Text="{Binding Lisatiedot}" Height="50" VerticalAlignment="Top" />
                     </GroupBox>
+                    <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="4" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                        <Button Name="TallennaMuokkaus" Click="TallennaMuokkaus_Click" Content="Tallenna" Width="100" Margin="0 0 10 0" />
+                        <Button Name="PoistaVaraus" Click="PoistaVaraus_Click" Content="Poista varaus" Width="100" />
+                    </StackPanel>
                 </Grid>
             </TabItem>
         </TabControl>
