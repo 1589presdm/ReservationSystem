@@ -56,7 +56,7 @@ namespace VarausjarjestelmaR3
 
 
         public void check_user (int Access)
-            {
+        {
             if(Access == 1)
                 {
                 Acces.Visibility = Visibility.Visible;
@@ -66,12 +66,18 @@ namespace VarausjarjestelmaR3
                 Acces.Visibility = Visibility.Collapsed;
                 }
 
-            }
+        }
 
         private void EmployeeBtn_Click (object sender, RoutedEventArgs e)
-            {
+        {
             contentControl.Content = new Employe();
-            }
         }
+
+        private void ReportsBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Reports.Reports reportsWindow = new Reports.Reports();
+            var returnValue = reportsWindow.ShowDialog();
+        }
+    }
 
 }

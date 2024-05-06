@@ -105,6 +105,8 @@
                     <Label Content="Laskut" FontSize="15" FontWeight="Medium" Margin="5,10,10,10"/>
                 </StackPanel>
             </Button>
+
+            <!--käyttäjät painike-->
             <Button Background="White" BorderThickness="0" Style="{StaticResource MyButton}"  Name="Acces" Width="155" Visibility="Visible" Click="EmployeeBtn_Click">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="/Icons/invoices.png" Width="25" Height="25">
@@ -112,7 +114,19 @@
                             <DropShadowEffect Opacity="0.1" BlurRadius="3" ShadowDepth="2"/>
                         </Image.Effect>
                     </Image>
-                    <Label Content="käytäjät" FontSize="15" FontWeight="Medium" Margin="5,10,10,10"/>
+                    <Label Content="Käyttäjät" FontSize="15" FontWeight="Medium" Margin="5,10,10,10"/>
+                </StackPanel>
+            </Button>
+
+            <!--raportit painike-->
+            <Button Background="White" BorderThickness="0" Style="{StaticResource MyButton}"  Name="Reports" Width="155" Visibility="Visible" Click="ReportsBtn_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Icons/invoices.png" Width="25" Height="25">
+                        <Image.Effect>
+                            <DropShadowEffect Opacity="0.1" BlurRadius="3" ShadowDepth="2"/>
+                        </Image.Effect>
+                    </Image>
+                    <Label Content="Raportit" FontSize="15" FontWeight="Medium" Margin="5,10,10,10"/>
                 </StackPanel>
             </Button>
 
