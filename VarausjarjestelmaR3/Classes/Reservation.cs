@@ -17,10 +17,10 @@ namespace VarausjarjestelmaR3.Classes
         public String Lisatiedot { get; set; }
         public Customer Asiakas { get; set; }
         public Employee Tyontekija { get; set; }
-        public ObservableCollection<ReservationServices> VarauksenPalvelut { get; set; }
+        public ObservableCollection<ReservationService> VarauksenPalvelut { get; set; }
     }
 
-    public class ReservationServices
+    public class ReservationService
     {
         public int PalveluvarausID { get; set; }
         public Service Palvelu {  get; set; }
@@ -38,7 +38,7 @@ namespace VarausjarjestelmaR3.Classes
         public String Lisatiedot { get; set; }
         public Customer Asiakas { get; set; }
         public Employee Tyontekija { get; set; }
-        public ObservableCollection<ReservationServices> VarauksenPalvelut { get; set; }
+        public ObservableCollection<ReservationService> VarauksenPalvelut { get; set; }
         }
 
 
