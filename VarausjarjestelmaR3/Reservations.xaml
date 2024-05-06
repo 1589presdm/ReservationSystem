@@ -264,12 +264,12 @@
                         </StackPanel>
                     </GroupBox>
                     <GroupBox Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Header="Palvelut: " >
-                        <DataGrid Name="dgPalvelut" AutoGenerateColumns="False">
+                        <DataGrid Name="dgPalvelut" AutoGenerateColumns="False" CanUserAddRows="False">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="PalveluID" Binding="{Binding PalveluID}" />
-                                <DataGridTextColumn Header="Tuote" Binding="{Binding Tuote}" />
+                                <DataGridTextColumn Header="PalveluID" Binding="{Binding PalveluID}" IsReadOnly="True" />
+                                <DataGridTextColumn Header="Tuote" Binding="{Binding Tuote}" IsReadOnly="True" />
                                 <DataGridTextColumn Header="Varattu määrä" Binding="{Binding VarattuMaara}" />
-                                <DataGridTextColumn Header="Varastomäärä yhteensä" Binding="{Binding Maara}" />
+                                <DataGridTextColumn Header="Varastomäärä yhteensä" Binding="{Binding Maara}" IsReadOnly="True" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </GroupBox>
