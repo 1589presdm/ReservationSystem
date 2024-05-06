@@ -609,6 +609,35 @@ namespace VarausjarjestelmaR3
 
             return laskut;
         }
+        public void UpdateCustomer(Customer customer) //asiakkaan tietojen päivitys tietokantaan
+        {
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                //numero on primary key
+                MySqlCommand cmd = new MySqlCommand("UPDATE asiakas SET asiakasID=@asiakasID, nimi=@nimi, puhelin=@puhelin, katuosoite=@katuosoite, postinumero=@postinumero, postitoimipaikka=@postitoimipaikka, sahkoposti=@sahkoposti  WHERE asiakasID=@asiakasId", conn);
+                cmd.Parameters.AddWithValue("@asiakasID", customer.AsiakasID);
+                cmd.Parameters.AddWithValue("@nimi", customer.Nimi);
+                cmd.Parameters.AddWithValue("@puhelin", customer.Puhelin);
+                cmd.Parameters.AddWithValue("@katuosoite", customer.Katuosoite);
+                cmd.Parameters.AddWithValue("@postinumero", customer.Postinumero);
+                cmd.Parameters.AddWithValue("@postitoimipaikka", customer.Postitoimipaikka);
+                cmd.Parameters.AddWithValue("@sahkoposti", customer.Sahkoposti);
+
+                cmd.ExecuteNonQuery();
+            }
+        }
+        public void DeleteCustomer(Customer customer) //poistetaan asiakas tietokannasta
+        {
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("DELETE FROM asiakas WHERE asiakasID=@asiakasID", conn);
+                cmd.Parameters.AddWithValue("@asiakasID", customer.AsiakasID);
+                cmd.ExecuteNonQuery();
+            }
+        }
 
     }
 }
