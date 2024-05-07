@@ -617,12 +617,33 @@ namespace VarausjarjestelmaR3
 
             return laskut;
         }
+
+        public void AddNewCustomer(Customer newCustomer)   //lisätään uusi asiakas tietokantaan
+        {
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("INSERT INTO asiakas (nimi, puhelin, katuosoite, postinumero, postitoimipaikka, sahkoposti) VALUES(@asiakasID, @nimi, @puhelin, @katuosoite, @postinumero, @postitoimipaikka, @sahkoposti)", conn);
+
+                cmd.Parameters.AddWithValue("@nimi", newCustomer.Nimi);
+                cmd.Parameters.AddWithValue("@puhelin", newCustomer.Puhelin);
+                cmd.Parameters.AddWithValue("@katuosoite", newCustomer.Katuosoite);
+                cmd.Parameters.AddWithValue("@postinumero", newCustomer.Postinumero);
+                cmd.Parameters.AddWithValue("@postitoimipaikka", newCustomer.Postitoimipaikka);
+                cmd.Parameters.AddWithValue("@sahkoposti", newCustomer.Sahkoposti);
+
+                cmd.ExecuteNonQuery();
+
+            }
+        }
         public void UpdateCustomer(Customer customer) //asiakkaan tietojen päivitys tietokantaan
         {
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 conn.Open();
-                //numero on primary key
+                
                 MySqlCommand cmd = new MySqlCommand("UPDATE asiakas SET asiakasID=@asiakasID, nimi=@nimi, puhelin=@puhelin, katuosoite=@katuosoite, postinumero=@postinumero, postitoimipaikka=@postitoimipaikka, sahkoposti=@sahkoposti  WHERE asiakasID=@asiakasId", conn);
                 cmd.Parameters.AddWithValue("@asiakasID", customer.AsiakasID);
                 cmd.Parameters.AddWithValue("@nimi", customer.Nimi);

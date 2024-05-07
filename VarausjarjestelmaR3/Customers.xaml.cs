@@ -25,10 +25,10 @@ namespace VarausjarjestelmaR3
     public partial class Customers : UserControl
     {
         private string connectionString = "Server=127.0.0.1; Port=3306; User ID=opiskelija; Pwd=opiskelija1; Database=vuokratoimistot;";
-        private Customer customer;
-        private Repository repo;
-        private ObservableCollection<Customer> customers;
-       
+        Customer customer;
+        Repository repo;
+        ObservableCollection<Customer> customers;
+        
         public Customers()
         {
             InitializeComponent();
@@ -36,7 +36,7 @@ namespace VarausjarjestelmaR3
             repo = new Repository();
             comCustomers.ItemsSource = GetCustomers();
             comCustomer.ItemsSource = GetCustomers();
-            var customer= new Customer();
+           
             this.DataContext = customer;
         }
         public ObservableCollection<Customer> GetCustomers()     //haetaan asiakkaat tietokannasta
@@ -67,27 +67,23 @@ namespace VarausjarjestelmaR3
 
             return customers;
         }
-
+       
         private void AddCustomer(object sender, RoutedEventArgs e)   //lisätään asiakas tietokantaan
         {
             
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
-            {
-                conn.Open();
-                MySqlCommand cmd = new MySqlCommand("INSERT INTO asiakas (nimi, puhelin, katuosoite, postinumero, postitoimipaikka, sahkoposti) VALUES(@asiakasID, @nimi, @puhelin, @katuosoite, @postinumero, @postitoimipaikka, @sahkoposti)", conn);
-
-                cmd.Parameters.AddWithValue("@nimi", customer.Nimi);
-                cmd.Parameters.AddWithValue("@puhelin", customer.Puhelin);
-                cmd.Parameters.AddWithValue("@katuosoite", customer.Katuosoite);
-                cmd.Parameters.AddWithValue("@postinumero", customer.Postinumero);
-                cmd.Parameters.AddWithValue("@postitoimipaikka", customer.Postitoimipaikka);
-                cmd.Parameters.AddWithValue("@sahkoposti", customer.Sahkoposti);
-                cmd.ExecuteNonQuery();
-                
-            }
+            var repo = new Repository();
+            Customer customer = new Customer();
+            customer.Nimi = Nimi.Text;
+            customer.Katuosoite = Katuosoite.Text;
+            customer.Postinumero = Postinumero.Text;
+            customer.Postitoimipaikka = Postitoimipaikka.Text;
+            customer.Puhelin = Puhelin.Text;
+            customer.Sahkoposti = Sahkoposti.Text;
+            
+            repo.AddNewCustomer(customer);
+            
         }
-        
-        private void DeleteSelectedCustomer(object sender, RoutedEventArgs e)
+        private void DeleteSelectedCustomer(object sender, RoutedEventArgs e) //poistetaan asiakas
         {
             var selectedCustomer = (Customer)comCustomer.SelectedItem;
 
@@ -101,7 +97,7 @@ namespace VarausjarjestelmaR3
                 }
             }
         }
-        private void UpdateCustomer(object sender, RoutedEventArgs e)
+        private void UpdateCustomer(object sender, RoutedEventArgs e) //päivitetään asiakas
         {
             var selectedCustomer = (Customer)comCustomers.SelectedItem; 
 
