@@ -15,7 +15,7 @@
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
             
-            <Button Content="Hae laskut" Click="HaeTiedot_Click" Margin="5"/>
+            <Button Content="Hae tiedot" Click="HaeTiedot_Click" Margin="5"/>
             <Separator Width="40" Visibility="Hidden"/>
             <!--<TextBlock Text="Päivitä tiedot alle sarakkeisiin ja paina päivitä." Margin="0,8,0,0" />-->
         </StackPanel>
@@ -25,7 +25,7 @@
         <Grid Grid.Row="2" >
             <!--<Button Content="Päivitä lasku" Click="Button_Click" Margin="5" Width="120"/>-->
             <!--<Button Content="Uusi" Click="Button_Click_1" Margin="5" Width="120" HorizontalAlignment="Left" Visibility="Hidden"/>-->
-            <Button Content="Uusi" Click="Exit" Margin="5" Width="120" HorizontalAlignment="Left" Visibility="Hidden"/>
+            <!--<Button Content="Uusi" Click="Exit" Margin="5" Width="120" HorizontalAlignment="Left" Visibility="Visible"/>-->
         </Grid>
     </Grid>
 </Window>

@@ -880,7 +880,32 @@ namespace VarausjarjestelmaR3
                 }
             }
         }
+        private MySqlDataAdapter adapter;
 
+        public DataTable GetInvoicesForPrint()
+        {
+            adapter = new MySqlDataAdapter();
+            DataTable dataTable = new DataTable();
+            try
+            {
+                using (var conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    //var cmd = new MySqlCommand("SELECT lasku.*, asiakas.*, asiakkaan_varaus.* FROM lasku JOIN asiakas ON lasku.asiakasID = asiakas.asiakasID JOIN asiakkaan_varaus ON lasku.varausID = asiakkaan_varaus.varausID", conn);
+
+                    //Add WHERE for dates
+                    var cmd = new MySqlCommand("SELECT  asiakkaan_varaus.*, asiakas.*, varauksen_palvelut.*, palvelu.* FROM asiakkaan_varaus JOIN asiakas ON asiakkaan_varaus.asiakasID = asiakas.asiakasID JOIN varauksen_palvelut ON  asiakkaan_varaus.varausID = varauksen_palvelut.varausID JOIN palvelu ON varauksen_palvelut.palveluID = palvelu.palveluID", conn);
+                    adapter.SelectCommand = cmd;
+                    adapter.Fill(dataTable);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Tietoja ei voitu hakea.", "Virhe!", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            return dataTable;
+
+        }
     }
 }
 

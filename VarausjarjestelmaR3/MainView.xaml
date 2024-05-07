@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VarausjarjestelmaR3"
         mc:Ignorable="d"
-        Title="Varausjärjestelmä" MinHeight="800" MinWidth="1200">
+        Title="Varausjärjestelmä" MinHeight="500" MinWidth="850" Height="500" Width="850">
     <Window.Resources>
         <Style x:Key="MyButton" TargetType="Button">
             <Setter Property="OverridesDefaultStyle" Value="True" />
