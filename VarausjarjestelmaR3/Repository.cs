@@ -10,6 +10,7 @@ using System.Data.SqlClient;
 using System.Security.Policy;
 using MySqlConnector;
 using VarausjarjestelmaR3.Classes;
+using System.Data;
 
 namespace VarausjarjestelmaR3
 {
@@ -456,9 +457,9 @@ namespace VarausjarjestelmaR3
         }
 
         //Haetaan kaikki varauksen palvelut listalle:
-        public ObservableCollection<ReservationServices> GetReservationServices(int varausID)
+        public ObservableCollection<ReservationService> GetReservationServices(int varausID)
         {
-            var varauksenPalvelut = new ObservableCollection<ReservationServices>();
+            var varauksenPalvelut = new ObservableCollection<ReservationService>();
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -471,7 +472,7 @@ namespace VarausjarjestelmaR3
                 {
                     while (dr.Read())
                     {
-                        varauksenPalvelut.Add(new ReservationServices
+                        varauksenPalvelut.Add(new ReservationService
                         {
                             PalveluvarausID = dr.GetInt32("as_palveluvarauksenID"),
                             Palvelu = GetService(dr.GetInt32("palveluID")),
@@ -759,8 +760,6 @@ namespace VarausjarjestelmaR3
             }
         }
 
-
-
         public void DeleteInvoice(int invoiceNumber)
         {
             using (var conn = new MySqlConnection(connectionString))
@@ -771,8 +770,164 @@ namespace VarausjarjestelmaR3
                 cmd.ExecuteNonQuery();
             }
         }
-    }
 
+
+        //Uuden tai muokatun varauksen tallentaminen:
+        public void SaveReservation(Reservation varaus)
+        {
+            int ID = varaus.VarausID;
+            bool uusiVaraus = (ID == 0);
+
+            if (uusiVaraus)
+            {
+                //!!!
+                //TOIMINTA ERITTÄIN EPÄVARMAA!
+                //!!!
+
+                //using (MySqlConnection conn = new MySqlConnection(connectionString))
+                //{
+                //    conn.Open();
+
+                //    MySqlCommand cmd = new MySqlCommand("INSERT INTO asiakkaan_varaus(varaus_alkaa, varaus_paattyy, huoneen_numeroID, varauspvm, lisatiedot, asiakasID, tyontekijaID) VALUES(@varaus_alkaa, @varaus_paattyy, @huoneen_numeroID, @varauspvm, @lisatiedot, @asiakasID, @tyontekijaID)", conn);
+                //    cmd.Parameters.AddWithValue("@varaus_alkaa", varaus.VarausAlkaa);
+                //    cmd.Parameters.AddWithValue("@varaus_paattyy", varaus.VarausPaattyy);
+                //    cmd.Parameters.AddWithValue("@huoneen_numeroID", varaus.Huone.HuoneenNumeroID);
+                //    cmd.Parameters.AddWithValue("@varauspvm", varaus.Varauspaiva);
+                //    cmd.Parameters.AddWithValue("@lisatiedot", varaus.Lisatiedot);
+                //    cmd.Parameters.AddWithValue("@asiakasID", varaus.Asiakas.AsiakasID);
+                //    cmd.Parameters.AddWithValue("@tyontekijaID", varaus.Tyontekija.TyontekijaID);
+
+                //    cmd.ExecuteNonQuery();
+
+                //    int lastInsertedId = Convert.ToInt32(cmd.ExecuteScalar());
+
+                //    foreach (var varattuPalvelu in varaus.VarauksenPalvelut)
+                //    {
+                //        cmd = new MySqlCommand("INSERT INTO varauksen_palvelut(palveluID, kpl, varausID) VALUES(@palveluID, @kpl, @varausID)", conn);
+                //        cmd.Parameters.AddWithValue("@palveluID", varattuPalvelu.Palvelu.PalveluID);
+                //        cmd.Parameters.AddWithValue("@kpl", varattuPalvelu.Kpl);
+                //        cmd.Parameters.AddWithValue("@varausID", lastInsertedId);
+                        
+                //        cmd.ExecuteNonQuery();
+                //    }
+                //}
+            }
+            else
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    //Päivitetään varauksen lisätiedot:
+                    MySqlCommand cmd = new MySqlCommand("UPDATE asiakkaan_varaus SET lisatiedot=@lisatiedot WHERE varausID=@varausID", conn);
+                    cmd.Parameters.AddWithValue("@varausID", varaus.VarausID);
+                    cmd.Parameters.AddWithValue("@lisatiedot", varaus.Lisatiedot);
+                    cmd.ExecuteNonQuery();
+
+                    //Vanhat palveluvaraukset pois:
+                    cmd = new MySqlCommand("DELETE FROM varauksen_palvelut WHERE varausID=@varausID", conn);
+                    cmd.Parameters.AddWithValue("@varausID", varaus.VarausID);
+                    cmd.ExecuteNonQuery();
+
+                    //Tallennetaan päivitetyt palveluvaraukset:
+                    foreach (var varattuPalvelu in varaus.VarauksenPalvelut)
+                    {
+                        cmd = new MySqlCommand("INSERT INTO varauksen_palvelut(palveluID, kpl, varausID) VALUES(@palveluID, @kpl, @varausID)", conn);
+                        cmd.Parameters.AddWithValue("@palveluID", varattuPalvelu.Palvelu.PalveluID);
+                        cmd.Parameters.AddWithValue("@kpl", varattuPalvelu.Kpl);
+                        cmd.Parameters.AddWithValue("@varausID", varaus.VarausID);
+
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+        }
+
+        //Poistetaan varaus: 
+        public void DeleteReservation(int reservationID)
+        {
+            using (var conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                var cmd = new MySqlCommand("DELETE FROM varauksen_palvelut WHERE varausID = @varausID", conn);
+                cmd.Parameters.AddWithValue("@varausID", reservationID);
+                cmd.ExecuteNonQuery();
+
+                cmd = new MySqlCommand("DELETE FROM asiakkaan_varaus WHERE varausID = @varausID", conn);
+                cmd.Parameters.AddWithValue("@varausID", reservationID);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        //Asiakastietojen tallennus/päivitys:
+        public void SaveCustomer(Customer asiakas)
+        {
+            bool uusiAsiakas = (asiakas.AsiakasID == 0);
+
+            if (uusiAsiakas)
+            {
+
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    MySqlCommand cmd = new MySqlCommand("INSERT INTO asiakas(nimi, puhelin, katuosoite, postinumero, postitoimipaikka, sahkoposti) VALUES(@nimi, @puhelin, @katuosoite, @postinumero, @postitoimipaikka, @sahkoposti)", conn);
+                    cmd.Parameters.AddWithValue("@nimi", asiakas.Nimi);
+                    cmd.Parameters.AddWithValue("@puhelin", asiakas.Puhelin);
+                    cmd.Parameters.AddWithValue("@katuosoite", asiakas.Katuosoite);
+                    cmd.Parameters.AddWithValue("@postinumero", asiakas.Postinumero);
+                    cmd.Parameters.AddWithValue("@postitoimipaikka", asiakas.Postitoimipaikka);
+                    cmd.Parameters.AddWithValue("@sahkoposti", asiakas.Sahkoposti);
+                    
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            else
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    MySqlCommand cmd = new MySqlCommand("UPDATE asiakas SET nimi=@nimi, puhelin=@puhelin, katuosoite=@katuosoite, postinumero=@postinumero, postitoimipaikka=@postitoimipaikka, sahkoposti=@sahkoposti  WHERE asiakasID=@asiakasID", conn);
+                    cmd.Parameters.AddWithValue("@asiakasID", asiakas.AsiakasID);
+                    cmd.Parameters.AddWithValue("@nimi", asiakas.Nimi);
+                    cmd.Parameters.AddWithValue("@puhelin", asiakas.Puhelin);
+                    cmd.Parameters.AddWithValue("@katuosoite", asiakas.Katuosoite);
+                    cmd.Parameters.AddWithValue("@postinumero", asiakas.Postinumero);
+                    cmd.Parameters.AddWithValue("@postitoimipaikka", asiakas.Postitoimipaikka);
+                    cmd.Parameters.AddWithValue("@sahkoposti", asiakas.Sahkoposti);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+        private MySqlDataAdapter adapter;
+
+        public DataTable GetInvoicesForPrint()
+        {
+            adapter = new MySqlDataAdapter();
+            DataTable dataTable = new DataTable();
+            try
+            {
+                using (var conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    //var cmd = new MySqlCommand("SELECT lasku.*, asiakas.*, asiakkaan_varaus.* FROM lasku JOIN asiakas ON lasku.asiakasID = asiakas.asiakasID JOIN asiakkaan_varaus ON lasku.varausID = asiakkaan_varaus.varausID", conn);
+
+                    //Add WHERE for dates
+                    var cmd = new MySqlCommand("SELECT  asiakkaan_varaus.*, asiakas.*, varauksen_palvelut.*, palvelu.* FROM asiakkaan_varaus JOIN asiakas ON asiakkaan_varaus.asiakasID = asiakas.asiakasID JOIN varauksen_palvelut ON  asiakkaan_varaus.varausID = varauksen_palvelut.varausID JOIN palvelu ON varauksen_palvelut.palveluID = palvelu.palveluID", conn);
+                    adapter.SelectCommand = cmd;
+                    adapter.Fill(dataTable);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Tietoja ei voitu hakea.", "Virhe!", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            return dataTable;
+
+        }
+    }
 }
 
 
