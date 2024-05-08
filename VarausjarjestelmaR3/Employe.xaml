@@ -27,9 +27,9 @@
                     <Canvas>
 
                         <ComboBox x:Name="combListOfDelete" Height="24" Width="212"  SelectedValue="{Binding TyontekijaID}"  SelectedValuePath="TyontekijaID" DisplayMemberPath="Nimi" Canvas.Left="334" Canvas.Top="61" HorizontalAlignment="Left" VerticalAlignment="Center"  />
-                        <Label Content="Mitä toimipiste haluaisit poistaa?" HorizontalAlignment="Left" VerticalAlignment="Center" Width="199" Height="26" Canvas.Left="100" Canvas.Top="61"/>
+                        <Label Content="Valitse käyttäjä:" HorizontalAlignment="Left" VerticalAlignment="Center" Width="199" Height="26" Canvas.Left="100" Canvas.Top="61"/>
                         <Button Name="deleteBtn" Content="poistaa" HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="75" Canvas.Left="346" Canvas.Top="343" Click="DeleteBtn" Visibility="Collapsed"/>
-                        <Button Content="Etsi" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Canvas.Left="570" Canvas.Top="61" Click="ShowEmployeeBtn" />
+                        <Button Content="Hae tiedot" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="570" Canvas.Top="61" Click="ShowEmployeeBtn" />
                         <ContentControl x:Name="toimiposteContentControl" Grid.Column="1" Height="195" Width="595" Canvas.Left="100" Canvas.Top="125" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                     </Canvas>
 
@@ -40,9 +40,9 @@
                     <!-- Toimipisteiden muokkaamisen näkymä ja toiminnallisuus -->
                     <Canvas>
                         <ComboBox x:Name="combListOfChange" Height="24" Width="212"  SelectedValue="{Binding TyontekijaID}"  SelectedValuePath="TyontekijaID" DisplayMemberPath="Nimi" Canvas.Left="334" Canvas.Top="61" HorizontalAlignment="Left" VerticalAlignment="Center"  />
-                        <Label Content="Mitä toimipiste haluaisit muokata?" HorizontalAlignment="Left" VerticalAlignment="Center" Width="199" Height="26" Canvas.Left="100" Canvas.Top="61"/>
-                        <Button Name="ChangeBtn" Content="Muokkaa" HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="75" Canvas.Left="346" Canvas.Top="343" Click="Chnage" Visibility="Collapsed"/>
-                        <Button Content="Etsi" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Canvas.Left="570" Canvas.Top="61" Click="ShowEmployeeBtn" />
+                        <Label Content="Valitse käyttäjä:" HorizontalAlignment="Left" VerticalAlignment="Center" Width="199" Height="26" Canvas.Left="100" Canvas.Top="61"/>
+                        <Button Name="ChangeBtn" Content="Tallenna muutokset" HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="120" Canvas.Left="346" Canvas.Top="343" Click="Chnage" Visibility="Collapsed"/>
+                        <Button Content="Hae tiedot" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="570" Canvas.Top="61" Click="ShowEmployeeBtn" />
                         <ContentControl x:Name="toimiposteContentControlsec" Grid.Column="1" Height="195" Width="595" Canvas.Left="100" Canvas.Top="125" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                     </Canvas>
                 </TabItem>
