@@ -28,12 +28,31 @@ namespace VarausjarjestelmaR3.Reports
 
         private Repository repo;
 
-        private void HaeTiedot_Click(object sender, RoutedEventArgs e)  //Get laskunumbers click
-        {
+        private void GetInfo_Click(object sender, RoutedEventArgs e)
+        //{
+        //    DataTable dataTable = repo.GetInvoicesForPrint();
+
+        //    DateTime startDate = StartDatePicker.SelectedDate ?? DateTime.MinValue;
+        //    DateTime endDate = EndDatePicker.SelectedDate ?? DateTime.MaxValue;
+
+        //    dataGridInvoices.ItemsSource = dataTable.DefaultView;
+        //}
+        {//untested, waiting for code fixes in customers.xaml
+            // Fetch data from the repository
             DataTable dataTable = repo.GetInvoicesForPrint();
-            dataGridInvoices.ItemsSource = dataTable.DefaultView;
+
+            // Get the selected start and end dates
+            DateTime startDate = StartDatePicker.SelectedDate ?? DateTime.MinValue;
+            DateTime endDate = EndDatePicker.SelectedDate ?? DateTime.MaxValue;
+
+            // Filter the data based on the date range
+            DataView dataView = new DataView(dataTable);
+            dataView.RowFilter = $"varaus_alkaa >= '{startDate.ToString("yyyy-MM-dd")}' AND varaus_alkaa <= '{endDate.ToString("yyyy-MM-dd")}'";
+
+            // Update the DataGrid with the filtered data
+            dataGridInvoices.ItemsSource = dataView;
         }
-        private void Exit(object sender, RoutedEventArgs e)  //close window
+        private void Exit(object sender, RoutedEventArgs e)  
         {
             DialogResult = true;
         }

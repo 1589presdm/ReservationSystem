@@ -13,13 +13,21 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
+        <GroupBox Header="Tiedonhaku">
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
-            
-            <Button Content="Hae tiedot" Click="HaeTiedot_Click" Margin="5"/>
+                <Label Content="Alkupäivä:"/>
+                <Separator Width="20" Visibility="Hidden"/>
+                <DatePicker x:Name="StartDatePicker" />
+            <Separator Width="20" Visibility="Hidden"/>
+                <Label Content="Loppupäivä:"/>
+                <Separator Width="20" Visibility="Hidden"/>
+                <DatePicker x:Name="EndDatePicker" />
             <Separator Width="40" Visibility="Hidden"/>
+            <Button Content="Hae tiedot" Click="GetInfo_Click" Margin="5"/>
+            
             <!--<TextBlock Text="Päivitä tiedot alle sarakkeisiin ja paina päivitä." Margin="0,8,0,0" />-->
         </StackPanel>
-
+        </GroupBox>
 
         <DataGrid x:Name="dataGridInvoices" Grid.Row="1" AutoGenerateColumns="True" Margin="10"/>
         <Grid Grid.Row="2" >

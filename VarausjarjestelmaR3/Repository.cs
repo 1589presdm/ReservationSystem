@@ -901,8 +901,9 @@ namespace VarausjarjestelmaR3
                 }
             }
         }
-        private MySqlDataAdapter adapter;
 
+        //Get information for reports
+        private MySqlDataAdapter adapter;
         public DataTable GetInvoicesForPrint()
         {
             adapter = new MySqlDataAdapter();
@@ -915,7 +916,7 @@ namespace VarausjarjestelmaR3
                     //var cmd = new MySqlCommand("SELECT lasku.*, asiakas.*, asiakkaan_varaus.* FROM lasku JOIN asiakas ON lasku.asiakasID = asiakas.asiakasID JOIN asiakkaan_varaus ON lasku.varausID = asiakkaan_varaus.varausID", conn);
 
                     //Add WHERE for dates
-                    var cmd = new MySqlCommand("SELECT  asiakkaan_varaus.*, asiakas.*, varauksen_palvelut.*, palvelu.* FROM asiakkaan_varaus JOIN asiakas ON asiakkaan_varaus.asiakasID = asiakas.asiakasID JOIN varauksen_palvelut ON  asiakkaan_varaus.varausID = varauksen_palvelut.varausID JOIN palvelu ON varauksen_palvelut.palveluID = palvelu.palveluID", conn);
+                    var cmd = new MySqlCommand("SELECT a.varausID, a.varaus_alkaa, a.varaus_paattyy, a.huoneen_numeroID, a.varauspvm, a.lisatiedot, a.asiakasID AS asiakkaan_varaus_asiakasID, a.tyontekijaID, b.asiakasID AS asiakas_asiakasID, b.nimi AS asiakas_nimi, b.puhelin AS asiakas_puhelin, b.katuosoite AS asiakas_katuosoite, b.postinumero AS asiakas_postinumero, b.postitoimipaikka AS asiakas_postitoimipaikka, b.sahkoposti AS asiakas_sahkoposti, c.palveluID AS varauksen_palvelut_palveluID, c.kpl, c.varausID AS varauksen_palvelut_varausID, d.palveluID AS palvelu_palveluID, d.tuote AS palvelu_tuote, d.palvelun_hinta, d.alv_prosentti AS palvelu_alv_prosentti, d.maara AS palvelu_maara FROM  asiakkaan_varaus AS a, asiakas AS b, varauksen_palvelut AS c, palvelu AS d WHERE a.asiakasID = b.asiakasID AND a.varausID = c.varausID AND c.palveluID = d.palveluID; ", conn);
                     adapter.SelectCommand = cmd;
                     adapter.Fill(dataTable);
                 }
