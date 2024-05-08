@@ -16,7 +16,7 @@
                     <StackPanel Height="349" Margin="68,0,55,0" Name="mainBox">
                         <UserControl Height="208" Width="683" Name="UserControlAddSec" ></UserControl>
                         <Canvas Height="100" RenderTransformOrigin="0.5,0.5">
-                            <Button Grid.Column="1" Width="100" Click="AddNewOffice" Canvas.Left="266" Canvas.Top="35" HorizontalAlignment="Center" VerticalAlignment="Top" Content="Lisää toimipiste"/>
+                            <Button Grid.Column="1" Width="100" Click="AddNewOffice" Canvas.Left="266" Canvas.Top="35" HorizontalAlignment="Center" VerticalAlignment="Top">Lisää</Button>
                         </Canvas>
                     </StackPanel>
 
@@ -27,9 +27,9 @@
                     <Canvas>
 
                         <ComboBox x:Name="combListOfDelete" Height="24" Width="212"  SelectedValue="{Binding ToimipisteID}"  SelectedValuePath="ToimipisteID" DisplayMemberPath="ToimipisteNimi" Canvas.Left="334" Canvas.Top="61" HorizontalAlignment="Left" VerticalAlignment="Center"  />
-                        <Label Content="Minkä toimipisteen haluaisit poistaa?" HorizontalAlignment="Left" VerticalAlignment="Center" Width="210" Height="26" Canvas.Left="100" Canvas.Top="61"/>
-                        <Button Name="deleteBtn" Content="Poista toimipiste" HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="120" Click="DeleteBtn" Canvas.Left="346" Canvas.Top="343"  Visibility="Collapsed"/>
-                        <Button Content="Hae tiedot" HorizontalAlignment="Left" VerticalAlignment="Center" Width="66" Canvas.Left="570" Canvas.Top="61" Click="ShowOfficeInfo" />
+                        <Label Content="Mitä toimipiste haluaisit poistaa?" HorizontalAlignment="Left" VerticalAlignment="Center" Width="199" Height="26" Canvas.Left="100" Canvas.Top="61"/>
+                        <Button Name="deleteBtn" Content="poistaa" HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="75" Click="DeleteBtn" Canvas.Left="346" Canvas.Top="343"  Visibility="Collapsed"/>
+                        <Button Content="Etsi" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Canvas.Left="570" Canvas.Top="61" Click="ShowOfficeInfo" />
                         <ContentControl x:Name="toimiposteContentControl" Grid.Column="1" Height="195" Width="595" Canvas.Left="100" Canvas.Top="125" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                     </Canvas>
 
@@ -40,9 +40,9 @@
                     <!-- Toimipisteiden muokkaamisen näkymä ja toiminnallisuus -->
                     <Canvas>
                         <ComboBox x:Name="combListOfChange" Height="24" Width="212"  SelectedValue="{Binding ToimipisteID}"  SelectedValuePath="ToimipisteID" DisplayMemberPath="ToimipisteNimi" Canvas.Left="334" Canvas.Top="61" HorizontalAlignment="Left" VerticalAlignment="Center"  />
-                        <Label Content="Mitä toimipistettä haluaisit muokata?" HorizontalAlignment="Left" VerticalAlignment="Center" Width="210" Height="26" Canvas.Left="100" Canvas.Top="61"/>
-                        <Button Name="ChangeBtn" Content="Tallenna muutokset" HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="120" Click="Chnage" Canvas.Left="346" Canvas.Top="343" Visibility="Collapsed"/>
-                        <Button Content="Hae tiedot" HorizontalAlignment="Left" VerticalAlignment="Center" Width="67" Canvas.Left="570" Canvas.Top="61" Click="ShowOfficeInfo" />
+                        <Label Content="Mitä toimipiste haluaisit muokata?" HorizontalAlignment="Left" VerticalAlignment="Center" Width="199" Height="26" Canvas.Left="100" Canvas.Top="61"/>
+                        <Button Name="ChangeBtn" Content="Muokkaa" HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="75" Click="Chnage" Canvas.Left="346" Canvas.Top="343" Visibility="Collapsed"/>
+                        <Button Content="Etsi" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Canvas.Left="570" Canvas.Top="61" Click="ShowOfficeInfo" />
                         <ContentControl x:Name="toimiposteContentControlsec" Grid.Column="1" Height="195" Width="595" Canvas.Left="100" Canvas.Top="125" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                     </Canvas>
                 </TabItem>
@@ -54,7 +54,7 @@
 
 
         <!-- Huoneiden hallinta välilehti -->
-        <TabItem Header="Tilat">
+        <TabItem Header="Huoneet">
             <TabControl>
                 <!-- Huoneiden lisääminen välilehti -->
                 <TabItem Header="Lisää">
@@ -62,7 +62,7 @@
                     <StackPanel Height="349" Margin="68,0,55,0" Name="RoommainBox">
                         <UserControl Height="208" Width="683" Name="RoomUserControlAddSec" ></UserControl>
                         <Canvas Height="100" RenderTransformOrigin="0.5,0.5">
-                            <Button Width="100" Click="AddNewRoom" Canvas.Left="266" Canvas.Top="35" HorizontalAlignment="Center" VerticalAlignment="Top">Lisää tila</Button>
+                            <Button Width="100" Click="AddNewRoom" Canvas.Left="266" Canvas.Top="35" HorizontalAlignment="Center" VerticalAlignment="Top">Lisää</Button>
                         </Canvas>
 
                     </StackPanel>
@@ -74,9 +74,9 @@
                     <Canvas>
 
                         <ComboBox x:Name="RoomcombListOfDelete" Height="24" Width="212"  SelectedValue="{Binding HuoneenNumeroID}"  SelectedValuePath="HuoneenNumeroID" DisplayMemberPath="Nimi" Canvas.Left="334" Canvas.Top="61" HorizontalAlignment="Left" VerticalAlignment="Center"  />
-                        <Label Content="Minkä tilan haluaisit poistaa?" HorizontalAlignment="Left" VerticalAlignment="Center" Width="199" Height="26" Canvas.Left="100" Canvas.Top="61"/>
-                        <Button Name="RoomDeleteBtn" Content="Poista tila" HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="75" Click="DeleteRoomBtn" Canvas.Left="346" Canvas.Top="343"  Visibility="Collapsed"/>
-                        <Button Content="Hae tiedot" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="570" Canvas.Top="61" Click="RoomInfo" />
+                        <Label Content="Mitä Huonetta haluaisit poistaa?" HorizontalAlignment="Left" VerticalAlignment="Center" Width="199" Height="26" Canvas.Left="100" Canvas.Top="61"/>
+                        <Button Name="RoomDeleteBtn" Content="poistaa" HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="75" Click="DeleteRoomBtn" Canvas.Left="346" Canvas.Top="343"  Visibility="Collapsed"/>
+                        <Button Content="Etsi" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Canvas.Left="570" Canvas.Top="61" Click="RoomInfo" />
                         <ContentControl x:Name="HuoneContentControl" Grid.Column="1" Height="195" Width="595" Canvas.Left="100" Canvas.Top="125" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                     </Canvas>
 
@@ -89,9 +89,9 @@
                     <Canvas>
 
                         <ComboBox x:Name="RoomcombListOfChange" Height="24" Width="212"  SelectedValue="{Binding HuoneenNumeroID}"  SelectedValuePath="HuoneenNumeroID" DisplayMemberPath="Nimi" Canvas.Left="334" Canvas.Top="61" HorizontalAlignment="Left" VerticalAlignment="Center"  />
-                        <Label Content="Mitä tilaa haluaisit muokata?" HorizontalAlignment="Left" VerticalAlignment="Center" Width="199" Height="26" Canvas.Left="100" Canvas.Top="61"/>
-                        <Button Name="RoomChangeBtn" Content="Tallenna muutokset" HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="120" Click="ChangeRoomBtn" Canvas.Left="346" Canvas.Top="343"  Visibility="Collapsed"/>
-                        <Button Content="Hae tiedot" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="570" Canvas.Top="61" Click="RoomInfo" />
+                        <Label Content="Mitä Huonetta haluaisit muokara?" HorizontalAlignment="Left" VerticalAlignment="Center" Width="199" Height="26" Canvas.Left="100" Canvas.Top="61"/>
+                        <Button Name="RoomChangeBtn" Content="Muokkaa" HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="75" Click="ChangeRoomBtn" Canvas.Left="346" Canvas.Top="343"  Visibility="Collapsed"/>
+                        <Button Content="Etsi" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Canvas.Left="570" Canvas.Top="61" Click="RoomInfo" />
                         <ContentControl x:Name="HuoneContentControlForChange" Grid.Column="1" Height="195" Width="595" Canvas.Left="100" Canvas.Top="125" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                     </Canvas>
                 </TabItem>
