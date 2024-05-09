@@ -77,8 +77,7 @@ namespace VarausjarjestelmaR3
 
         private void ReportsBtn_Click(object sender, RoutedEventArgs e)
         {
-            Reports.Reports reportsWindow = new Reports.Reports();
-            var returnValue = reportsWindow.ShowDialog();
+            contentControl.Content = new Report();
         }
     }
 

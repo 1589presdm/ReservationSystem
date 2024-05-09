@@ -113,8 +113,8 @@
       <DependentUpon>OffficeInfoList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Offices.xaml.cs" />
-    <Compile Include="Reports\Reports.xaml.cs">
-      <DependentUpon>Reports.xaml</DependentUpon>
+    <Compile Include="Report.xaml.cs">
+      <DependentUpon>Report.xaml</DependentUpon>
     </Compile>
     <Compile Include="Repository.cs" />
     <Compile Include="RoomInfoList.xaml.cs">
@@ -170,7 +170,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Reports\Reports.xaml">
+    <Page Include="Report.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -230,6 +230,8 @@
     <Resource Include="Icons\reservation.png" />
     <Resource Include="Icons\service.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Reports\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

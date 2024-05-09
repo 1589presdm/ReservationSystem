@@ -70,6 +70,7 @@
                                     <GridViewColumn Header="Varauspäivä" DisplayMemberBinding="{Binding Varauspaiva, StringFormat={}{0:dd.MM.yyyy}}" Width="100"/>
                                     <GridViewColumn Header="Huone" DisplayMemberBinding="{Binding Huone.Nimi}" Width="100"/>
                                     <GridViewColumn Header="Lisätiedot" DisplayMemberBinding="{Binding Lisatiedot}" Width="80" />
+                                    <GridViewColumn Header="Työntekijä" DisplayMemberBinding="{Binding Tyontekija.Nimi}" Width="80" />
                                     <GridViewColumn Header="Asiakas" DisplayMemberBinding="{Binding Asiakas.Nimi}" Width="80" />
                                     <GridViewColumn Header="Varauksen palvelut" Width="150">
                                         <GridViewColumn.CellTemplate>
