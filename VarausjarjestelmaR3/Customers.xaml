@@ -5,59 +5,96 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:VarausjarjestelmaR3"
              mc:Ignorable="d" 
-                d:DesignHeight ="450" d:DesignWidth="800">
+                d:DesignHeight ="450" d:DesignWidth="800" Loaded="OnLoaded">
     <TabControl>
-        <!--Asiakkaat välilehti-->
-        <TabItem Header="Asiakkaat">
+        <!-- Toimipisteiden hallinta välilehti -->
+        <TabItem Header="Asiakas">
             <TabControl Margin="-1,0,1,0">
-                <!--Lisää-välilehti-->
+                <!-- Toimipisteiden lisääminen välilehti -->
                 <TabItem Header="Lisää">
-                    <Canvas Margin="21,0,19,99" Height="318">
 
-                        <Label Content="Nimi" Canvas.Left="39" Canvas.Top="50" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-                        <TextBox Text="{Binding Nimi}" TextWrapping="Wrap" Canvas.Left="178" Canvas.Top="55" Width="120"/>
+                    <StackPanel Height="349" Margin="68,0,55,0" Name="mainBox">
+                        <UserControl Height="208" Width="683" Name="UserControlAddSec" ></UserControl>
+                        <Canvas Height="100" RenderTransformOrigin="0.5,0.5">
+                            <Button Grid.Column="1" Width="100" Canvas.Left="266" Canvas.Top="35" HorizontalAlignment="Center" Click="AddNewCustomer" VerticalAlignment="Top">Lisää</Button>
+                        </Canvas>
+                    </StackPanel>
 
-                        <Label Content="Osoite" Canvas.Left="39" Canvas.Top="80" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-                        <TextBox Text="{Binding Katuosoite}"  TextWrapping="Wrap" Canvas.Left="178" Canvas.Top="85" Width="120"/>
+                </TabItem>
 
-                        <Label Content="Postinumero" Canvas.Left="39" Canvas.Top="110" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-                        <TextBox Text="{Binding Postinumero}" TextWrapping="Wrap" Canvas.Left="178" Canvas.Top="115" Width="120"/>
+                <!-- Toimipisteiden poistaminen välilehti -->
+                <TabItem Header="Poista" HorizontalAlignment="Right" Width="43" Name="deleteSection">
+                    <Canvas>
 
-                        <Label Content="Postitoimipaikka" Canvas.Left="39" Canvas.Top="140" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-                        <TextBox x:Name="Postitoimipaikka" Text="{Binding Postitoimipaikka}" TextWrapping="Wrap" Canvas.Left="178" Canvas.Top="145" Width="120"/>
+                        <ComboBox x:Name="combListOfDelete" Height="24" Width="212"  SelectedValue="{Binding AsiakasID}"  SelectedValuePath="AsiakasID" DisplayMemberPath="Nimi" Canvas.Left="334" Canvas.Top="61" HorizontalAlignment="Left" VerticalAlignment="Center"  />
+                        <Label Content="Valitse asiakas:" HorizontalAlignment="Left" VerticalAlignment="Center" Width="199" Height="26" Canvas.Left="100" Canvas.Top="61"/>
+                        <Button Name="deleteBtn" Content="poistaa" HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="75" Canvas.Left="346" Canvas.Top="343" Click="DeleteBtn" Visibility="Collapsed"/>
+                        <Button Content="Hae tiedot" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="570" Canvas.Top="61" Click="ShowCustomerBtn" />
+                        <ContentControl x:Name="toimiposteContentControl" Grid.Column="1" Height="195" Width="595" Canvas.Left="100" Canvas.Top="125" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    </Canvas>
 
-                        <Label Content="Puhelin" Canvas.Left="39" Canvas.Top="170" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-                        <TextBox x:Name="Puhelin" Text="{Binding Puhelin}" TextWrapping="Wrap" Canvas.Left="178" Canvas.Top="175" Width="120"/>
+                </TabItem>
 
-                        <Label Content="Sähköposti" Canvas.Left="39" Canvas.Top="200" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-                        <TextBox Text="{Binding sahkoposti}" TextWrapping="Wrap" Canvas.Left="178" Canvas.Top="205" Width="120"/>
-
-                        <Button x:Name="AddCustomerBtn" Content="Lisää" Canvas.Left="321" Canvas.Top="264" Height="26" Width="87" Click="AddCustomer"/>
+                <!-- Toimipisteiden muokkaaminen välilehti -->
+                <TabItem Header="Muokkaa" Name="changeSection">
+                    <!-- Toimipisteiden muokkaamisen näkymä ja toiminnallisuus -->
+                    <Canvas>
+                        <ComboBox x:Name="combListOfChange" Height="24" Width="212"  SelectedValue="{Binding AsiakasID}"  SelectedValuePath="AsiakasID" DisplayMemberPath="Nimi" Canvas.Left="334" Canvas.Top="61" HorizontalAlignment="Left" VerticalAlignment="Center"  />
+                        <Label Content="Valitse asiakas:" HorizontalAlignment="Left" VerticalAlignment="Center" Width="199" Height="26" Canvas.Left="100" Canvas.Top="61"/>
+                        <Button Name="ChangeBtn" Content="Tallenna muutokset" HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="120" Canvas.Left="346" Canvas.Top="343" Click="Chnage" Visibility="Collapsed"/>
+                        <Button Content="Hae tiedot" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="570" Canvas.Top="61" Click="ShowCustomerBtn" />
+                        <ContentControl x:Name="toimiposteContentControlsec" Grid.Column="1" Height="195" Width="595" Canvas.Left="100" Canvas.Top="125" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                     </Canvas>
                 </TabItem>
-                <!--Päivitä-välilehti-->
-                <TabItem Header="Päivitä">
-                    <Canvas Margin="21,0,19,99" Height="318">
-                        <Label Content="Valitse asiakas" Canvas.Left="39" Canvas.Top="20" 
-                           HorizontalAlignment="Center" VerticalAlignment="Top" Width="95"/>
-                        <ComboBox Name="comCustomers" DisplayMemberPath="Nimi" Height="21" 
-                              Canvas.Left="184" Canvas.Top="22" Width="190"
-                              HorizontalAlignment="Center" VerticalAlignment="Top"/>
-                        <Button x:Name="UpDateCustomerBtn" Content="Päivitä" 
-                                Canvas.Left="321" Canvas.Top="264" Height="26" Width="87" Click="UpdateCustomer" />
+
+                <TabItem Header="Historia" Name="historySection">
+                    <!-- Toimipisteiden muokkaamisen näkymä ja toiminnallisuus -->
+                    <Canvas>
+                        <ComboBox Name="combListOfHistory" Height="24" Width="212"  SelectedValue="{Binding AsiakasID}"  SelectedValuePath="AsiakasID" DisplayMemberPath="Nimi" Canvas.Left="334" Canvas.Top="61" HorizontalAlignment="Left" VerticalAlignment="Center"  />
+                        <Label Content="Ketä etsit?" HorizontalAlignment="Left" VerticalAlignment="Center" Width="199" Height="26" Canvas.Left="100" Canvas.Top="61"/>
+                        <Button Content="Etsi" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Canvas.Left="570" Canvas.Top="61" Click="ShowHestory" />
+
+
+                        <ListView Grid.Column="0" Grid.Row="0" Name="Varaukset" Canvas.Left="16" Canvas.Top="140" >
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                    <Setter Property="BorderBrush" Value="LightGray"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.View >
+                                <GridView>
+                                    <GridViewColumn  Header="ID" DisplayMemberBinding="{Binding VarausID}" Width="30" />
+                                    <GridViewColumn Header="Varaus alkaa" DisplayMemberBinding="{Binding VarausAlkaa, StringFormat={}{0:dd.MM.yyyy}}" Width="100" />
+                                    <GridViewColumn Header="Varaus päättyy" DisplayMemberBinding="{Binding VarausPaattyy, StringFormat={}{0:dd.MM.yyyy}}" Width="100"/>
+                                    <GridViewColumn Header="Varauspäivä" DisplayMemberBinding="{Binding Varauspaiva, StringFormat={}{0:dd.MM.yyyy}}" Width="100"/>
+                                    <GridViewColumn Header="Huone" DisplayMemberBinding="{Binding Huone.Nimi}" Width="100"/>
+                                    <GridViewColumn Header="Lisätiedot" DisplayMemberBinding="{Binding Lisatiedot}" Width="80" />
+                                    <GridViewColumn Header="Asiakas" DisplayMemberBinding="{Binding Asiakas.Nimi}" Width="80" />
+                                    <GridViewColumn Header="Varauksen palvelut" Width="150">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <ListView ItemsSource="{Binding VarauksenPalvelut}">
+                                                    <ListView.View>
+                                                        <GridView>
+                                                            <GridViewColumn Header="Palvelu" DisplayMemberBinding="{Binding Palvelu.Tuote}" Width="95" />
+                                                            <GridViewColumn Header="Kpl" DisplayMemberBinding="{Binding Kpl}" Width="30" />
+                                                        </GridView>
+                                                    </ListView.View>
+                                                </ListView>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+
+
                     </Canvas>
-                </TabItem>
-                <!--Poista-välilehti-->
-                <TabItem Header="Poista">
-                    <Canvas Margin="21,0,19,99" Height="318">
-                        <Label Content="Valitse asiakas" Canvas.Left="39" Canvas.Top="20" 
-                           HorizontalAlignment="Center" VerticalAlignment="Top" Width="95"/>
-                        <ComboBox Name="comCustomer" DisplayMemberPath="Nimi" Height="21" 
-                              Canvas.Left="184" Canvas.Top="22" Width="190"
-                              HorizontalAlignment="Center" VerticalAlignment="Top" />
-                    </Canvas>
+
                 </TabItem>
             </TabControl>
         </TabItem>
     </TabControl>
 </UserControl>
+

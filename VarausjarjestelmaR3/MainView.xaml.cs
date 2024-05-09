@@ -60,10 +60,12 @@ namespace VarausjarjestelmaR3
             if(Access == 1)
                 {
                 Acces.Visibility = Visibility.Visible;
+                offices.Visibility= Visibility.Visible;
                 }
             else if(Access == 2)
                 {
                 Acces.Visibility = Visibility.Collapsed;
+                offices.Visibility= Visibility.Collapsed;
                 }
 
         }

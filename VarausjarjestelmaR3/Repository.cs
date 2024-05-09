@@ -550,6 +550,43 @@ namespace VarausjarjestelmaR3
         }
 
 
+        public ObservableCollection<Reservation> GetAllReservationsforCustomer (int CustomerID)
+            {
+            var varaukset = new ObservableCollection<Reservation>();
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM asiakkaan_varaus where asiakasID = @asiakasID", conn);
+                cmd.Parameters.AddWithValue("@asiakasID", Convert.ToInt32(CustomerID));
+
+                var dr = cmd.ExecuteReader();
+
+                while (dr.Read())
+                    {
+                    varaukset.Add(new Reservation
+                        {
+                        VarausID = dr.GetInt32("varausID"),
+                        VarausAlkaa = dr.GetDateTime("varaus_alkaa"),
+                        VarausPaattyy = dr.GetDateTime("varaus_paattyy"),
+                        Varauspaiva = dr.GetDateTime("varauspvm"),
+                        Huone = GetRoom(dr.GetInt32("huoneen_numeroID")),
+                        Lisatiedot = dr.GetString("lisatiedot"),
+                        Asiakas = GetCustomer(dr.GetInt32("asiakasID")),
+                        Tyontekija = GetEmployee(dr.GetInt32("tyontekijaID")),
+                        VarauksenPalvelut = GetReservationServices(dr.GetInt32("varausID")),
+                        });
+                    }
+                }
+
+            return varaukset;
+            }
+
+
+
+
+
+
         //Haetaan lasku ID-numeron perusteella:
         public Invoice GetInvoice(int laskunumero)
         {

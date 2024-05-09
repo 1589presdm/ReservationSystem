@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VarausjarjestelmaR3"
         mc:Ignorable="d"
-        Title="Varausjärjestelmä" MinHeight="500" MinWidth="850" Height="500" Width="850">
+        Title="Varausjärjestelmä" MinHeight="500" MinWidth="850" Height="500" Width="900">
     <Window.Resources>
         <Style x:Key="MyButton" TargetType="Button">
             <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -59,16 +59,7 @@
             </Button>
 
 			<!--Toimipisteet painike-->
-            <Button Margin="10,0,10,0" Background="White" BorderThickness="0" Style="{StaticResource MyButton}" Click="OfficesBtn_Click" >
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="icons/office.png" Width="25" Height="25">
-                        <Image.Effect>
-                            <DropShadowEffect Opacity="0.1" BlurRadius="3" ShadowDepth="2"/>
-                        </Image.Effect>
-                    </Image>
-                    <Label Content="Toimipisteet" FontSize="15" FontWeight="Medium" Margin="5,10,10,10"/>
-                </StackPanel>
-            </Button>
+
 
 			<!--Palvelut painike-->
             <Button Margin="10,0,10,0" Background="White" BorderThickness="0" Style="{StaticResource MyButton}" Click="ServicesBtn_Click">
@@ -107,19 +98,10 @@
             </Button>
 
             <!--käyttäjät painike-->
-            <Button Background="White" BorderThickness="0" Style="{StaticResource MyButton}"  Name="Acces" Width="155" Visibility="Visible" Click="EmployeeBtn_Click">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="/Icons/invoices.png" Width="25" Height="25">
-                        <Image.Effect>
-                            <DropShadowEffect Opacity="0.1" BlurRadius="3" ShadowDepth="2"/>
-                        </Image.Effect>
-                    </Image>
-                    <Label Content="Käyttäjät" FontSize="15" FontWeight="Medium" Margin="5,10,10,10"/>
-                </StackPanel>
-            </Button>
+
 
             <!--raportit painike-->
-            <Button Background="White" BorderThickness="0" Style="{StaticResource MyButton}"  Name="Reports" Width="155" Visibility="Visible" Click="ReportsBtn_Click">
+            <Button Margin="10,0,10,0" Background="White" BorderThickness="0" Style="{StaticResource MyButton}"  Name="Reports"  Visibility="Visible" Click="ReportsBtn_Click">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="/Icons/invoices.png" Width="25" Height="25">
                         <Image.Effect>
@@ -127,6 +109,26 @@
                         </Image.Effect>
                     </Image>
                     <Label Content="Raportit" FontSize="15" FontWeight="Medium" Margin="5,10,10,10"/>
+                </StackPanel>
+            </Button>
+            <Button Margin="10,0,10,0" Background="White" BorderThickness="0" Style="{StaticResource MyButton}" Name="offices" Click="OfficesBtn_Click" >
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="icons/office.png" Width="25" Height="25">
+                        <Image.Effect>
+                            <DropShadowEffect Opacity="0.1" BlurRadius="3" ShadowDepth="2"/>
+                        </Image.Effect>
+                    </Image>
+                    <Label Content="Toimipisteet" FontSize="15" FontWeight="Medium" Margin="5,10,10,10"/>
+                </StackPanel>
+            </Button>
+            <Button Margin="10,0,10,0" Background="White" BorderThickness="0" Style="{StaticResource MyButton}"  Name="Acces"  Visibility="Visible" Click="EmployeeBtn_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Icons/invoices.png" Width="25" Height="25">
+                        <Image.Effect>
+                            <DropShadowEffect Opacity="0.1" BlurRadius="3" ShadowDepth="2"/>
+                        </Image.Effect>
+                    </Image>
+                    <Label Content="Käyttäjät" FontSize="15" FontWeight="Medium" Margin="5,10,10,10"/>
                 </StackPanel>
             </Button>
 

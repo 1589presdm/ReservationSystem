@@ -95,6 +95,9 @@
     <Compile Include="Classes\Reservation.cs" />
     <Compile Include="Classes\Room.cs" />
     <Compile Include="Classes\Service.cs" />
+    <Compile Include="CustomerInfoList.xaml.cs">
+      <DependentUpon>CustomerInfoList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Customers.xaml.cs" />
     <Compile Include="Employe.xaml.cs">
       <DependentUpon>Employe.xaml</DependentUpon>
@@ -123,6 +126,10 @@
     <Compile Include="UpdateCustomerWin.xaml.cs">
       <DependentUpon>UpdateCustomerWin.xaml</DependentUpon>
     </Compile>
+    <Page Include="CustomerInfoList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Customers.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

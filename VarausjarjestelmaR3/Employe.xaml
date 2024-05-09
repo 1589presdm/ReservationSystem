@@ -55,22 +55,22 @@
                         <Button Content="Etsi" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Canvas.Left="570" Canvas.Top="61" Click="ShowHestory" />
 
 
-                        <ListView Grid.Column="0" Grid.Row="0" Name="Varaukset" Canvas.Left="16" Canvas.Top="140">
+                        <ListView Grid.Column="0" Grid.Row="0" Name="Varaukset" Canvas.Left="16" Canvas.Top="140" >
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
                                     <Setter Property="BorderThickness" Value="0,0,0,1"/>
                                     <Setter Property="BorderBrush" Value="LightGray"/>
                                 </Style>
                             </ListView.ItemContainerStyle>
-                            <ListView.View>
+                            <ListView.View >
                                 <GridView>
-                                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding VarausID}" />
-                                    <GridViewColumn Header="Varaus alkaa" DisplayMemberBinding="{Binding VarausAlkaa, StringFormat={}{0:dd.MM.yyyy}}" />
-                                    <GridViewColumn Header="Varaus päättyy" DisplayMemberBinding="{Binding VarausPaattyy, StringFormat={}{0:dd.MM.yyyy}}" />
-                                    <GridViewColumn Header="Varauspäivä" DisplayMemberBinding="{Binding Varauspaiva, StringFormat={}{0:dd.MM.yyyy}}" />
-                                    <GridViewColumn Header="Huone" DisplayMemberBinding="{Binding Huone.Nimi}" />
-                                    <GridViewColumn Header="Lisätiedot" DisplayMemberBinding="{Binding Lisatiedot}" />
-                                    <GridViewColumn Header="Asiakas" DisplayMemberBinding="{Binding Asiakas.Nimi}" />
+                                    <GridViewColumn  Header="ID" DisplayMemberBinding="{Binding VarausID}" Width="30" />
+                                    <GridViewColumn Header="Varaus alkaa" DisplayMemberBinding="{Binding VarausAlkaa, StringFormat={}{0:dd.MM.yyyy}}" Width="100" />
+                                    <GridViewColumn Header="Varaus päättyy" DisplayMemberBinding="{Binding VarausPaattyy, StringFormat={}{0:dd.MM.yyyy}}" Width="100"/>
+                                    <GridViewColumn Header="Varauspäivä" DisplayMemberBinding="{Binding Varauspaiva, StringFormat={}{0:dd.MM.yyyy}}" Width="100"/>
+                                    <GridViewColumn Header="Huone" DisplayMemberBinding="{Binding Huone.Nimi}" Width="100"/>
+                                    <GridViewColumn Header="Lisätiedot" DisplayMemberBinding="{Binding Lisatiedot}" Width="80" />
+                                    <GridViewColumn Header="Asiakas" DisplayMemberBinding="{Binding Asiakas.Nimi}" Width="80" />
                                     <GridViewColumn Header="Varauksen palvelut" Width="150">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
