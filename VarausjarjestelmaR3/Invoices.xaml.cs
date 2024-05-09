@@ -16,12 +16,11 @@ using System.Windows.Shapes;
 using VarausjarjestelmaR3;
 using VarausjarjestelmaR3.Classes;
 
-
 namespace VarausjarjestelmaR3
 {
     public partial class Invoices : UserControl
     {
-        private Repository repo = new Repository();
+        private readonly Repository repo = new Repository();
         private string currentPaymentMethod;
 
         public Invoices()
@@ -29,90 +28,106 @@ namespace VarausjarjestelmaR3
             InitializeComponent();
             LoadData();
             amountExVATTextBox.TextChanged += AmountExVATTextBox_TextChanged;
+            invoicesListView.ItemsSource = null;
         }
+
 
         private void LoadData()
         {
-            //hae kaikki laskut ja aseta ListViewin tietolähde
-            var invoices = repo.GetAllInvoices();
-            invoicesListView.ItemsSource = invoices;
-            //savedInvoicesListView.ItemsSource = invoices;//Toinen ikkuna, jossa on tallennettuja tilejä
-
-            //haemme tilin enimmäisnumeron arkistosta ja asetamme TextBoxiin seuraavan numeron
+            var reservations = repo.GetAllReservations();
+            invoicesListView.ItemsSource = reservations;
             int nextInvoiceNumber = repo.GetMaxInvoiceNumber() + 1;
             invoiceNumberTextBox.Text = nextInvoiceNumber.ToString();
         }
 
-        //maksutavan valinta
+        //maksutavan valintaa käsitellään
         private void PaymentMethod_Checked(object sender, RoutedEventArgs e)
         {
-            RadioButton radioButton = sender as RadioButton;
-            if (radioButton != null && radioButton.IsChecked == true)
+            if (sender is RadioButton radioButton && radioButton.IsChecked == true)
             {
                 currentPaymentMethod = radioButton.Content.ToString();
             }
         }
 
-        //muutokset tekstiin kentässä, joka koskee arvonlisäverotonta määrää.
+        //käsitellään tekstimuutoksia summakentässä ilman ALV
         private void AmountExVATTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateVATandTotal();
         }
 
-        //ravonlisäveron ja kokonaismäärän laskentamenetelmä
+
         private void UpdateVATandTotal()
         {
             if (double.TryParse(amountExVATTextBox.Text, out double amountExVAT))
             {
-                double vat = amountExVAT * 0.24; //ALV 24%
+                double vat = amountExVAT * 0.24; // ALV 24%
                 vatTextBox.Text = vat.ToString("N2");
-
                 double totalAmount = amountExVAT + vat;
                 totalAmountTextBox.Text = totalAmount.ToString("N2");
             }
             else
             {
-                //asettaa oletusarvot, jos syötetty arvo ei ole numero
+                //ALV- ja kokonaissumma-kenttien nollaaminen, jos ne on syötetty väärin
                 vatTextBox.Text = "0.00";
                 totalAmountTextBox.Text = "0.00";
             }
         }
 
+        //tilin tallentaminen
         private void SaveInvoice_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                if (!int.TryParse(asiakasIDTextBox.Text, out int asiakasID) || !int.TryParse(varausIDTextBox.Text, out int varausID))
+                //VarausID-tarkistus
+                if (!int.TryParse(varausIDTextBox.Text, out int varausID))
                 {
-                    MessageBox.Show("Asiakas ID tai VarausID on virheellinen.");
+                    MessageBox.Show("Virheellinen syöte.");
+                    ClearCustomerFields();
+                    ClearFinancialFields();
                     return;
                 }
 
-                Invoice newInvoice = new Invoice
+                //valittujen varaus- ja summakenttien tarkistaminen
+                if (invoicesListView.SelectedItem is Reservation selectedReservation &&
+                    double.TryParse(amountExVATTextBox.Text, out double amountExVAT) &&
+                    double.TryParse(vatTextBox.Text, out double vat) &&
+                    double.TryParse(totalAmountTextBox.Text, out double totalAmount))
                 {
-                    //tietojen lukeminen käyttöliittymästä
-                    Laskunumero = int.Parse(invoiceNumberTextBox.Text),
-                    VerotonSumma = double.Parse(amountExVATTextBox.Text),
-                    AlvEuroina = double.Parse(vatTextBox.Text),
-                    Loppusumma = double.Parse(totalAmountTextBox.Text),
-                    Laskutustapa = currentPaymentMethod,
-                    AsiakasID = asiakasID,
-                    VarausID = varausID
-                };
+                    int nextInvoiceNumber = repo.GetMaxInvoiceNumber();
 
+                    Invoice newInvoice = new Invoice
+                    {
+                        Laskunumero = nextInvoiceNumber,
+                        VerotonSumma = amountExVAT,
+                        AlvEuroina = vat,
+                        Loppusumma = totalAmount,
+                        Laskutustapa = currentPaymentMethod,
+                        AsiakasID = selectedReservation.Asiakas.AsiakasID,
+                        Asiakas = selectedReservation.Asiakas,
+                        VarausID = varausID
+                    };
 
-                repo.SaveInvoice(newInvoice); //laskun tallentaminen tietokantaan
+                    repo.SaveInvoice(newInvoice);
 
-                if (savedInvoicesListView.ItemsSource is ObservableCollection<Invoice> savedInvoices)
-                {
-                    savedInvoices.Add(newInvoice);
+                    if (savedInvoicesListView.ItemsSource is ObservableCollection<Invoice> savedInvoices)
+                    {
+                        savedInvoices.Add(newInvoice);
+                        savedInvoicesListView.Items.Refresh();
+                    }
+                    else
+                    {
+                        var newInvoicesList = new ObservableCollection<Invoice> { newInvoice };
+                        savedInvoicesListView.ItemsSource = newInvoicesList;
+                        savedInvoicesListView.Items.Refresh();
+                    }
+
+                    MessageBox.Show("Lasku tallennettiin ja lisättiin luetteloon.");
                 }
                 else
                 {
-                    savedInvoicesListView.ItemsSource = new ObservableCollection<Invoice> { newInvoice };
+                    MessageBox.Show("Virheellinen syöte.");
+                    ClearFinancialFields();
                 }
-
-                MessageBox.Show("Lasku tallennettiin ja lisättiin luetteloon.");
             }
             catch (Exception ex)
             {
@@ -120,66 +135,103 @@ namespace VarausjarjestelmaR3
             }
         }
 
-        /*Käsittelee laskuluettelon valinnan muuttamista. Jos yksi tili on valittu, näyttää kyseisen tilin tiedot.
-          Jos useita tilejä on valittu, laskee ja näyttää kaikkien valittujen tilien summat.*/
-        private void InvoicesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+
+        //tekstimuutosten käsittely VarausID-kentässä
+        private void VarausIDTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            double totalVerotonSumma = 0;
-            double totalAlv = 0;
-            double totalLoppusumma = 0;
+            //VarausID-tarkistus
+            if (int.TryParse(varausIDTextBox.Text, out int varausID))
+            {
 
-            //jos vain yksi kohde on valittu, näytä sen tiedot.
-            if (invoicesListView.SelectedItems.Count == 1 && invoicesListView.SelectedItem is Invoice selectedInvoice)
-            {
-                amountExVATTextBox.Text = selectedInvoice.VerotonSumma.ToString("N2");
-                vatTextBox.Text = selectedInvoice.AlvEuroina.ToString("N2");
-                totalAmountTextBox.Text = selectedInvoice.Loppusumma.ToString("N2");
-            }
-            else
-            {
-                //muussa tapauksessa lasketaan valittujen kohtien kokonaissumma.
-                foreach (Invoice invoice in invoicesListView.SelectedItems)
+                var reservation = repo.GetReservation(varausID);
+
+                if (reservation?.Asiakas != null)
                 {
-                    totalVerotonSumma += invoice.VerotonSumma;
-                    totalAlv += invoice.AlvEuroina;
-                    totalLoppusumma += invoice.Loppusumma;
-                }
+                    customerNameTextBox.Text = reservation.Asiakas.Nimi;
+                    customerPhoneTextBox.Text = reservation.Asiakas.Puhelin;
+                    customerAddressTextBox.Text = reservation.Asiakas.Katuosoite;
+                    customerPostalCodeTextBox.Text = reservation.Asiakas.Postinumero;
+                    customerCityTextBox.Text = reservation.Asiakas.Postitoimipaikka;
+                    customerEmailTextBox.Text = reservation.Asiakas.Sahkoposti;
 
-                amountExVATTextBox.Text = totalVerotonSumma.ToString("N2");
-                vatTextBox.Text = totalAlv.ToString("N2");
-                totalAmountTextBox.Text = totalLoppusumma.ToString("N2");
-            }
-        }
-
-        //menetelmä asiakastietokenttien automaattista täyttämistä varten ID perusteella
-        private void AsiakasIDTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (int.TryParse(asiakasIDTextBox.Text, out int asiakasID))
-            {
-                var customer = repo.GetCustomer(asiakasID);
-                if (customer != null)
-                {
-                    customerNameTextBox.Text = customer.Nimi;
-                    customerPhoneTextBox.Text = customer.Puhelin;
-                    customerAddressTextBox.Text = customer.Katuosoite;
-                    customerPostalCodeTextBox.Text = customer.Postinumero;
-                    customerCityTextBox.Text = customer.Postitoimipaikka;
-                    customerEmailTextBox.Text = customer.Sahkoposti;
+                    invoicesListView.ItemsSource = new ObservableCollection<Reservation> { reservation };
                 }
                 else
                 {
+                    MessageBox.Show("Määritetyllä ID varustettuja varauksia ei löytynyt.");
                     ClearCustomerFields();
+                    ClearFinancialFields();
+                    invoicesListView.ItemsSource = null;
                 }
             }
             else
             {
                 ClearCustomerFields();
+                ClearFinancialFields();
+                invoicesListView.ItemsSource = null;
             }
         }
 
+        //varauksen yksityiskohtien näyttäminen
+        private void DisplayReservationDetails(Reservation reservation)
+        {
+            double totalExVAT = 0;
+            double totalVAT = 0;
+
+            //huoneen hinnan tarkistaminen ja laskeminen
+            if (reservation.Huone != null)
+            {
+                totalExVAT += reservation.Huone.Hinta;
+                totalVAT += reservation.Huone.Hinta * (reservation.Huone.AlvProsentti / 100);
+            }
+
+            //palvelujen kustannusten tarkistaminen ja laskeminen
+            if (reservation.VarauksenPalvelut != null && reservation.VarauksenPalvelut.Count > 0)
+            {
+                foreach (var service in reservation.VarauksenPalvelut)
+                {
+                    double serviceTotal = service.Palvelu.PalvelunHinta * service.Kpl;
+                    totalExVAT += serviceTotal;
+                    totalVAT += serviceTotal * (service.Palvelu.AlvProsentti / 100);
+                }
+            }
+
+            double totalIncludingVAT = totalExVAT + totalVAT;
+
+            amountExVATTextBox.Text = totalExVAT.ToString("N2");
+            vatTextBox.Text = totalVAT.ToString("N2");
+            totalAmountTextBox.Text = totalIncludingVAT.ToString("N2");
+        }
+
+        //valinnan muutosten käsittely ListView
+        private void InvoicesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (invoicesListView.SelectedItem is Reservation selectedReservation)
+            {
+                customerNameTextBox.Text = selectedReservation.Asiakas.Nimi;
+                customerPhoneTextBox.Text = selectedReservation.Asiakas.Puhelin;
+                customerAddressTextBox.Text = selectedReservation.Asiakas.Katuosoite;
+                customerPostalCodeTextBox.Text = selectedReservation.Asiakas.Postinumero;
+                customerCityTextBox.Text = selectedReservation.Asiakas.Postitoimipaikka;
+                customerEmailTextBox.Text = selectedReservation.Asiakas.Sahkoposti;
 
 
-        //kenttien tyhjentäminen, jos tunnus on väärä tai asiakasta ei löydy
+                DisplayReservationDetails(selectedReservation);
+            }
+            else
+            {
+                ClearCustomerFields();
+                ClearFinancialFields();
+            }
+        }
+
+        private void ClearFinancialFields()
+        {
+            amountExVATTextBox.Text = "";
+            vatTextBox.Text = "";
+            totalAmountTextBox.Text = "";
+        }
+
         private void ClearCustomerFields()
         {
             customerNameTextBox.Text = "";
@@ -190,15 +242,7 @@ namespace VarausjarjestelmaR3
             customerEmailTextBox.Text = "";
         }
 
-        private void EditInvoice_Click(object sender, RoutedEventArgs e)
-        {
-            if (savedInvoicesListView.SelectedItem is Invoice selectedInvoice)
-            {
-                //En tiedä, onko laskun muokkaustoiminto välttämätön vai riittääkö vain mahdollisuus poistaa lasku
-            }
-        }
-
-        //menetelmä laskun poistamiseksi tietokannasta
+        //laskun poistaminen tietokannasta
         private void DeleteInvoice_Click(object sender, RoutedEventArgs e)
         {
             if (savedInvoicesListView.SelectedItem is Invoice selectedInvoice)
@@ -208,29 +252,5 @@ namespace VarausjarjestelmaR3
                 MessageBox.Show("Tili on poistettu.");
             }
         }
-
-
-        //menetelmä laskun poistamiseksi vain käyttöliittymästä
-        /*private void DeleteInvoice_Click(object sender, RoutedEventArgs e)
-        {
-            if (savedInvoicesListView.SelectedItem is Invoice selectedInvoice)
-            {
-                
-                var invoices = savedInvoicesListView.ItemsSource as ObservableCollection<Invoice>;
-                if (invoices != null)
-                {
-                    invoices.Remove(selectedInvoice);
-                    MessageBox.Show("Tili on poistettu luettelosta.");
-                }
-                
-            }
-            else
-            {
-                MessageBox.Show("Valitse poistettava tili.");
-            }
-        }*/
-
-
     }
-
 }

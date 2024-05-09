@@ -63,7 +63,6 @@
                     <!-- Customer Information -->
                     <Label Content="Asiakas" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2"
                      FontSize="16" FontWeight="Bold" HorizontalAlignment="Center"/>
-                    <TextBox x:Name="asiakasIDTextBox" Width="30" HorizontalAlignment="Right"  Grid.Row="1" Grid.Column="4" Margin="5" TextChanged="AsiakasIDTextBox_TextChanged"/>
                     <TextBox Grid.Row="2" Grid.Column="3" Margin="5" x:Name="customerNameTextBox"/>
                     <TextBox Grid.Row="3" Grid.Column="3" Margin="5" x:Name="customerPhoneTextBox"/>
                     <TextBox Grid.Row="4" Grid.Column="3" Margin="5" x:Name="customerAddressTextBox"/>
@@ -77,16 +76,17 @@
                         <RadioButton x:Name="radioCard" Content="Kortilla" Margin="5,0" GroupName="PaymentMethod" Checked="PaymentMethod_Checked"/>
                     </StackPanel>
                     <Label Content="VarausID" Grid.Row="14" Grid.Column="3" Margin="5,0"/>
-                    <TextBox x:Name="varausIDTextBox" Grid.Row="14" Grid.Column="4" Margin="5" Width="30"/>
+                    <TextBox x:Name="varausIDTextBox" Grid.Row="14" Grid.Column="4" Margin="5" Width="30" TextChanged="VarausIDTextBox_TextChanged"/>
 
 
                     <Label Content="Varattu" Grid.Row="15" Grid.Column="0"/>
                     <ListView x:Name="invoicesListView" Grid.Row="15" Grid.Column="1" Grid.ColumnSpan="3" Margin="5" Width="Auto" SelectionChanged="InvoicesListView_SelectionChanged">
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Header="Laskunumero" Width="100" DisplayMemberBinding="{Binding Laskunumero}"/>
-                                <GridViewColumn Header="Varaus alkaa" Width="300" DisplayMemberBinding="{Binding Varaus.VarausAlkaa, StringFormat={}{0:dd.MM.yyyy}}"/>
-                                <GridViewColumn Header="Hinta" Width="100" DisplayMemberBinding="{Binding VerotonSumma}"/>
+                                <GridViewColumn Header="Varaus ID" Width="100" DisplayMemberBinding="{Binding VarausID}"/>
+                                <GridViewColumn Header="Varaus alkaa" Width="150" DisplayMemberBinding="{Binding VarausAlkaa, StringFormat={}{0:dd.MM.yyyy}}"/>
+                                <GridViewColumn Header="Varaus päättyy" Width="150" DisplayMemberBinding="{Binding VarausPaattyy, StringFormat={}{0:dd.MM.yyyy}}"/>
+                                <GridViewColumn Header="Huone" Width="100" DisplayMemberBinding="{Binding Huone.Nimi}"/>
                             </GridView>
                         </ListView.View>
                     </ListView>
@@ -119,8 +119,8 @@
                     </ListView>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10">
-                        <Button Content="Muokkaa" Margin="5" Width="100"/>
                         <Button Content="Poista" Margin="5" Width="100" Click="DeleteInvoice_Click"/>
+                        <Button Content="Näytä" Margin="5" Width="100" />
                     </StackPanel>
                 </Grid>
             </TabItem>
