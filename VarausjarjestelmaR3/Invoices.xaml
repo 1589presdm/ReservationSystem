@@ -120,7 +120,7 @@
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10">
                         <Button Content="Poista" Margin="5" Width="100" Click="DeleteInvoice_Click"/>
-                        <Button Content="Näytä" Margin="5" Width="100" />
+                        <Button Content="Näytä" Margin="5" Width="100" Click="ViewInvoice_Click" />
                     </StackPanel>
                 </Grid>
             </TabItem>

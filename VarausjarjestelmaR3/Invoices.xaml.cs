@@ -242,6 +242,19 @@ namespace VarausjarjestelmaR3
             customerEmailTextBox.Text = "";
         }
 
+        private void ViewInvoice_Click(object sender, RoutedEventArgs e)
+        {
+            if (savedInvoicesListView.SelectedItem is Invoice selectedInvoice)
+            {
+                InvoiceInfoList invoiceInfoWindow = new InvoiceInfoList(selectedInvoice);
+                invoiceInfoWindow.Show();
+            }
+            else
+            {
+                MessageBox.Show("Valitse lasku.");
+            }
+        }
+
         //laskun poistaminen tietokannasta
         private void DeleteInvoice_Click(object sender, RoutedEventArgs e)
         {
