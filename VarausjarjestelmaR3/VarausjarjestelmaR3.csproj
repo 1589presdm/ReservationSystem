@@ -105,6 +105,9 @@
     <Compile Include="EmployeeInfoList.xaml.cs">
       <DependentUpon>EmployeeInfoList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="InvoiceInfoList.xaml.cs">
+      <DependentUpon>InvoiceInfoList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Invoices.xaml.cs">
       <DependentUpon>Invoices.xaml</DependentUpon>
     </Compile>
@@ -139,6 +142,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="EmployeeInfoList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="InvoiceInfoList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
