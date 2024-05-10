@@ -7,6 +7,7 @@ using VarausjarjestelmaR3.Classes;
 using static System.Net.Mime.MediaTypeNames;
 using System.Collections.Generic;
 using System.Data;
+using System.Security.Policy;
 
 namespace VarausjarjestelmaR3
 {
@@ -21,6 +22,7 @@ namespace VarausjarjestelmaR3
         ObservableCollection<Reservation> nykyiset;
         ObservableCollection<Reservation> tulevat;
         ObservableCollection<Service> palvelut;
+        private TabItem edellinenValilehti;
 
         public Reservations()
         {
@@ -73,6 +75,10 @@ namespace VarausjarjestelmaR3
         //Valitun varauksen avaus ja muokkaus Muokkaa-välilehdessä:
         private void Muokkaa_Click(object sender, RoutedEventArgs e)
         {
+            edellinenValilehti = (TabItem)tabControl.SelectedItem;
+            tabMuokkaaVarausta.Visibility = Visibility.Visible;
+            tabControl.SelectedItem = tabMuokkaaVarausta;
+
             var valittuVaraus = (sender as Button)?.DataContext as Reservation;
 
             //Varaus- ja asiakastiedot:
@@ -130,8 +136,6 @@ namespace VarausjarjestelmaR3
             }
 
             dgPalvelut.ItemsSource = dataTable.DefaultView;
-
-            tabControl.SelectedIndex = 3;
         }
 
         //Varauksen muutosten tallennus:
@@ -155,7 +159,16 @@ namespace VarausjarjestelmaR3
             {
                 var row = rowView.Row;
                 var palveluID = (int)row["PalveluID"];
+                var tuote = (string)row["Tuote"];
                 var varattuMaara = (int)row["VarattuMaara"];
+                var varastomaara = (int)row["Maara"];
+
+                //Palvelua ei voi varata enemmän, kuin varastossa on:
+                if (varattuMaara > varastomaara)
+                {
+                    MessageBox.Show("Palvelun '" + tuote + "' varattu määrä ei voi olla suurempi kuin varastomäärä. Muuta varattava määrä.");
+                    return; // Keskeytetään tallennus
+                }
 
                 if (varattuMaara > 0 ) {
                 var palvelu = new ReservationService
@@ -187,7 +200,7 @@ namespace VarausjarjestelmaR3
             MessageBox.Show("Varauksen muutokset tallennettu.");
 
             GetData();
-            tabControl.SelectedIndex = 0;
+            SuljeMuokkaa();
         }
 
         //Varauksen poisto: 
@@ -211,7 +224,7 @@ namespace VarausjarjestelmaR3
                     repo.DeleteReservation(varausID);
                     MessageBox.Show("Varaus ja lasku poistettu.");
                     GetData();
-                    tabControl.SelectedIndex = 0;
+                    //tabControl.SelectedIndex = 0;
                 }
                 else if (result == MessageBoxResult.No)
                 {
@@ -223,8 +236,9 @@ namespace VarausjarjestelmaR3
                 repo.DeleteReservation(varausID);
                 
                 MessageBox.Show("Varaus poistettu.");
+
                 GetData();
-                tabControl.SelectedIndex = 0;
+                SuljeMuokkaa();
             }
         }
 
@@ -243,6 +257,27 @@ namespace VarausjarjestelmaR3
             }
 
             return false;
+        }
+
+        private void SuljeMuokkaa()
+        {
+            // Sulje "Muokkaa varausta" -välilehti
+            tabMuokkaaVarausta.Visibility = Visibility.Collapsed;
+
+            // Palaa takaisin edelliseen välilehteen
+            if (edellinenValilehti != null)
+            {
+                tabControl.SelectedItem = edellinenValilehti;
+            }
+            else
+            {
+                tabControl.SelectedIndex = 0;
+            }
+        }
+
+        private void SuljeMuokkaa_Click(object sender, RoutedEventArgs e)
+        {
+            SuljeMuokkaa();
         }
     }
 }
