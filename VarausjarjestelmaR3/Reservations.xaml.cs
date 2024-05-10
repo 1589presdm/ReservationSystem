@@ -203,7 +203,20 @@ namespace VarausjarjestelmaR3
 
             if (laskuOlemassa == true)
             {
-                MessageBox.Show("Varausta ei voida poistaa, koska siihen liittyy lasku. Poista ensin lasku.");
+                MessageBoxResult result = MessageBox.Show("Varausta ei voida poistaa, koska siihen liittyy lasku. Haluatko poistaa sekä laskun että varauksen?", "Vahvista varauksen ja laskun poisto", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    repo.DeleteInvoice(varausID);
+                    repo.DeleteReservation(varausID);
+                    MessageBox.Show("Varaus ja lasku poistettu.");
+                    GetData();
+                    tabControl.SelectedIndex = 0;
+                }
+                else if (result == MessageBoxResult.No)
+                {
+                    MessageBox.Show("Varauksen poisto peruttu.");
+                }
             }
             else
             {
