@@ -10,6 +10,7 @@ using System.Data.SqlClient;
 using System.Security.Policy;
 using MySqlConnector;
 using VarausjarjestelmaR3.Classes;
+using System.Windows.Media;
 using System.Data;
 
 namespace VarausjarjestelmaR3
@@ -806,6 +807,237 @@ namespace VarausjarjestelmaR3
                 cmd.Parameters.AddWithValue("@Laskunumero", invoiceNumber);
                 cmd.ExecuteNonQuery();
             }
+        }
+
+        /// <summary>
+        /// Hakee paikkakunnan toimipisteet
+        /// </summary>
+        /// <param name="paikkakunta"></param>
+        /// <returns></returns>
+        public ObservableCollection<Office> GetAllOfficesByMunicipality(string paikkakunta)
+        {
+            var toimipisteet = new ObservableCollection<Office>();
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM toimipiste WHERE paikkakunta=@paikkakunta", conn);
+                cmd.Parameters.AddWithValue("@paikkakunta", paikkakunta);
+
+
+                var dr = cmd.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    toimipisteet.Add(new Office
+                    {
+                        ToimipisteID = dr.GetInt32("toimipisteID"),
+                        Paikkakunta = dr.GetString("paikkakunta"),
+                        ToimipisteNimi = dr.GetString("toimipiste_nimi"),
+                        Katuosoite = dr.GetString("katuosoite"),
+                        Postinumero = dr.GetString("postinumero"),
+                        Postitoimipaikka = dr.GetString("postitoimipaikka"),
+                        Puhelin = dr.GetString("puhelin"),
+                        Yritys = GetCompany(dr.GetInt32("yritysID")),
+                    });
+                }
+            }
+
+            return toimipisteet;
+        }
+
+        /// <summary>
+        /// Hakee toimipisteen huoneet
+        /// </summary>
+        /// <param name="toimipiste"></param>
+        /// <returns></returns>
+        public ObservableCollection<Room> GetAllRoomsByOffice(int toimipiste)
+        {
+            var huoneet = new ObservableCollection<Room>();
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM huoneet WHERE toimipisteID=@ToimipisteID", conn);
+                cmd.Parameters.AddWithValue("@ToimipisteID", toimipiste);
+
+                var dr = cmd.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    huoneet.Add(new Room
+                    {
+                        HuoneenNumeroID = dr.GetInt32("huoneen_numeroID"),
+                        Nimi = dr.GetString("nimi"),
+                        Hinta = dr.GetDouble("hinta"),
+                        AlvProsentti = dr.GetDouble("alv_prosentti"),
+                        HloMaara = dr.GetInt32("hlo_maara"),
+                        Toimipiste = GetOffice(dr.GetInt32("toimipisteID")),
+                    });
+                }
+            }
+
+            return huoneet;
+        }
+
+        /// <summary>
+        /// Hakee toimipisteen palvelut
+        /// </summary>
+        /// <param name="toimipiste"></param>
+        /// <returns></returns>
+        public ObservableCollection<Service> GetAllServicesByOffice(int toimipiste)
+        {
+            var palvelut = new ObservableCollection<Service>();
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM palvelu WHERE toimipisteID=@ToimipisteID", conn);
+                cmd.Parameters.AddWithValue("@ToimipisteID", toimipiste);
+
+                var dr = cmd.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    palvelut.Add(new Service
+                    {
+                        PalveluID = dr.GetInt32("palveluID"),
+                        Tuote = dr.GetString("tuote"),
+                        PalvelunHinta = dr.GetDouble("palvelun_hinta"),
+                        AlvProsentti = dr.GetDouble("alv_prosentti"),
+                        Maara = dr.GetInt32("maara"),
+                        Toimipiste = GetOffice(dr.GetInt32("toimipisteID")),
+                    });
+                }
+            }
+
+            return palvelut;
+        }
+
+        /// <summary>
+        /// Lisää varauksen
+        /// </summary>
+        /// <param name="reservations"></param>
+        public void AddReservation(Reservation reservation)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();            
+
+                string query = "INSERT INTO asiakkaan_varaus (varausID, varaus_alkaa, varaus_paattyy, huoneen_numeroID, varauspvm, lisatiedot, asiakasID, tyontekijaID)" +
+                    "VALUES(@VarausID, @VarausAlkaa, @VarausPaattyy, @HuoneenNumeroID, @VarausPaiva, @Lisatiedot, @AsiakasID, @TyontekijaID)";
+
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@VarausID", reservation.VarausID);
+                cmd.Parameters.AddWithValue("@VarausAlkaa", reservation.VarausAlkaa);
+                cmd.Parameters.AddWithValue("@VarausPaattyy", reservation.VarausPaattyy);
+                cmd.Parameters.AddWithValue("@HuoneenNumeroID", reservation.Huone.HuoneenNumeroID);
+                cmd.Parameters.AddWithValue("@VarausPaiva", reservation.Varauspaiva);
+                cmd.Parameters.AddWithValue("@Lisatiedot", reservation.Lisatiedot);
+                cmd.Parameters.AddWithValue("@AsiakasID", reservation.Asiakas.AsiakasID);
+                cmd.Parameters.AddWithValue("@TyontekijaID", reservation.Tyontekija.TyontekijaID);
+
+                cmd.ExecuteNonQuery();
+                reservation.VarausID = (int)cmd.LastInsertedId;
+                
+            }
+        }
+
+        public void AddReservationServices(ReservationServices reservationServices)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+
+                string query = "INSERT INTO varauksen_palvelut (as_palveluvarauksenID, palveluID, varausID)" +
+                    "VALUES(@PalveluvarausID, @PalveluID, @VarausID)";
+
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@PalveluvarausID", reservationServices.PalveluvarausID);
+                cmd.Parameters.AddWithValue("@PalveluID", reservationServices.Palvelu.PalveluID);
+                cmd.Parameters.AddWithValue("@VarausID", reservationServices.VarausID);
+
+                cmd.ExecuteNonQuery();
+                reservationServices.PalveluvarausID = (int)cmd.LastInsertedId;
+
+            }
+        }
+
+        internal List<Reservation> GetAllReservationsForRoomsAndTime(ObservableCollection<Room> rooms)
+        {
+            var varaukset = new List<Reservation>();
+
+            foreach (var room in rooms)
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("SELECT * FROM asiakkaan_varaus WHERE huoneen_numeroID=@huoneID;", conn);
+                    cmd.Parameters.AddWithValue("@huoneID", room.HuoneenNumeroID);
+
+
+                    var dr = cmd.ExecuteReader();
+
+                    while (dr.Read())
+                    {
+                        varaukset.Add(new Reservation
+                        {
+                            VarausID = dr.GetInt32("varausID"),
+                            VarausAlkaa = dr.GetDateTime("varaus_alkaa"),
+                            VarausPaattyy = dr.GetDateTime("varaus_paattyy"),
+                            Varauspaiva = dr.GetDateTime("varauspvm"),
+                            Huone = GetRoom(dr.GetInt32("huoneen_numeroID")),
+                            Lisatiedot = dr.GetString("lisatiedot"),
+                            Asiakas = GetCustomer(dr.GetInt32("asiakasID")),
+                            Tyontekija = GetEmployee(dr.GetInt32("tyontekijaID")),
+                            VarauksenPalvelut = GetReservationServices(dr.GetInt32("varausID")),
+                        });
+                    }
+                }
+            }
+
+
+            return varaukset;
+        }
+
+        internal List<ReservationAvailability> CreateBaseAvailability(ObservableCollection<Room> rooms, DateTime startDate, DateTime endDate)
+        {
+            var result = new List<ReservationAvailability>();
+
+            foreach (var day in EachCalendarDay(startDate, endDate))
+            {
+                foreach (var room in rooms)
+                {
+                    result.Add(new ReservationAvailability() { Date = day, Room = room });
+                }
+            }
+
+            return result;
+
+        }
+
+        public IEnumerable<DateTime> EachCalendarDay(DateTime startDate, DateTime endDate)
+        {
+            for (var date = startDate.Date; date.Date <= endDate.Date; date = date.AddDays(1)) yield
+            return date;
+        }
+
+        internal List<ReservationAvailability> CreateAvailability(List<ReservationAvailability> baseAvailability, List<Reservation> reservations)
+        {
+            foreach (var availability in baseAvailability)
+            {
+                if (reservations.Any(reservation => reservation.Huone.HuoneenNumeroID == availability.Room.HuoneenNumeroID &&
+                                                    reservation.VarausAlkaa <= availability.Date &&
+                                                    reservation.VarausPaattyy >= availability.Date))
+                {
+                    availability.Available = false;
+                }
+            }
+
+            return baseAvailability;
         }
 
 

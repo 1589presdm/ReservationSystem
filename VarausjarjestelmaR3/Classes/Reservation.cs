@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.Windows.Media;
 
 namespace VarausjarjestelmaR3.Classes
 {
@@ -41,7 +42,12 @@ namespace VarausjarjestelmaR3.Classes
         public ObservableCollection<ReservationService> VarauksenPalvelut { get; set; }
         }
 
-
+    public class ReservationAvailability
+    {
+        public DateTime Date { get; set; }
+        public bool Available { get; set; } = true;
+        public Room Room { get; set; }
+    }
 
 
     }

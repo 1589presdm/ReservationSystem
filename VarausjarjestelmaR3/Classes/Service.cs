@@ -14,5 +14,11 @@ namespace VarausjarjestelmaR3.Classes
         public double AlvProsentti {  get; set; }
         public int Maara {  get; set; }
         public Office Toimipiste { get; set; }
+
+        public override string ToString()
+        {
+            return Tuote;
+        }
     }
+
 }
