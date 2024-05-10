@@ -230,8 +230,6 @@
     <Resource Include="Icons\reservation.png" />
     <Resource Include="Icons\service.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Reports\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
