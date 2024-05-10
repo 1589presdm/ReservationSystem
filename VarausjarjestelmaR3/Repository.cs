@@ -946,19 +946,24 @@ namespace VarausjarjestelmaR3
             }
         }
 
-        public void AddReservationServices(ReservationServices reservationServices)
+        /// <summary>
+        /// Lisää varauksen palvelut
+        /// </summary>
+        /// <param name="reservationServices"></param>
+        public void AddReservationServices(ReservationService reservationServices)
         {
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 conn.Open();
 
-                string query = "INSERT INTO varauksen_palvelut (as_palveluvarauksenID, palveluID, varausID)" +
-                    "VALUES(@PalveluvarausID, @PalveluID, @VarausID)";
+                string query = "INSERT INTO varauksen_palvelut (as_palveluvarauksenID, palveluID, varausID, kpl)" +
+                    "VALUES(@PalveluvarausID, @PalveluID, @VarausID, @kpl)";
 
                 MySqlCommand cmd = new MySqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@PalveluvarausID", reservationServices.PalveluvarausID);
                 cmd.Parameters.AddWithValue("@PalveluID", reservationServices.Palvelu.PalveluID);
                 cmd.Parameters.AddWithValue("@VarausID", reservationServices.VarausID);
+                cmd.Parameters.AddWithValue("@kpl", reservationServices.Kpl);
 
                 cmd.ExecuteNonQuery();
                 reservationServices.PalveluvarausID = (int)cmd.LastInsertedId;
@@ -966,6 +971,11 @@ namespace VarausjarjestelmaR3
             }
         }
 
+        /// <summary>
+        /// Hakee varauksen huoneen mukaan
+        /// </summary>
+        /// <param name="rooms"></param>
+        /// <returns></returns>
         internal List<Reservation> GetAllReservationsForRoomsAndTime(ObservableCollection<Room> rooms)
         {
             var varaukset = new List<Reservation>();
@@ -1003,6 +1013,13 @@ namespace VarausjarjestelmaR3
             return varaukset;
         }
 
+        /// <summary>
+        /// Luodaan päivät varattaviksi
+        /// </summary>
+        /// <param name="rooms"></param>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <returns></returns>
         internal List<ReservationAvailability> CreateBaseAvailability(ObservableCollection<Room> rooms, DateTime startDate, DateTime endDate)
         {
             var result = new List<ReservationAvailability>();
@@ -1019,12 +1036,24 @@ namespace VarausjarjestelmaR3
 
         }
 
+        /// <summary>
+        /// Käy päiviä läpi
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <returns></returns>
         public IEnumerable<DateTime> EachCalendarDay(DateTime startDate, DateTime endDate)
         {
             for (var date = startDate.Date; date.Date <= endDate.Date; date = date.AddDays(1)) yield
             return date;
         }
 
+        /// <summary>
+        /// Tarkistaa onko huone varattavissa ajankohtana
+        /// </summary>
+        /// <param name="baseAvailability"></param>
+        /// <param name="reservations"></param>
+        /// <returns></returns>
         internal List<ReservationAvailability> CreateAvailability(List<ReservationAvailability> baseAvailability, List<Reservation> reservations)
         {
             foreach (var availability in baseAvailability)

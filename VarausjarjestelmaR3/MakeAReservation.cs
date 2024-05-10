@@ -109,9 +109,16 @@ namespace VarausjarjestelmaR3
 
             repo.AddReservation(reservation);
 
-            var reservationService = new ReservationServices();
-
-            //reservationService.Palvelu.PalveluID = ServicesLB.SelectedItems;
+            foreach (var item in ServicesLB.SelectedItems)
+            {
+                var reservationService = new ReservationService();
+                reservationService.Palvelu = (Service)item;
+                reservationService.VarausID = reservation.VarausID;
+                reservationService.Kpl = 1;
+                
+                repo.AddReservationServices(reservationService);
+            }
+            
 
             MessageBox.Show("Varaus tehty");
 
@@ -127,19 +134,19 @@ namespace VarausjarjestelmaR3
         {
             ObservableCollection<Office> distinctNames = repo.GetAllOffices();
 
-            var asd2 = new ObservableCollection<Office>();
+            var distinct = new ObservableCollection<Office>();
 
             foreach (var distinctName in distinctNames)
             {
-                if (asd2.Any(x=>x.Paikkakunta == distinctName.Paikkakunta))
+                if (distinct.Any(x=>x.Paikkakunta == distinctName.Paikkakunta))
                 {
                     continue;
                 }
 
-                asd2.Add(distinctName);
+                distinct.Add(distinctName);
             }        
 
-            return asd2;
+            return distinct;
         }
 
     }

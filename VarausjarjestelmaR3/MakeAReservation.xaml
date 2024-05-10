@@ -15,17 +15,28 @@
             <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" >
+        <StackPanel Orientation="Horizontal">
+            
+            <!--Asiakas alasvetovalikko-->
             <ComboBox x:Name="ComCustomer" Margin="0,20,10,50" Height="25" DisplayMemberPath="Nimi" 
           SelectedValuePath="Nimi" IsEditable="True" IsReadOnly="True" Text="Asiakas"/>
+
+            <!--Paikkakunta alasvetovalikko-->
             <ComboBox x:Name="ComMunicipality" Margin="20,20,0,50" Height="25" DisplayMemberPath="Paikkakunta" 
                       SelectedValuePath="Paikkakunta" SelectionChanged="MunicipalityCom_Changed" IsEditable="True" IsReadOnly="True" Text="Paikkakunta"/>
+
+            <!--Toimipiste alasvetovalikko-->
             <ComboBox x:Name="ComOffices" Margin="20,20,0,50" Height="25" DisplayMemberPath="ToimipisteNimi" SelectedValuePath="ToimipisteNimi"
                       IsEditable="True" IsReadOnly="True" Text="Toimipiste"/>
+
+            <!--Alkupäivän valinta-->
             <Label Content="Mistä" Margin="10,20,0,50"/>
             <DatePicker x:Name="StartDateP" Margin="0,20,10,50" Height="25"/>
+
+            <!--Lopetuspäivän valinta-->
             <Label Content="Mihin" Margin="0,20,0,50"/>
             <DatePicker x:Name="EndDateP" Margin="0,20,20,50" Height="25"/>
+            
             <Button Content="Etsi" Margin="0,20,0,50" Width="40" Height="25" Click="SearchBtn_Click"/>
         </StackPanel>
 
@@ -40,6 +51,7 @@
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
+            <!--Tilojen listbox-->
             <ListBox Margin="5" x:Name="OfficesLB">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -49,15 +61,17 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
-            <ListBox Margin="5" x:Name="ServicesLB" Grid.Column="1">
+            <!--Palveluiden listbox-->
+            <ListBox Margin="5" x:Name="ServicesLB" Grid.Column="1" SelectionMode="Multiple">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <CheckBox Content="{Binding Tuote}" IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" />
+                        <CheckBox Content="{Binding Tuote}" IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected}"/>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
         </Grid>
 
+        <!--Lisätiedot-->
         <TextBox x:Name="AdditionalInfoTB" Grid.Row="3" Margin="5,2,5,5" Text="Lisätiedot"/>
 
         <Button Grid.Row="4" Content="Varaa" HorizontalAlignment="Right" Width="70" Margin="10" Click="ReserveBtn_Click"/>
