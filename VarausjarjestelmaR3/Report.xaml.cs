@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Data;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using VarausjarjestelmaR3.Classes;
@@ -14,8 +15,9 @@ namespace VarausjarjestelmaR3
     public partial class Report : UserControl
     {
         Repository repo;
-        ObservableCollection<Reservation> varaukset;
+        ObservableCollection<Reservation> kaikkiVaraukset;
         ObservableCollection<Reservation> valitutVaraukset;
+        ObservableCollection<Reservation> jarjestysVaraukset;
         DateTime startDate;
         DateTime endDate;
 
@@ -38,10 +40,10 @@ namespace VarausjarjestelmaR3
         //}
 
         {
-            varaukset = repo.GetAllReservations();
+            kaikkiVaraukset = repo.GetAllReservations();
+            jarjestysVaraukset = new ObservableCollection<Reservation>(kaikkiVaraukset.OrderBy(v => v.VarausAlkaa));  //Varaukset aikajärjestykseen.
 
             valitutVaraukset = new ObservableCollection<Reservation>();
-
             lvVaraukset.ItemsSource = valitutVaraukset;
 
             //// Fetch data from the repository
@@ -51,7 +53,7 @@ namespace VarausjarjestelmaR3
             startDate = StartDatePicker.SelectedDate ?? DateTime.MinValue;
             endDate = EndDatePicker.SelectedDate ?? DateTime.MaxValue;
 
-            FilterReservations(varaukset, startDate, endDate);
+            FilterReservations(jarjestysVaraukset, startDate, endDate);
 
             //// Filter the data based on the date range
             //DataView dataView = new DataView(dataTable);
@@ -87,13 +89,13 @@ namespace VarausjarjestelmaR3
 
             using (StreamWriter writer = new StreamWriter(filePath))
             {
+                writer.WriteLine($"Tiedot väliltä {startDate.ToString("dd.MM.yyyy")}-{endDate.ToString("dd.MM.yyyy")}: ");
+                writer.WriteLine();
+                writer.WriteLine();
+                writer.WriteLine();
+
                 foreach (var item in listView.Items)
                 {
-                    writer.WriteLine($"Tiedot väliltä {startDate.ToString("dd.MM.yyyy")}-{endDate.ToString("dd.MM.yyyy")}: ");
-                    writer.WriteLine();
-                    writer.WriteLine();
-                    writer.WriteLine();
-
                     if (item is Reservation reservation)
                     {
                         //Muotoillaan päivämäärä:
@@ -113,9 +115,16 @@ namespace VarausjarjestelmaR3
                         if (varauksenPalvelut.Count > 0)
                         {
                             writer.Write("Palvelut: \t");
-                            foreach (var palvelu in varauksenPalvelut)
+                            for (int i = 0; i < varauksenPalvelut.Count; i++)
                             {
-                                writer.Write($"{palvelu.Palvelu.Tuote} {palvelu.Kpl} kpl; \t");
+                                var palvelu = varauksenPalvelut[i];
+                                writer.Write($"{palvelu.Palvelu.Tuote} {palvelu.Kpl} kpl");
+
+                                //Lisätään pilkku ja välilyönti, paitsi jos viimeinen tulostettava palvelu
+                                if (i < varauksenPalvelut.Count - 1)
+                                {
+                                    writer.Write(", ");
+                                }
                             }
                             writer.WriteLine();
                         }
