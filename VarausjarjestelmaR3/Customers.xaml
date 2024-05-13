@@ -28,7 +28,7 @@
 
                         <ComboBox x:Name="combListOfDelete" Height="24" Width="212"  SelectedValue="{Binding AsiakasID}"  SelectedValuePath="AsiakasID" DisplayMemberPath="Nimi" Canvas.Left="334" Canvas.Top="61" HorizontalAlignment="Left" VerticalAlignment="Center"  />
                         <Label Content="Valitse asiakas:" HorizontalAlignment="Left" VerticalAlignment="Center" Width="199" Height="26" Canvas.Left="100" Canvas.Top="61"/>
-                        <Button Name="deleteBtn" Content="poistaa" HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="75" Canvas.Left="346" Canvas.Top="343" Click="DeleteBtn" Visibility="Collapsed"/>
+                        <Button Name="deleteBtn" Content="Poista asiakas" HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="100" Canvas.Left="346" Canvas.Top="343" Click="DeleteBtn" Visibility="Collapsed"/>
                         <Button Content="Hae tiedot" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="570" Canvas.Top="61" Click="ShowCustomerBtn" />
                         <ContentControl x:Name="toimiposteContentControl" Grid.Column="1" Height="195" Width="595" Canvas.Left="100" Canvas.Top="125" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                     </Canvas>
