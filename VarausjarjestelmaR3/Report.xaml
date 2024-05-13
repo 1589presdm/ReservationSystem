@@ -15,16 +15,18 @@
 
         <GroupBox Header="Tiedonhaku">
             <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
-                <Label Content="Alkupäivä:"/>
-                <Separator Width="20" Visibility="Hidden"/>
+                <ComboBox x:Name="ComMunicipality" Margin="0,0,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Height="30" MinWidth="100" DisplayMemberPath="Paikkakunta" SelectedValuePath="Paikkakunta" SelectionChanged="MunicipalityCom_Changed" IsEditable="True" IsReadOnly="True" Text="Paikkakunta"/>
+                <Separator Width="10" Visibility="Hidden"/>
+                <ComboBox x:Name="ComOffices" Margin="0,0,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Height="30" MinWidth="100" DisplayMemberPath="ToimipisteNimi" SelectedValuePath="ToimipisteNimi" IsEditable="True" IsReadOnly="True" Text="Toimipiste"/>
+                <Separator Width="20" Visibility="Hidden"/><Label Content="Alkupäivä:"/>
+                <Separator Width="5" Visibility="Hidden"/>
                 <DatePicker x:Name="StartDatePicker" />
-                <Separator Width="20" Visibility="Hidden"/>
+                <Separator Width="10" Visibility="Hidden"/>
                 <Label Content="Loppupäivä:"/>
-                <Separator Width="20" Visibility="Hidden"/>
+                <Separator Width="5" Visibility="Hidden"/>
                 <DatePicker x:Name="EndDatePicker" />
-                <Separator Width="40" Visibility="Hidden"/>
-                <Button Content="Hae tiedot" Click="GetInfo_Click" Margin="5"/>
-
+                <Separator Width="20" Visibility="Hidden"/>
+                <Button Content="Hae tiedot" Click="GetInfo_Click" Height="25" Width="90" />
             </StackPanel>
         </GroupBox>
 
@@ -82,101 +84,6 @@
                 </GridView>
             </ListView.View>
         </ListView>
-
-
-        <!--<DataGrid x:Name="dataGridInvoices" Grid.Row="1" AutoGenerateColumns="False" Margin="10">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Varaus ID" Binding="{Binding varausID}"/>
-                <DataGridTextColumn Header="Alkupäivä" Binding="{Binding varaus_alkaa}"/>
-                <DataGridTextColumn Header="Loppupäivä" Binding="{Binding varaus_paattyy}"/>
-                <DataGridTextColumn Header="Nimi" Binding="{Binding asiakas_nimi}"/>
-                <DataGridTextColumn Header="Puh#" Binding="{Binding asiakas_puhelin}"/>
-                <DataGridTextColumn Header="Sähköposti" Binding="{Binding asiakas_sahkoposti}"/>
-                <DataGridTextColumn Header="Varattu huone" Binding="{Binding huoneen_numeroID}"/>
-                <DataGridTextColumn Header="Toimipiste" Binding="{Binding toimipiste_nimi}"/>
-                <DataGridTextColumn Header="Tilattu palvelu" Binding="{Binding palvelu_tuote}"/>
-                <DataGridTextColumn Header="Palvelu kpl" Binding="{Binding palvelu_maara}"/>
-                <DataGridTextColumn Header="Lisätiedot" Binding="{Binding lisatiedot}"/>
-            </DataGrid.Columns>
-        </DataGrid>-->
-        <!--<Grid Grid.Row="1" ShowGridLines="False">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-
-            </Grid.ColumnDefinitions>
-            <GroupBox Header="Varaaja"  HorizontalAlignment="Left" Grid.Column="0">
-
-                <Grid ShowGridLines="False">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="50"/>
-                        <ColumnDefinition Width="150"/>
-                    </Grid.ColumnDefinitions>
-
-                    <StackPanel Grid.Column="0" Width="70" HorizontalAlignment="Left">
-                        <Label Content="Nimi" HorizontalAlignment="Left"  VerticalAlignment="Top" />
-                        <Label Content="Osoite" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                        <Label Content="Puh #"  HorizontalAlignment="Left"  VerticalAlignment="Top"/>
-                    </StackPanel>
-
-                    <StackPanel Grid.Column="1" Width="120" HorizontalAlignment="Left">
-                        <TextBox HorizontalAlignment="Left" Text="Rakennus Oy"  TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Height="18" IsReadOnly="True" Margin="0,5,0,0" />
-                        <TextBox HorizontalAlignment="Left" Text="Vakioarvonkatu 1 asdasdasdasdasd"  TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Height="18" Margin="0,8,0,0" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
-                        <TextBox HorizontalAlignment="Left" Text="040-123 4567" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Height="18" Margin="0,8,0,0"/>
-                    </StackPanel>
-                </Grid>
-            </GroupBox>
-
-            <GroupBox Header="Maksaja"  HorizontalAlignment="Left" Grid.Column="1">
-
-                <Grid ShowGridLines="False">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="50"/>
-                        <ColumnDefinition Width="150"/>
-                    </Grid.ColumnDefinitions>
-
-                    <StackPanel Grid.Column="0" Width="70" HorizontalAlignment="Left">
-                        <Label Content="Nimi" HorizontalAlignment="Left"  VerticalAlignment="Top" />
-                        <Label Content="Osoite" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                        <Label Content="Puh #"  HorizontalAlignment="Left"  VerticalAlignment="Top"/>
-                    </StackPanel>
-
-                    <StackPanel Grid.Column="1" Width="120" HorizontalAlignment="Left">
-                        <TextBox x:Name="maksajabox" HorizontalAlignment="Left" Text=""  TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Height="18"  Margin="0,5,0,0" />
-                        <TextBox x:Name="addressbox" HorizontalAlignment="Left"  TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Height="18" Margin="0,8,0,0"/>
-                        <TextBox x:Name="phonebox" HorizontalAlignment="Left"  TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Height="18" Margin="0,8,0,0"/>
-                    </StackPanel>
-                </Grid>
-            </GroupBox>
-
-            <GroupBox Header="Lasku"  HorizontalAlignment="Left" Grid.Column="2">
-
-                <Grid ShowGridLines="False">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="60"/>
-                        <ColumnDefinition Width="150"/>
-                    </Grid.ColumnDefinitions>
-
-                    <StackPanel Grid.Column="0" Width="80" HorizontalAlignment="Left">
-                        <Label Content="Lasku #" HorizontalAlignment="Left"  VerticalAlignment="Top" />
-                        <Label Content="Päiväys" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                        <Label Content="Eräpäivä"  HorizontalAlignment="Left"  VerticalAlignment="Top"/>
-                    </StackPanel>
-
-                    <StackPanel Grid.Column="1" Width="120" HorizontalAlignment="Left">
-                        <TextBox x:Name="laskunumerobox" HorizontalAlignment="Left"  TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Height="18" Margin="0,5,0,0" />
-
-                        <DatePicker Name="pvmbox" Margin="0,5,0,0" FirstDayOfWeek="Monday"  />
-                        <DatePicker Name="erapaivabox" Margin="0,5,0,0" FirstDayOfWeek="Monday" />
-
-
-                    </StackPanel>
-
-                </Grid>
-            </GroupBox>
-        </Grid>-->
-        <!--Grid2 end here-->
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" >
             <Label Content="Painamalla nappia saat työpöydälle tulostettavan tekstitiedoston." />
