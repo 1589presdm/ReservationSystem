@@ -302,26 +302,13 @@
                             </StackPanel>
                         </StackPanel>
                     </GroupBox>
-                    <GroupBox Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Header="Palvelut: " >
+                    <GroupBox Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Header="Palvelut (poistaaksesi varatun palvelun valitse määräksi 0): " >
                         <DataGrid Name="dgPalvelut" AutoGenerateColumns="False" CanUserAddRows="False">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="PalveluID" Binding="{Binding PalveluID}" IsReadOnly="True" />
                                 <DataGridTextColumn Header="Tuote" Binding="{Binding Tuote}" IsReadOnly="True" />
                                 <DataGridTextColumn Header="Varattu määrä" Binding="{Binding VarattuMaara}" />
                                 <DataGridTextColumn Header="Varastomäärä yhteensä" Binding="{Binding Maara}" IsReadOnly="True" />
-                                <DataGridComboBoxColumn Header="Varattu määrä" SelectedValueBinding="{Binding VarattuMaara}" SelectedValuePath="Value" DisplayMemberPath="Key">
-                                    <DataGridComboBoxColumn.ElementStyle>
-                                        <Style TargetType="ComboBox">
-                                            <Setter Property="ItemsSource" Value="{Binding DataContext.StockAmounts, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
-                                        </Style>
-                                    </DataGridComboBoxColumn.ElementStyle>
-                                    <DataGridComboBoxColumn.EditingElementStyle>
-                                        <Style TargetType="ComboBox">
-                                            <Setter Property="ItemsSource" Value="{Binding DataContext.StockAmounts, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
-                                        </Style>
-                                    </DataGridComboBoxColumn.EditingElementStyle>
-                                </DataGridComboBoxColumn>
-
                             </DataGrid.Columns>
                         </DataGrid>
                     </GroupBox>

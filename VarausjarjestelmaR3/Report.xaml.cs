@@ -129,7 +129,10 @@ namespace VarausjarjestelmaR3
                             writer.WriteLine();
                         }
 
-                        writer.WriteLine($"Lisätiedot: \t{reservation.Lisatiedot}");
+                        if (reservation.Lisatiedot != null && reservation.Lisatiedot != "")
+                        {
+                            writer.WriteLine($"Lisätiedot: \t{reservation.Lisatiedot}");
+                        }
 
                         //Tyhjiä rivejä ja viivaa jokaisen varauksen väliin:
                         writer.WriteLine();
@@ -137,26 +140,26 @@ namespace VarausjarjestelmaR3
                         writer.WriteLine();
                     }
                 }
+
+                MessageBox.Show($"Raportti tallennettu työpöydälle tekstitiedostoon nimellä: {fileName}", "Tallennus onnistui", MessageBoxButton.OK, MessageBoxImage.Information);  //Confirmation box
             }
 
-            MessageBox.Show($"Raportti tallennettu työpöydälle tekstitiedostoon nimellä: {fileName}", "Tallennus onnistui", MessageBoxButton.OK, MessageBoxImage.Information);  //Confirmation box
+
+            //RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap((int)ActualWidth, (int)ActualHeight, 96, 96, System.Windows.Media.PixelFormats.Pbgra32);
+            //renderTargetBitmap.Render(this);
+
+            //PngBitmapEncoder pngEncoder = new PngBitmapEncoder();                                            //Create screenshot as PNG
+            //pngEncoder.Frames.Add(BitmapFrame.Create(renderTargetBitmap));
+            //MemoryStream memoryStream = new MemoryStream();
+            //pngEncoder.Save(memoryStream);
+
+            //string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);              //Save to desktop
+            //string fileName = $"UI_Screenshot_{DateTime.Now:yyyyMMdd_HHmmss}.png";
+            //string filePath = System.IO.Path.Combine(desktopPath, fileName);
+            //File.WriteAllBytes(filePath, memoryStream.ToArray());
+
+            //MessageBox.Show($"Kuva tallennettu työpöydälle nimellä: {fileName}", "Tallennus onnistui", MessageBoxButton.OK, MessageBoxImage.Information);  //Confirmation box
         }
 
-
-        //RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap((int)ActualWidth, (int)ActualHeight, 96, 96, System.Windows.Media.PixelFormats.Pbgra32);
-        //renderTargetBitmap.Render(this);
-
-        //PngBitmapEncoder pngEncoder = new PngBitmapEncoder();                                            //Create screenshot as PNG
-        //pngEncoder.Frames.Add(BitmapFrame.Create(renderTargetBitmap));
-        //MemoryStream memoryStream = new MemoryStream();
-        //pngEncoder.Save(memoryStream);
-
-        //string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);              //Save to desktop
-        //string fileName = $"UI_Screenshot_{DateTime.Now:yyyyMMdd_HHmmss}.png";
-        //string filePath = System.IO.Path.Combine(desktopPath, fileName);
-        //File.WriteAllBytes(filePath, memoryStream.ToArray());
-
-        //MessageBox.Show($"Kuva tallennettu työpöydälle nimellä: {fileName}", "Tallennus onnistui", MessageBoxButton.OK, MessageBoxImage.Information);  //Confirmation box
     }
-
 }

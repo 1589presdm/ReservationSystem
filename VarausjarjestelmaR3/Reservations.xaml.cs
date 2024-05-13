@@ -163,20 +163,25 @@ namespace VarausjarjestelmaR3
                 var varattuMaara = (int)row["VarattuMaara"];
                 var varastomaara = (int)row["Maara"];
 
-                //Palvelua ei voi varata enemmän, kuin varastossa on:
-                if (varattuMaara > varastomaara)
+                if (varattuMaara > 0 && varattuMaara <= varastomaara)
                 {
-                    MessageBox.Show("Palvelun '" + tuote + "' varattu määrä ei voi olla suurempi kuin varastomäärä. Muuta varattava määrä.");
-                    return; // Keskeytetään tallennus
-                }
-
-                if (varattuMaara > 0 ) {
-                var palvelu = new ReservationService
+                    var palvelu = new ReservationService
+                    {
+                        Palvelu = new Service { PalveluID = palveluID },
+                        Kpl = varattuMaara
+                    };
+                    varauksenPalvelut.Add(palvelu);
+                } else if (varattuMaara > varastomaara) //Palvelua ei voi varata enemmän, kuin varastossa on:
                 {
-                    Palvelu = new Service { PalveluID = palveluID },
-                    Kpl = varattuMaara
-                };
-                varauksenPalvelut.Add(palvelu);
+                    MessageBox.Show("Palvelun '" + tuote + "' varattu määrä ei voi olla suurempi kuin varastomäärä. Muuta varattava määrä.", " Virhe", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return; //Keskeytetään tallennus
+                } else if (varattuMaara == 0)
+                {
+                    continue;
+                } else
+                {
+                    MessageBox.Show("Virhe palvelun '" + tuote + "' määrää valittaessa. Tarkista varattava määrä. Tämän palvelun määrän tulee olla väliltä 0-" + row["Maara"] + ".", " Virhe", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return; //Keskeytetään tallennus
                 }
             }
 
