@@ -72,8 +72,8 @@
 
                     <!-- Invoice Details -->
                     <StackPanel Grid.Row="14" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="5">
-                        <RadioButton x:Name="radioCash" Content="Käteisenä" Margin="5,0" GroupName="PaymentMethod" Checked="PaymentMethod_Checked" />
-                        <RadioButton x:Name="radioCard" Content="Kortilla" Margin="5,0" GroupName="PaymentMethod" Checked="PaymentMethod_Checked"/>
+                        <RadioButton x:Name="radioCash" Content="Sähköpostilasku" Margin="5,0" GroupName="PaymentMethod" Checked="PaymentMethod_Checked" />
+                        <RadioButton x:Name="radioCard" Content="Paperilasku" Margin="5,0" GroupName="PaymentMethod" Checked="PaymentMethod_Checked"/>
                     </StackPanel>
                     <Label Content="VarausID" Grid.Row="14" Grid.Column="3" Margin="5,0"/>
                     <TextBox x:Name="varausIDTextBox" Grid.Row="14" Grid.Column="4" Margin="5" Width="30" TextChanged="VarausIDTextBox_TextChanged"/>

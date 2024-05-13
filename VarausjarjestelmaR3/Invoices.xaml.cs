@@ -1,6 +1,8 @@
-﻿using System;
+﻿using MySqlConnector;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +22,7 @@ namespace VarausjarjestelmaR3
 {
     public partial class Invoices : UserControl
     {
-        private readonly Repository repo = new Repository();
+        private string connectionString = "Server=127.0.0.1; Port=3306; User ID=opiskelija; Pwd=opiskelija1; Database=vuokratoimistot;";
         private string currentPaymentMethod;
 
         public Invoices()
@@ -31,16 +33,248 @@ namespace VarausjarjestelmaR3
             invoicesListView.ItemsSource = null;
         }
 
-
         private void LoadData()
         {
-            var reservations = repo.GetAllReservations();
-            invoicesListView.ItemsSource = reservations;
-            int nextInvoiceNumber = repo.GetMaxInvoiceNumber() + 1;
-            invoiceNumberTextBox.Text = nextInvoiceNumber.ToString();
+            LoadReservations();
+            LoadSavedInvoices();
+            SetNextInvoiceNumber();
         }
 
-        //maksutavan valintaa käsitellään
+        private void LoadReservations()
+        {
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "SELECT * FROM asiakkaan_varaus";
+                var command = new MySqlCommand(query, connection);
+                var reader = command.ExecuteReader();
+                var reservations = new ObservableCollection<Reservation>();
+
+                while (reader.Read())
+                {
+                    var reservation = new Reservation
+                    {
+                        VarausID = reader.GetInt32("varausID"),
+                        VarausAlkaa = reader.GetDateTime("varaus_alkaa"),
+                        VarausPaattyy = reader.GetDateTime("varaus_paattyy"),
+                        Varauspaiva = reader.GetDateTime("varauspvm"),
+                        Lisatiedot = reader.GetString("lisatiedot"),
+                        Asiakas = LoadCustomer(reader.GetInt32("asiakasID")),
+                        Huone = LoadRoom(reader.GetInt32("huoneen_numeroID")),
+                        VarauksenPalvelut = LoadReservationServices(reader.GetInt32("varausID"))
+                    };
+                    reservations.Add(reservation);
+                }
+
+                invoicesListView.ItemsSource = reservations;
+            }
+        }
+
+        private Customer LoadCustomer(int customerId)
+        {
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "SELECT * FROM asiakas WHERE asiakasID = @customerId";
+                var command = new MySqlCommand(query, connection);
+                command.Parameters.AddWithValue("@customerId", customerId);
+                var reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    return new Customer
+                    {
+                        AsiakasID = reader.GetInt32("asiakasID"),
+                        Nimi = reader.GetString("nimi"),
+                        Puhelin = reader.GetString("puhelin"),
+                        Katuosoite = reader.GetString("katuosoite"),
+                        Postinumero = reader.GetString("postinumero"),
+                        Postitoimipaikka = reader.GetString("postitoimipaikka"),
+                        Sahkoposti = reader.GetString("sahkoposti")
+                    };
+                }
+                return null;
+            }
+        }
+
+        private Room LoadRoom(int roomId)
+        {
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "SELECT * FROM huoneet WHERE huoneen_numeroID = @roomId";
+                var command = new MySqlCommand(query, connection);
+                command.Parameters.AddWithValue("@roomId", roomId);
+                var reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    return new Room
+                    {
+                        HuoneenNumeroID = reader.GetInt32("huoneen_numeroID"),
+                        Nimi = reader.GetString("nimi"),
+                        Hinta = reader.GetDouble("hinta"),
+                        AlvProsentti = reader.GetDouble("alv_prosentti"),
+                        HloMaara = reader.GetInt32("hlo_maara"),
+                        Toimipiste = LoadOffice(reader.GetInt32("toimipisteID"))
+                    };
+                }
+                return null;
+            }
+        }
+
+        private Office LoadOffice(int officeId)
+        {
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "SELECT * FROM toimipiste WHERE toimipisteID = @officeId";
+                var command = new MySqlCommand(query, connection);
+                command.Parameters.AddWithValue("@officeId", officeId);
+                var reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    return new Office
+                    {
+                        ToimipisteID = reader.GetInt32("toimipisteID"),
+                        ToimipisteNimi = reader.GetString("toimipiste_nimi"),
+                        Paikkakunta = reader.GetString("paikkakunta"),
+                        Katuosoite = reader.GetString("katuosoite"),
+                        Postinumero = reader.GetString("postinumero"),
+                        Postitoimipaikka = reader.GetString("postitoimipaikka"),
+                        Puhelin = reader.GetString("puhelin")
+                    };
+                }
+                return null;
+            }
+        }
+
+        private ObservableCollection<ReservationService> LoadReservationServices(int reservationId)
+        {
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "SELECT * FROM varauksen_palvelut WHERE varausID = @reservationId";
+                var command = new MySqlCommand(query, connection);
+                command.Parameters.AddWithValue("@reservationId", reservationId);
+                var reader = command.ExecuteReader();
+                var services = new ObservableCollection<ReservationService>();
+
+                while (reader.Read())
+                {
+                    services.Add(new ReservationService
+                    {
+                        PalveluvarausID = reader.GetInt32("as_palveluvarauksenID"),
+                        Palvelu = LoadService(reader.GetInt32("palveluID")),
+                        Kpl = reader.GetInt32("kpl"),
+                        VarausID = reader.GetInt32("varausID")
+                    });
+                }
+
+                return services;
+            }
+        }
+
+        private Service LoadService(int serviceId)
+        {
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "SELECT * FROM palvelu WHERE palveluID = @serviceId";
+                var command = new MySqlCommand(query, connection);
+                command.Parameters.AddWithValue("@serviceId", serviceId);
+                var reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    return new Service
+                    {
+                        PalveluID = reader.GetInt32("palveluID"),
+                        Tuote = reader.GetString("tuote"),
+                        PalvelunHinta = reader.GetDouble("palvelun_hinta"),
+                        AlvProsentti = reader.GetDouble("alv_prosentti"),
+                        Maara = reader.GetInt32("maara"),
+                        Toimipiste = LoadOffice(reader.GetInt32("toimipisteID"))
+                    };
+                }
+                return null;
+            }
+        }
+
+        private void LoadSavedInvoices()
+        {
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "SELECT * FROM lasku";
+                var command = new MySqlCommand(query, connection);
+                var reader = command.ExecuteReader();
+                var invoices = new ObservableCollection<Invoice>();
+
+                while (reader.Read())
+                {
+                    var invoice = new Invoice
+                    {
+                        Laskunumero = reader.GetInt32("laskuID"),
+                        Laskutustapa = reader.GetString("laskutustapa"),
+                        VerotonSumma = reader.GetDouble("veroton_summa"),
+                        AlvEuroina = reader.GetDouble("alv_euroina"),
+                        Loppusumma = reader.GetDouble("loppusumma"),
+                        AsiakasID = reader.GetInt32("asiakasID"),
+                        VarausID = reader.GetInt32("varausID"),
+                        Asiakas = LoadCustomer(reader.GetInt32("asiakasID")),
+                        Varaus = LoadReservation(reader.GetInt32("varausID"))
+                    };
+                    invoices.Add(invoice);
+                }
+
+                savedInvoicesListView.ItemsSource = invoices;
+            }
+        }
+
+        private Reservation LoadReservation(int reservationId)
+        {
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "SELECT * FROM asiakkaan_varaus WHERE varausID = @reservationId";
+                var command = new MySqlCommand(query, connection);
+                command.Parameters.AddWithValue("@reservationId", reservationId);
+                var reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    return new Reservation
+                    {
+                        VarausID = reader.GetInt32("varausID"),
+                        VarausAlkaa = reader.GetDateTime("varaus_alkaa"),
+                        VarausPaattyy = reader.GetDateTime("varaus_paattyy"),
+                        Varauspaiva = reader.GetDateTime("varauspvm"),
+                        Lisatiedot = reader.GetString("lisatiedot"),
+                        Asiakas = LoadCustomer(reader.GetInt32("asiakasID")),
+                        Huone = LoadRoom(reader.GetInt32("huoneen_numeroID")),
+                        VarauksenPalvelut = LoadReservationServices(reader.GetInt32("varausID"))
+                    };
+                }
+                return null;
+            }
+        }
+
+        private void SetNextInvoiceNumber()
+        {
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "SELECT MAX(laskuID) FROM lasku";
+                var command = new MySqlCommand(query, connection);
+                var result = command.ExecuteScalar();
+                int nextInvoiceNumber = (result != DBNull.Value) ? Convert.ToInt32(result) + 1 : 1;
+                invoiceNumberTextBox.Text = nextInvoiceNumber.ToString();
+            }
+        }
+
+        //maksutavan valinta
         private void PaymentMethod_Checked(object sender, RoutedEventArgs e)
         {
             if (sender is RadioButton radioButton && radioButton.IsChecked == true)
@@ -49,12 +283,10 @@ namespace VarausjarjestelmaR3
             }
         }
 
-        //käsitellään tekstimuutoksia summakentässä ilman ALV
         private void AmountExVATTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateVATandTotal();
         }
-
 
         private void UpdateVATandTotal()
         {
@@ -67,18 +299,15 @@ namespace VarausjarjestelmaR3
             }
             else
             {
-                //ALV- ja kokonaissumma-kenttien nollaaminen, jos ne on syötetty väärin
                 vatTextBox.Text = "0.00";
                 totalAmountTextBox.Text = "0.00";
             }
         }
 
-        //tilin tallentaminen
         private void SaveInvoice_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                //VarausID-tarkistus
                 if (!int.TryParse(varausIDTextBox.Text, out int varausID))
                 {
                     MessageBox.Show("Virheellinen syöte.");
@@ -87,13 +316,12 @@ namespace VarausjarjestelmaR3
                     return;
                 }
 
-                //valittujen varaus- ja summakenttien tarkistaminen
                 if (invoicesListView.SelectedItem is Reservation selectedReservation &&
                     double.TryParse(amountExVATTextBox.Text, out double amountExVAT) &&
                     double.TryParse(vatTextBox.Text, out double vat) &&
                     double.TryParse(totalAmountTextBox.Text, out double totalAmount))
                 {
-                    int nextInvoiceNumber = repo.GetMaxInvoiceNumber();
+                    int nextInvoiceNumber = Convert.ToInt32(invoiceNumberTextBox.Text);
 
                     Invoice newInvoice = new Invoice
                     {
@@ -104,10 +332,11 @@ namespace VarausjarjestelmaR3
                         Laskutustapa = currentPaymentMethod,
                         AsiakasID = selectedReservation.Asiakas.AsiakasID,
                         Asiakas = selectedReservation.Asiakas,
-                        VarausID = varausID
+                        VarausID = varausID,
+                        Varaus = selectedReservation
                     };
 
-                    repo.SaveInvoice(newInvoice);
+                    SaveInvoiceToDatabase(newInvoice);
 
                     if (savedInvoicesListView.ItemsSource is ObservableCollection<Invoice> savedInvoices)
                     {
@@ -116,9 +345,7 @@ namespace VarausjarjestelmaR3
                     }
                     else
                     {
-                        var newInvoicesList = new ObservableCollection<Invoice> { newInvoice };
-                        savedInvoicesListView.ItemsSource = newInvoicesList;
-                        savedInvoicesListView.Items.Refresh();
+                        savedInvoicesListView.ItemsSource = new ObservableCollection<Invoice> { newInvoice };
                     }
 
                     MessageBox.Show("Lasku tallennettiin ja lisättiin luetteloon.");
@@ -135,57 +362,80 @@ namespace VarausjarjestelmaR3
             }
         }
 
+        private void SaveInvoiceToDatabase(Invoice invoice)
+        {
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = @"INSERT INTO lasku (laskutustapa, alv_euroina, veroton_summa, loppusumma, asiakasID, varausID) 
+                                 VALUES (@Laskutustapa, @AlvEuroina, @VerotonSumma, @Loppusumma, @AsiakasID, @VarausID)";
+                var command = new MySqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Laskutustapa", invoice.Laskutustapa);
+                command.Parameters.AddWithValue("@AlvEuroina", invoice.AlvEuroina);
+                command.Parameters.AddWithValue("@VerotonSumma", invoice.VerotonSumma);
+                command.Parameters.AddWithValue("@Loppusumma", invoice.Loppusumma);
+                command.Parameters.AddWithValue("@AsiakasID", invoice.AsiakasID);
+                command.Parameters.AddWithValue("@VarausID", invoice.VarausID);
+                command.ExecuteNonQuery();
+            }
+        }
 
-        //tekstimuutosten käsittely VarausID-kentässä
+        // VarausID-kentän muutoksen käsittely
         private void VarausIDTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            //VarausID-tarkistus
-            if (int.TryParse(varausIDTextBox.Text, out int varausID))
+            try
             {
-
-                var reservation = repo.GetReservation(varausID);
-
-                if (reservation?.Asiakas != null)
+                if (int.TryParse(varausIDTextBox.Text, out int varausID))
                 {
-                    customerNameTextBox.Text = reservation.Asiakas.Nimi;
-                    customerPhoneTextBox.Text = reservation.Asiakas.Puhelin;
-                    customerAddressTextBox.Text = reservation.Asiakas.Katuosoite;
-                    customerPostalCodeTextBox.Text = reservation.Asiakas.Postinumero;
-                    customerCityTextBox.Text = reservation.Asiakas.Postitoimipaikka;
-                    customerEmailTextBox.Text = reservation.Asiakas.Sahkoposti;
+                    var reservation = LoadReservation(varausID);
 
-                    invoicesListView.ItemsSource = new ObservableCollection<Reservation> { reservation };
+                    if (reservation?.Asiakas != null)
+                    {
+                        customerNameTextBox.Text = reservation.Asiakas.Nimi;
+                        customerPhoneTextBox.Text = reservation.Asiakas.Puhelin;
+                        customerAddressTextBox.Text = reservation.Asiakas.Katuosoite;
+                        customerPostalCodeTextBox.Text = reservation.Asiakas.Postinumero;
+                        customerCityTextBox.Text = reservation.Asiakas.Postitoimipaikka;
+                        customerEmailTextBox.Text = reservation.Asiakas.Sahkoposti;
+
+                        invoicesListView.ItemsSource = new ObservableCollection<Reservation> { reservation };
+                    }
+                    else
+                    {
+                        MessageBox.Show("Määritetyllä ID varustettuja varauksia ei löytynyt.");
+                        ClearCustomerFields();
+                        ClearFinancialFields();
+                        invoicesListView.ItemsSource = null;
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Määritetyllä ID varustettuja varauksia ei löytynyt.");
                     ClearCustomerFields();
                     ClearFinancialFields();
                     invoicesListView.ItemsSource = null;
                 }
             }
-            else
+            catch (Exception ex)
             {
+                MessageBox.Show($"Tapahtui virhe: {ex.Message}");
                 ClearCustomerFields();
                 ClearFinancialFields();
                 invoicesListView.ItemsSource = null;
             }
         }
 
-        //varauksen yksityiskohtien näyttäminen
+        //nätyä varauksen tiedot
         private void DisplayReservationDetails(Reservation reservation)
         {
             double totalExVAT = 0;
             double totalVAT = 0;
 
-            //huoneen hinnan tarkistaminen ja laskeminen
             if (reservation.Huone != null)
             {
                 totalExVAT += reservation.Huone.Hinta;
                 totalVAT += reservation.Huone.Hinta * (reservation.Huone.AlvProsentti / 100);
             }
 
-            //palvelujen kustannusten tarkistaminen ja laskeminen
             if (reservation.VarauksenPalvelut != null && reservation.VarauksenPalvelut.Count > 0)
             {
                 foreach (var service in reservation.VarauksenPalvelut)
@@ -203,7 +453,7 @@ namespace VarausjarjestelmaR3
             totalAmountTextBox.Text = totalIncludingVAT.ToString("N2");
         }
 
-        //valinnan muutosten käsittely ListView
+        //varauksen valinnan muutos ListView
         private void InvoicesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (invoicesListView.SelectedItem is Reservation selectedReservation)
@@ -215,7 +465,6 @@ namespace VarausjarjestelmaR3
                 customerCityTextBox.Text = selectedReservation.Asiakas.Postitoimipaikka;
                 customerEmailTextBox.Text = selectedReservation.Asiakas.Sahkoposti;
 
-
                 DisplayReservationDetails(selectedReservation);
             }
             else
@@ -225,6 +474,7 @@ namespace VarausjarjestelmaR3
             }
         }
 
+        //taloustietokenttien tyhjennys
         private void ClearFinancialFields()
         {
             amountExVATTextBox.Text = "";
@@ -232,6 +482,7 @@ namespace VarausjarjestelmaR3
             totalAmountTextBox.Text = "";
         }
 
+        //asiakastietokenttien tyhjennys
         private void ClearCustomerFields()
         {
             customerNameTextBox.Text = "";
@@ -255,14 +506,26 @@ namespace VarausjarjestelmaR3
             }
         }
 
-        //laskun poistaminen tietokannasta
         private void DeleteInvoice_Click(object sender, RoutedEventArgs e)
         {
             if (savedInvoicesListView.SelectedItem is Invoice selectedInvoice)
             {
-                repo.DeleteInvoice(selectedInvoice.Laskunumero);
-                savedInvoicesListView.ItemsSource = repo.GetAllInvoices();
+                DeleteInvoiceFromDatabase(selectedInvoice.Laskunumero);
+                LoadSavedInvoices();
                 MessageBox.Show("Tili on poistettu.");
+            }
+        }
+
+        //poista lasku tietokannasta
+        private void DeleteInvoiceFromDatabase(int invoiceId)
+        {
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "DELETE FROM lasku WHERE laskuID = @invoiceId";
+                var command = new MySqlCommand(query, connection);
+                command.Parameters.AddWithValue("@invoiceId", invoiceId);
+                command.ExecuteNonQuery();
             }
         }
     }
