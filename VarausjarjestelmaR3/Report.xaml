@@ -28,7 +28,63 @@
             </StackPanel>
         </GroupBox>
 
-        <DataGrid x:Name="dataGridInvoices" Grid.Row="1" AutoGenerateColumns="False" Margin="10">
+        <ListView Grid.Column="0" Grid.Row="1" Name="lvVaraukset">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="BorderThickness" Value="1,1,1,1"/>
+                    <Setter Property="BorderBrush" Value="LightGray"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.Resources>
+                <Style TargetType="{x:Type GridViewColumnHeader}">
+                    <Setter Property="HorizontalContentAlignment" Value="Left" />
+                    <Setter Property="Padding" Value="5 0 0 0" />
+                </Style>
+            </ListView.Resources>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding VarausID}" Width="30" />
+                    <GridViewColumn Header="Varaus alkaa" DisplayMemberBinding="{Binding VarausAlkaa, StringFormat={}{0:dd.MM.yyyy}}" Width="100" />
+                    <GridViewColumn Header="Varaus päättyy" DisplayMemberBinding="{Binding VarausPaattyy, StringFormat={}{0:dd.MM.yyyy}}" Width="100" />
+                    <GridViewColumn Header="Varauspäivä" DisplayMemberBinding="{Binding Varauspaiva, StringFormat={}{0:dd.MM.yyyy}}" Width="100" />
+                    <GridViewColumn Header="Huone" DisplayMemberBinding="{Binding Huone.Nimi}" Width="150" />
+                    <GridViewColumn Header="Lisätiedot" Width="150">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Lisatiedot}" TextWrapping="Wrap"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Asiakas" DisplayMemberBinding="{Binding Asiakas.Nimi}" Width="150" />
+                    <GridViewColumn Header="Varauksen palvelut" Width="150">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <ListView ItemsSource="{Binding VarauksenPalvelut}">
+                                    <ListView.Resources>
+                                        <Style TargetType="{x:Type GridViewColumnHeader}">
+                                            <Setter Property="Height" Value="0" />
+                                        </Style>
+                                        <Style TargetType="ListView">
+                                            <Setter Property="BorderBrush" Value="LightGray" />
+                                            <Setter Property="BorderThickness" Value="0 0 0 0" />
+                                        </Style>
+                                    </ListView.Resources>
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="Palvelu" DisplayMemberBinding="{Binding Palvelu.Tuote}" Width="95" />
+                                            <GridViewColumn Header="Kpl" DisplayMemberBinding="{Binding Kpl}" Width="30" />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+
+        <!--<DataGrid x:Name="dataGridInvoices" Grid.Row="1" AutoGenerateColumns="False" Margin="10">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Varaus ID" Binding="{Binding varausID}"/>
                 <DataGridTextColumn Header="Alkupäivä" Binding="{Binding varaus_alkaa}"/>
@@ -42,7 +98,7 @@
                 <DataGridTextColumn Header="Palvelu kpl" Binding="{Binding palvelu_maara}"/>
                 <DataGridTextColumn Header="Lisätiedot" Binding="{Binding lisatiedot}"/>
             </DataGrid.Columns>
-        </DataGrid>
+        </DataGrid>-->
         <!--<Grid Grid.Row="1" ShowGridLines="False">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -123,7 +179,7 @@
         <!--Grid2 end here-->
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" >
-            <Label Content="Tulostaaksesi venytä ikkuna näyttämään kaikki tiedot ja paina nappia. Saat työpöydälle kuvatulosteen." />
+            <Label Content="Painamalla nappia saat työpöydälle tulostettavan tekstitiedoston." />
             <Separator Width="40" Visibility="Hidden"/>
             <Button Content="Tulosta" Click="PrintButton_Click" Width="75"/>
         </StackPanel>
