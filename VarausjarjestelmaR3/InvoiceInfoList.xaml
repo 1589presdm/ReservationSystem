@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VarausjarjestelmaR3"
         mc:Ignorable="d"
-        Title="InvoiceInfoList" Height="450" Width="800">
+      Title="InvoiceInfoList" Height="450" Width="800">
     <Grid>
         <ListView x:Name="invoiceDetailsListView" Margin="10">
             <ListView.View>
@@ -14,7 +14,16 @@
                     <GridViewColumn Header="Asiakas" DisplayMemberBinding="{Binding Asiakas.Nimi}" Width="150" />
                     <GridViewColumn Header="Varaus alkaa" DisplayMemberBinding="{Binding Varaus.VarausAlkaa, StringFormat={}{0:dd.MM.yyyy}}" Width="150" />
                     <GridViewColumn Header="Varaus päättyy" DisplayMemberBinding="{Binding Varaus.VarausPaattyy, StringFormat={}{0:dd.MM.yyyy}}" Width="150" />
-                    <GridViewColumn Header="Huone" DisplayMemberBinding="{Binding Varaus.Huone.Nimi}" Width="150" />
+                    <GridViewColumn Header="Huone" Width="150">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox ItemsSource="{Binding DataContext.Huoneet, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                          SelectedValuePath="HuoneenNumeroID"
+                                          DisplayMemberPath="Nimi"
+                                          SelectedValue="{Binding Varaus.Huone.HuoneenNumeroID, Mode=TwoWay}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                     <GridViewColumn Header="Palvelut" Width="200">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -30,19 +39,40 @@
                                     </ListView.Resources>
                                     <ListView.View>
                                         <GridView>
-                                            <GridViewColumn Header="Palvelu" DisplayMemberBinding="{Binding Palvelu.Tuote}" Width="95" />
+                                            <GridViewColumn Header="Palvelu" Width="95">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <ComboBox ItemsSource="{Binding DataContext.Palvelut, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                                                  SelectedValuePath="PalveluID"
+                                                                  DisplayMemberPath="Tuote"
+                                                                  SelectedValue="{Binding Palvelu.PalveluID, Mode=TwoWay}"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
                                             <GridViewColumn Header="Kpl" DisplayMemberBinding="{Binding Kpl}" Width="30" />
                                         </GridView>
                                     </ListView.View>
                                 </ListView>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
+
                     </GridViewColumn>
-                    <GridViewColumn Header="Loppusumma" DisplayMemberBinding="{Binding Loppusumma}" Width="100" />
-                    <GridViewColumn Header="Laskutustapa" DisplayMemberBinding="{Binding Laskutustapa}" Width="100" />
+                    <GridViewColumn Header="Laskutustapa" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox ItemsSource="{Binding DataContext.Laskutustavat, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                          SelectedValue="{Binding Laskutustapa, Mode=TwoWay}" DisplayMemberPath=""/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button Content="Close" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10" Click="CloseButton_Click"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10">
+            <Label Content="Loppusumma"/>
+            <TextBox x:Name="totalAmountTextBox" Margin="5" Width="100"/>
+            <Button Content="Tallenna" Margin="5" Width="120" Height="30" Click="SaveChanges_Click"/>
+            <Button Content="Sulje" Margin="5" Width="120" Height="30" Click="CloseButton_Click"/>
+        </StackPanel>
     </Grid>
 </Window>
