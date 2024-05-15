@@ -238,6 +238,8 @@
     <Resource Include="Icons\reservation.png" />
     <Resource Include="Icons\service.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="SQL\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
