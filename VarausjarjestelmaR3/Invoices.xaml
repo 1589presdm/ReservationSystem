@@ -41,7 +41,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Label Content="Laskun numero" Grid.Row="0"/>
-                    <TextBox Grid.Row="0" Grid.Column="1" Margin="5" Width="200" x:Name="invoiceNumberTextBox"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" Margin="5" Width="200" x:Name="invoiceNumberTextBox" IsReadOnly="True"/>
 
                     <!-- Company Information -->
                     <Label Content="Laskuttaja" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"

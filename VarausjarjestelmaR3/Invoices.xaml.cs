@@ -150,6 +150,7 @@ namespace VarausjarjestelmaR3
             }
         }
 
+        //lataa varaukseen liittyvät palvelut varauksen ID perusteella.
         private ObservableCollection<ReservationService> LoadReservationServices(int reservationId)
         {
             using (var connection = new MySqlConnection(connectionString))
@@ -176,6 +177,7 @@ namespace VarausjarjestelmaR3
             }
         }
 
+        //lataa palvelun tiedot palvelun ID mukaan
         private Service LoadService(int serviceId)
         {
             using (var connection = new MySqlConnection(connectionString))
@@ -202,7 +204,8 @@ namespace VarausjarjestelmaR3
             }
         }
 
-        private void LoadSavedInvoices()
+        //lataa kaikki tallennetut laskut tietokannasta
+        public void LoadSavedInvoices()
         {
             using (var connection = new MySqlConnection(connectionString))
             {
@@ -233,6 +236,7 @@ namespace VarausjarjestelmaR3
             }
         }
 
+        //altaa varaustiedot varauksen ID mukaan
         private Reservation LoadReservation(int reservationId)
         {
             using (var connection = new MySqlConnection(connectionString))
@@ -261,6 +265,7 @@ namespace VarausjarjestelmaR3
             }
         }
 
+        //asettaa seuraavan tilinumeron ja lisää nykyistä enimmäismäärää yhdellä
         private void SetNextInvoiceNumber()
         {
             using (var connection = new MySqlConnection(connectionString))
@@ -283,11 +288,13 @@ namespace VarausjarjestelmaR3
             }
         }
 
+        //päivittää alv-arvon ja kokonaissumman, kun arvonlisäverotonta summaa muutetaan.
         private void AmountExVATTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateVATandTotal();
         }
 
+        //laskee ja päivittää arvonlisäveron arvon ja kokonaissumman arvonlisäverottoman summan perusteella.
         private void UpdateVATandTotal()
         {
             if (double.TryParse(amountExVATTextBox.Text, out double amountExVAT))
@@ -362,6 +369,7 @@ namespace VarausjarjestelmaR3
             }
         }
 
+        //tallentaa uuden tilin tietokantaan
         private void SaveInvoiceToDatabase(Invoice invoice)
         {
             using (var connection = new MySqlConnection(connectionString))
@@ -380,7 +388,7 @@ namespace VarausjarjestelmaR3
             }
         }
 
-        // VarausID-kentän muutoksen käsittely
+        //käsittelee ID-kentän muutokset lataamalla asianmukaiset tiedot
         private void VarausIDTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             try
@@ -493,11 +501,12 @@ namespace VarausjarjestelmaR3
             customerEmailTextBox.Text = "";
         }
 
+        //avaaa ikkunan, jossa on tilitiedot
         private void ViewInvoice_Click(object sender, RoutedEventArgs e)
         {
             if (savedInvoicesListView.SelectedItem is Invoice selectedInvoice)
             {
-                InvoiceInfoList invoiceInfoWindow = new InvoiceInfoList(selectedInvoice);
+                InvoiceInfoList invoiceInfoWindow = new InvoiceInfoList(selectedInvoice, this); 
                 invoiceInfoWindow.Show();
             }
             else
