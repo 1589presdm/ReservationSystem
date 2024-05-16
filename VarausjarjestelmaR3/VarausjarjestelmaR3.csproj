@@ -241,5 +241,8 @@
   <ItemGroup>
     <Folder Include="SQL\" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\logo.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
