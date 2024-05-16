@@ -16,7 +16,7 @@
                     <StackPanel Height="349" Margin="68,0,55,0" Name="mainBox">
                         <UserControl Height="208" Width="683" Name="UserControlAddSec" ></UserControl>
                         <Canvas Height="100" RenderTransformOrigin="0.5,0.5">
-                            <Button Grid.Column="1" Width="100" Canvas.Left="266" Canvas.Top="35" HorizontalAlignment="Center" Click="AddNewEmployee" VerticalAlignment="Top">Lisää</Button>
+                            <Button Grid.Column="1" Width="100" Canvas.Left="266" Canvas.Top="35" HorizontalAlignment="Center" Click="AddNewEmployee" VerticalAlignment="Top" Background="#FFEDF3F3">Lisää</Button>
                         </Canvas>
                     </StackPanel>
 
@@ -28,8 +28,8 @@
 
                         <ComboBox x:Name="combListOfDelete" Height="24" Width="212"  SelectedValue="{Binding TyontekijaID}"  SelectedValuePath="TyontekijaID" DisplayMemberPath="Nimi" Canvas.Left="334" Canvas.Top="61" HorizontalAlignment="Left" VerticalAlignment="Center"  />
                         <Label Content="Valitse käyttäjä:" HorizontalAlignment="Left" VerticalAlignment="Center" Width="199" Height="26" Canvas.Left="100" Canvas.Top="61"/>
-                        <Button Name="deleteBtn" Content="poistaa" HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="75" Canvas.Left="346" Canvas.Top="343" Click="DeleteBtn" Visibility="Collapsed"/>
-                        <Button Content="Hae tiedot" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="570" Canvas.Top="61" Click="ShowEmployeeBtn" />
+                        <Button Name="deleteBtn" Content="poistaa" HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="75" Canvas.Left="346" Canvas.Top="343" Click="DeleteBtn" Visibility="Collapsed" Background="#FFEDF3F3"/>
+                        <Button Content="Hae tiedot" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="570" Canvas.Top="61" Click="ShowEmployeeBtn" Background="#FFEDF3F3" />
                         <ContentControl x:Name="toimiposteContentControl" Grid.Column="1" Height="195" Width="595" Canvas.Left="100" Canvas.Top="125" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                     </Canvas>
 
@@ -41,8 +41,8 @@
                     <Canvas>
                         <ComboBox x:Name="combListOfChange" Height="24" Width="212"  SelectedValue="{Binding TyontekijaID}"  SelectedValuePath="TyontekijaID" DisplayMemberPath="Nimi" Canvas.Left="334" Canvas.Top="61" HorizontalAlignment="Left" VerticalAlignment="Center"  />
                         <Label Content="Valitse käyttäjä:" HorizontalAlignment="Left" VerticalAlignment="Center" Width="199" Height="26" Canvas.Left="100" Canvas.Top="61"/>
-                        <Button Name="ChangeBtn" Content="Tallenna muutokset" HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="120" Canvas.Left="346" Canvas.Top="343" Click="Chnage" Visibility="Collapsed"/>
-                        <Button Content="Hae tiedot" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="570" Canvas.Top="61" Click="ShowEmployeeBtn" />
+                        <Button Name="ChangeBtn" Content="Tallenna muutokset" HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="120" Canvas.Left="346" Canvas.Top="343" Click="Chnage" Visibility="Collapsed" Background="#FFEDF3F3"/>
+                        <Button Content="Hae tiedot" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="570" Canvas.Top="61" Click="ShowEmployeeBtn"  Background="#FFEDF3F3"/>
                         <ContentControl x:Name="toimiposteContentControlsec" Grid.Column="1" Height="195" Width="595" Canvas.Left="100" Canvas.Top="125" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                     </Canvas>
                 </TabItem>
@@ -52,7 +52,7 @@
                     <Canvas>
                         <ComboBox Name="combListOfHistory" Height="24" Width="212"  SelectedValue="{Binding TyontekijaID}"  SelectedValuePath="TyontekijaID" DisplayMemberPath="Nimi" Canvas.Left="334" Canvas.Top="61" HorizontalAlignment="Left" VerticalAlignment="Center"  />
                         <Label Content="Ketä etsit?" HorizontalAlignment="Left" VerticalAlignment="Center" Width="199" Height="26" Canvas.Left="100" Canvas.Top="61"/>
-                        <Button Content="Etsi" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Canvas.Left="570" Canvas.Top="61" Click="ShowHestory" />
+                        <Button Content="Etsi" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Canvas.Left="570" Canvas.Top="61" Click="ShowHestory" Background="#FFEDF3F3" />
 
 
                         <ListView Grid.Column="0" Grid.Row="0" Name="Varaukset" Canvas.Left="16" Canvas.Top="140" >

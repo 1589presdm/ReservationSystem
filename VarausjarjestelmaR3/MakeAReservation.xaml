@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:VarausjarjestelmaR3"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" Background="White">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="5*"/>
@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal">
-            
+
             <!--Asiakas alasvetovalikko-->
             <ComboBox x:Name="ComCustomer" Margin="0,20,10,50" Height="25" DisplayMemberPath="Nimi" 
           SelectedValuePath="Nimi" IsEditable="True" IsReadOnly="True" Text="Asiakas"/>
@@ -36,14 +36,15 @@
             <!--Lopetuspäivän valinta-->
             <Label Content="Mihin" Margin="0,20,0,50"/>
             <DatePicker x:Name="EndDateP" Margin="0,20,20,50" Height="25"/>
-            
-            <Button Content="Etsi" Margin="0,20,0,50" Width="40" Height="25" Click="SearchBtn_Click"/>
+
+            <Button Content="Etsi" Margin="0,20,0,50" Width="40" Height="25" Click="SearchBtn_Click" Background="#FFEDF3F3"/>
         </StackPanel>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
+
+        <Canvas Grid.Row="1">
             <Label Grid.Row="1" Content="Tilat"/>
-            <Label Content="Palvelut" Margin="300,0,0,0"/>
-        </StackPanel>
+            <Label Content="Palvelut" Canvas.Left="430" Canvas.Top="2" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        </Canvas>
 
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
@@ -73,8 +74,9 @@
 
         <!--Lisätiedot-->
         <TextBox x:Name="AdditionalInfoTB" Grid.Row="3" Margin="5,2,5,5" Text="Lisätiedot" VerticalScrollBarVisibility="Auto"/>
+        
+        <Button Grid.Row="4" Content="Varaa" HorizontalAlignment="Right" Width="70" Margin="10" Click="ReserveBtn_Click" Background="#FFEDF3F3"/>
 
-        <Button Grid.Row="4" Content="Varaa" HorizontalAlignment="Right" Width="70" Margin="10" Click="ReserveBtn_Click"/>
 
     </Grid>
 </UserControl>

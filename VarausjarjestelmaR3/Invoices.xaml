@@ -101,7 +101,7 @@
                     <TextBox x:Name="totalAmountTextBox" Grid.Row="18" Grid.Column="1" Margin="5" Width="200"/>
 
                     <Button Grid.Row="19" Grid.Column="0" Grid.ColumnSpan="4" Content="Tallenna" 
-                     HorizontalAlignment="Right" Margin="5" Width="120" Height="30" Click="SaveInvoice_Click"/>
+                     HorizontalAlignment="Right" Margin="5" Width="120" Height="30" Click="SaveInvoice_Click"  Background="#FFEDF3F3"/>
                 </Grid>
             </TabItem>
 

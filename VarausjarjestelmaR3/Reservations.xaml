@@ -96,7 +96,7 @@
                             <GridViewColumn Header="" Width="100">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Name="Muokkaa" Content="Muokkaa" Click="Muokkaa_Click"  CommandParameter="{Binding}" Width="80" Height="30">
+                                        <Button Name="Muokkaa" Content="Muokkaa" Click="Muokkaa_Click"  CommandParameter="{Binding}" Width="80" Height="30"  Background="#FFEDF3F3">
                                         </Button>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -161,7 +161,7 @@
                             <GridViewColumn Header="" Width="100">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Name="Muokkaa" Content="Muokkaa" Click="Muokkaa_Click"  CommandParameter="{Binding}" Width="80" Height="30">
+                                        <Button Name="Muokkaa" Content="Muokkaa" Click="Muokkaa_Click"  CommandParameter="{Binding}" Width="80" Height="30"  Background="#FFEDF3F3">
                                         </Button>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -226,7 +226,7 @@
                             <GridViewColumn Header="" Width="100">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Name="Muokkaa" Content="Muokkaa" Click="Muokkaa_Click"  CommandParameter="{Binding}" Width="80" Height="30">
+                                        <Button Name="Muokkaa" Content="Muokkaa" Click="Muokkaa_Click"  CommandParameter="{Binding}" Width="80" Height="30"  Background="#FFEDF3F3">
                                         </Button>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -316,8 +316,8 @@
                         <TextBox Name="Lisatiedot" />
                     </GroupBox>
                     <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="3" Height="30" VerticalAlignment="Top" HorizontalAlignment="Right">
-                        <Button Name="TallennaMuokkaus" Click="TallennaMuokkaus_Click" Content="Tallenna" Width="100" Margin="0 0 10 0" />
-                        <Button Name="PoistaVaraus" Click="PoistaVaraus_Click" Content="Poista varaus" Width="100" Margin="0 0 5 0" />
+                        <Button Name="TallennaMuokkaus" Click="TallennaMuokkaus_Click" Content="Tallenna" Width="100" Margin="0 0 10 0"  Background="#FFEDF3F3" />
+                        <Button Name="PoistaVaraus" Click="PoistaVaraus_Click" Content="Poista varaus" Width="100" Margin="0 0 5 0"   Background="#FFEDF3F3"/>
                     </StackPanel>
                 </Grid>
             </TabItem>

@@ -26,7 +26,7 @@
                 <Separator Width="5" Visibility="Hidden"/>
                 <DatePicker x:Name="EndDatePicker" />
                 <Separator Width="20" Visibility="Hidden"/>
-                <Button Content="Hae tiedot" Click="GetInfo_Click" Height="25" Width="90" />
+                <Button Content="Hae tiedot" Click="GetInfo_Click" Height="25" Width="90"  Background="#FFEDF3F3" />
             </StackPanel>
         </GroupBox>
 
@@ -88,7 +88,7 @@
         <StackPanel Grid.Row="2" Orientation="Horizontal" >
             <Label Content="Painamalla nappia saat työpöydälle tulostettavan tekstitiedoston." />
             <Separator Width="40" Visibility="Hidden"/>
-            <Button Content="Tulosta" Click="PrintButton_Click" Width="75"/>
+            <Button Content="Tulosta" Click="PrintButton_Click" Width="75"  Background="#FFEDF3F3"/>
         </StackPanel>
     </Grid>
 </UserControl>

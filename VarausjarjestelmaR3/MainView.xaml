@@ -26,16 +26,21 @@
             </Setter>
         </Style>
     </Window.Resources>
-	
+
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="29*"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="150*"/>
         </Grid.ColumnDefinitions>
 
-		<!--Tee varaus painike-->
-        <StackPanel>
-            <Button Margin="10,0,10,0" Background="White" BorderThickness="0" Style="{StaticResource MyButton}" Click="MakeAReservationBtn_Click">
+        <!--Tee varaus painike-->
+        <StackPanel Background="#FFEDF3F3">
+            <StackPanel.Effect>
+                <DropShadowEffect ShadowDepth="5" Color="Black" Opacity="0.2"/>
+            </StackPanel.Effect>
+
+            <Button Margin="10,0,10,0"  BorderThickness="0" Style="{StaticResource MyButton}" Click="MakeAReservationBtn_Click">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="icons/booking.png" Width="25" Height="25">
                         <Image.Effect>
@@ -46,8 +51,8 @@
                 </StackPanel>
             </Button>
 
-			<!--Varaukset painike-->
-            <Button Margin="10,0,10,0" Background="White" BorderThickness="0" Style="{StaticResource MyButton}" Click="ReservationsBtn_Click">
+            <!--Varaukset painike-->
+            <Button Margin="10,0,10,0"  BorderThickness="0" Style="{StaticResource MyButton}" Click="ReservationsBtn_Click">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="icons/reservation.png" Width="25" Height="25">
                         <Image.Effect>
@@ -58,11 +63,11 @@
                 </StackPanel>
             </Button>
 
-			<!--Toimipisteet painike-->
+            <!--Toimipisteet painike-->
 
 
-			<!--Palvelut painike-->
-            <Button Margin="10,0,10,0" Background="White" BorderThickness="0" Style="{StaticResource MyButton}" Click="ServicesBtn_Click">
+            <!--Palvelut painike-->
+            <Button Margin="10,0,10,0" BorderThickness="0" Style="{StaticResource MyButton}" Click="ServicesBtn_Click">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="icons/service.png" Width="25" Height="25">
                         <Image.Effect>
@@ -73,8 +78,8 @@
                 </StackPanel>
             </Button>
 
-			<!--Asiakkaat painike-->
-            <Button Margin="10,0,10,0" Background="White" BorderThickness="0" Style="{StaticResource MyButton}" Click="CustomersBtn_Click">
+            <!--Asiakkaat painike-->
+            <Button Margin="10,0,10,0" BorderThickness="0" Style="{StaticResource MyButton}" Click="CustomersBtn_Click">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="icons/customers.png" Width="25" Height="25">
                         <Image.Effect>
@@ -85,8 +90,8 @@
                 </StackPanel>
             </Button>
 
-			<!--Laskut painike-->
-            <Button Margin="10,0,10,0" Background="White" BorderThickness="0" Style="{StaticResource MyButton}" Click="InvoicesBtn_Click">
+            <!--Laskut painike-->
+            <Button Margin="10,0,10,0" BorderThickness="0" Style="{StaticResource MyButton}" Click="InvoicesBtn_Click">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="icons/invoices.png" Width="25" Height="25">
                         <Image.Effect>
@@ -101,7 +106,7 @@
 
 
             <!--raportit painike-->
-            <Button Margin="10,0,10,0" Background="White" BorderThickness="0" Style="{StaticResource MyButton}"  Name="Reports"  Visibility="Visible" Click="ReportsBtn_Click">
+            <Button Margin="10,0,10,0" BorderThickness="0" Style="{StaticResource MyButton}"  Name="Reports"  Visibility="Visible" Click="ReportsBtn_Click">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="/Icons/invoices.png" Width="25" Height="25">
                         <Image.Effect>
@@ -111,7 +116,7 @@
                     <Label Content="Raportit" FontSize="15" FontWeight="Medium" Margin="5,10,10,10"/>
                 </StackPanel>
             </Button>
-            <Button Margin="10,0,10,0" Background="White" BorderThickness="0" Style="{StaticResource MyButton}" Name="offices" Click="OfficesBtn_Click" >
+            <Button Margin="10,0,10,0" BorderThickness="0" Style="{StaticResource MyButton}" Name="offices" Click="OfficesBtn_Click" >
                 <StackPanel Orientation="Horizontal">
                     <Image Source="icons/office.png" Width="25" Height="25">
                         <Image.Effect>
@@ -121,9 +126,9 @@
                     <Label Content="Toimipisteet" FontSize="15" FontWeight="Medium" Margin="5,10,10,10"/>
                 </StackPanel>
             </Button>
-            <Button Margin="10,0,10,0" Background="White" BorderThickness="0" Style="{StaticResource MyButton}"  Name="Acces"  Visibility="Visible" Click="EmployeeBtn_Click">
+            <Button Margin="10,0,10,0"  BorderThickness="0" Style="{StaticResource MyButton}"  Name="Acces"  Visibility="Visible" Click="EmployeeBtn_Click">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="/Icons/invoices.png" Width="25" Height="25">
+                    <Image Source="icons/customers.png" Width="25" Height="25">
                         <Image.Effect>
                             <DropShadowEffect Opacity="0.1" BlurRadius="3" ShadowDepth="2"/>
                         </Image.Effect>
@@ -134,11 +139,11 @@
 
         </StackPanel>
 
-        
 
 
 
-        <ContentControl x:Name="contentControl" Grid.Column="1"/>
+
+        <ContentControl x:Name="contentControl" Grid.Column="2" Grid.ColumnSpan="2"/>
 
 
 
