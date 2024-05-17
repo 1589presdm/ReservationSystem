@@ -76,6 +76,7 @@
             <Label Content="Loppusumma"/>
             <TextBox x:Name="totalAmountTextBox" Margin="5" Width="100"/>
             <Button Content="Tallenna" Margin="5" Width="120" Height="30" Click="SaveChanges_Click"  Background="#FFEDF3F3"/>
+            <Button Content="Tulosta lasku" Margin="5" Width="120" Height="30" Click="Print_Click"  Background="#FFEDF3F3"/>
             <Button Content="Sulje" Margin="5" Width="120" Height="30" Click="CloseButton_Click"  Background="#FFEDF3F3"/>
         </StackPanel>
     </Grid>

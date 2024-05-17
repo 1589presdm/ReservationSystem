@@ -5,7 +5,9 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -356,6 +358,89 @@ namespace VarausjarjestelmaR3
         {
             currentInvoice.Varaus.VarauksenPalvelut.Clear();
             UpdateTotalAmount();
+        }
+
+        private void Print_Click(object sender, RoutedEventArgs e)
+        {
+            Invoice invoice = currentInvoice;
+
+            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            string fileName = $"Invoice_{invoice.Laskunumero}.txt";
+            string filePath = System.IO.Path.Combine(desktopPath, fileName);
+            
+
+            using (StreamWriter writer = new StreamWriter(filePath))
+            {
+                //Otsikko & laskunumero
+                writer.WriteLine($"LASKU");
+                writer.WriteLine();
+                writer.WriteLine($"Laskunumero: {invoice.Laskunumero}");
+
+                //Laskutustapa
+                writer.WriteLine($"Laskutustapa: {invoice.Laskutustapa}");
+                writer.WriteLine();
+                writer.WriteLine("----------------------------------------------------------------");
+                writer.WriteLine();
+
+                //Laskutettavan tiedot
+                writer.WriteLine($"Laskun saaja: ");
+                writer.WriteLine($"{invoice.Asiakas.Nimi}");
+                writer.WriteLine($"{invoice.Asiakas.Katuosoite}");
+                writer.Write($"{invoice.Asiakas.Postinumero} ");
+                writer.WriteLine($"{invoice.Asiakas.Postitoimipaikka}");
+                writer.WriteLine($"{invoice.Asiakas.Sahkoposti}");
+                writer.WriteLine();
+                writer.WriteLine($"Asiakasnumero: {invoice.Asiakas.AsiakasID}");
+                writer.WriteLine();
+                writer.WriteLine("----------------------------------------------------------------");
+                writer.WriteLine();
+
+                //Laskuttajan tiedot
+                writer.WriteLine($"Laskuttaja: ");
+                writer.WriteLine($"Vuokratoimistot Oy");
+                writer.WriteLine($"Karjalankatu 3");
+                writer.WriteLine($"80200 Joensuu");
+                writer.WriteLine($"vuokratoimistot@vuokratoimistot.fi");
+                writer.WriteLine();
+                writer.WriteLine("----------------------------------------------------------------");
+                writer.WriteLine();
+
+                //Vuokratut tilat ja palvelut
+                writer.WriteLine($"Varausnumero: {invoice.VarausID}");
+                writer.WriteLine();
+
+                writer.WriteLine($"Varauksen ajankohta: {invoice.Varaus.VarausAlkaa.ToString("dd.MM.yyyy")}-{invoice.Varaus.VarausPaattyy.ToString("dd.MM.yyyy")}");
+                writer.WriteLine();
+
+                writer.WriteLine($"Vuokrattu tila: ");
+                writer.WriteLine($"{invoice.Varaus.Huone}, hinta/vrk: {invoice.Varaus.Huone.Hinta} €, alv: {invoice.Varaus.Huone.AlvProsentti} %");
+                writer.WriteLine();
+
+                var varauksenPalvelut = invoice.Varaus.VarauksenPalvelut;
+                if (varauksenPalvelut.Count > 0)
+                {
+                    writer.WriteLine("Vuokratut välineet ja palvelut: ");
+                    for (int i = 0; i < varauksenPalvelut.Count; i++)
+                    {
+                        var palvelu = varauksenPalvelut[i];
+                        writer.WriteLine($"{palvelu.Palvelu.Tuote} {palvelu.Kpl} kpl, kappalehinta/vrk: {palvelu.Palvelu.PalvelunHinta} €, alv: {palvelu.Palvelu.AlvProsentti} %");
+
+                    }
+                    writer.WriteLine();
+                }
+
+                //Veroton summa, vero, loppusumma
+
+                writer.WriteLine($"Veroton summa: {invoice.VerotonSumma} €");
+                writer.WriteLine($"ALV: {invoice.AlvEuroina} €");
+                writer.WriteLine();
+                writer.WriteLine($"MAKSETTAVA SUMMA: {invoice.Loppusumma} €");
+                writer.WriteLine();
+                writer.WriteLine("----------------------------------------------------------------"); ;
+                writer.WriteLine();
+
+                MessageBox.Show($"Lasku tallennettu työpöydälle tekstitiedostoon nimellä: {fileName}", "Tallennus onnistui", MessageBoxButton.OK, MessageBoxImage.Information);  //Confirmation box
+            }
         }
     }
 }

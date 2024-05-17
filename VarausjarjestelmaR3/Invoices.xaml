@@ -105,8 +105,8 @@
                 </Grid>
             </TabItem>
 
-            <!-- uusi välilehti tallennettujen tilien tarkastelua ja hallintaa varten -->
-            <TabItem Header="Tallennetut tilit">
+            <!-- uusi välilehti tallennettujen laskujen tarkastelua ja hallintaa varten -->
+            <TabItem Header="Tallennetut laskut">
                 <Grid>
                     <ListView x:Name="savedInvoicesListView" Margin="10">
                         <ListView.View>
