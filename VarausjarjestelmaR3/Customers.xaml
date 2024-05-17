@@ -12,7 +12,6 @@
             <TabControl Margin="-1,0,1,0">
                 <!-- Toimipisteiden lisääminen välilehti -->
                 <TabItem Header="Lisää">
-
                     <StackPanel Height="349" Margin="68,0,55,0" Name="mainBox">
                         <UserControl Height="208" Width="683" Name="UserControlAddSec" ></UserControl>
                         <Canvas Height="100" RenderTransformOrigin="0.5,0.5">
@@ -23,9 +22,8 @@
                 </TabItem>
 
                 <!-- Toimipisteiden poistaminen välilehti -->
-                <TabItem Header="Poista" HorizontalAlignment="Right" Width="43" Name="deleteSection">
+                <TabItem Header="Poista" HorizontalAlignment="Right" Name="deleteSection">
                     <Canvas>
-
                         <ComboBox x:Name="combListOfDelete" Height="24" Width="212"  SelectedValue="{Binding AsiakasID}"  SelectedValuePath="AsiakasID" DisplayMemberPath="Nimi" Canvas.Left="334" Canvas.Top="61" HorizontalAlignment="Left" VerticalAlignment="Center"  />
                         <Label Content="Valitse asiakas:" HorizontalAlignment="Left" VerticalAlignment="Center" Width="199" Height="26" Canvas.Left="100" Canvas.Top="61"/>
                         <Button Name="deleteBtn" Content="Poista asiakas" HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="100" Canvas.Left="346" Canvas.Top="343" Click="DeleteBtn" Visibility="Collapsed" Background="#FFEDF3F3"/>

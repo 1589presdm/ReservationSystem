@@ -19,9 +19,6 @@ namespace VarausjarjestelmaR3
     {
         private string connectionString = "Server=127.0.0.1; Port=3306; User ID=opiskelija; Pwd=opiskelija1; Database=vuokratoimistot;";
 
-
-
-
         public static void PrintVisual(FrameworkElement pageToPrint)             //Metodi, joka avaa printti-ikkunan 
         {
             PrintDialog printDialog = new PrintDialog();
@@ -41,9 +38,7 @@ namespace VarausjarjestelmaR3
         }
 
 
-
-
-        //Metodeja tietojen hakuun tietokannasta; toiminta vielä paljolti testaamatta.
+        //Metodeja tietojen hakuun tietokannasta.
 
         //Haetaan yritys ID-numeron perusteella:
         public Company GetCompany(int yritysID)
@@ -584,10 +579,6 @@ namespace VarausjarjestelmaR3
             }
 
 
-
-
-
-
         //Haetaan lasku ID-numeron perusteella:
         public Invoice GetInvoice(int laskunumero)
         {
@@ -622,7 +613,6 @@ namespace VarausjarjestelmaR3
         }
 
         //Haetaan kaikki laskut listalle:
-
         public ObservableCollection<Invoice> GetAllInvoices()
         {
             var laskut = new ObservableCollection<Invoice>();
@@ -1078,10 +1068,6 @@ namespace VarausjarjestelmaR3
 
             if (uusiVaraus)
             {
-                //!!!
-                //TOIMINTA ERITTÄIN EPÄVARMAA!
-                //!!!
-
                 //using (MySqlConnection conn = new MySqlConnection(connectionString))
                 //{
                 //    conn.Open();
