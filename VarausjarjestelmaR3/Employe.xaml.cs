@@ -150,24 +150,65 @@ namespace VarausjarjestelmaR3
             {
             using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
-                connection.Open();
-                string query = "delete from tyontekija where tyontekijaID = @tyontekijaID ";
+                MessageBoxResult result = MessageBox.Show("Haluatko varmasti poistaa tämän työntekijän?", "Vahvista poisto", MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
-                MySqlCommand command = new MySqlCommand(query, connection);
-                command.Parameters.AddWithValue("@tyontekijaID", combListOfDelete.SelectedValue);
-                try
+                if (result == MessageBoxResult.Yes)
                     {
-                    command.ExecuteNonQuery();
+                    // Poista työntekijä tietokannasta
+                    connection.Open();
+                    MySqlTransaction transaction = connection.BeginTransaction();
 
-                    MessageBox.Show("Käyttäjä " + combListOfDelete.Text + " poistettu ");
-                    this.DataContext = null;
+                    try
+                        {
+                        // Siirrä työntekijän varaukset pääkäyttäjälle
+                        using (MySqlCommand transferCommand = new MySqlCommand())
+                            {
+                            transferCommand.Connection = connection;
+                            transferCommand.Transaction = transaction;
+                            transferCommand.CommandText = "UPDATE asiakkaan_varaus SET tyontekijaID = @AdminUserID WHERE tyontekijaID = @EmployeeID";
+                            transferCommand.Parameters.AddWithValue("@AdminUserID", 1);
+                            transferCommand.Parameters.AddWithValue("@EmployeeID", combListOfDelete.SelectedValue);
+                            transferCommand.ExecuteNonQuery();
+                            }
+
+                        //poistetaan työntekijä työpisteestä
+                        using (MySqlCommand deleteEmployeeCommand = new MySqlCommand())
+                            {
+                            deleteEmployeeCommand.Connection = connection;
+                            deleteEmployeeCommand.Transaction = transaction;
+                            deleteEmployeeCommand.CommandText = "DELETE FROM toimipisteen_tyontekija WHERE tyontekijaID = @EmployeeID";
+                            deleteEmployeeCommand.Parameters.AddWithValue("@EmployeeID", combListOfDelete.SelectedValue);
+                            deleteEmployeeCommand.ExecuteNonQuery();
+                            }
+
+                        // Lopuksi poista työntekijä
+                        using (MySqlCommand deleteEmployeeCommand = new MySqlCommand())
+                            {
+                            deleteEmployeeCommand.Connection = connection;
+                            deleteEmployeeCommand.Transaction = transaction;
+                            deleteEmployeeCommand.CommandText = "DELETE FROM tyontekija WHERE tyontekijaID = @EmployeeID";
+                            deleteEmployeeCommand.Parameters.AddWithValue("@EmployeeID", combListOfDelete.SelectedValue);
+                            deleteEmployeeCommand.ExecuteNonQuery();
+                            }
+
+                        transaction.Commit();
+                        MessageBox.Show("Työntekijä on poistettu onnistuneesti.", "Poisto onnistui", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                        }
+                    catch (Exception ex)
+                        {
+                        MessageBox.Show("Virhe: " + ex.Message);
+                        transaction.Rollback();
+                        }
                     }
-                catch (Exception ex)
+                else
                     {
-                    MessageBox.Show("Virhe: " + ex.Message);
-
+                    MessageBox.Show("Poisto peruutettu.", "Toiminto peruutettu", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
-                }
+
+                } 
+
+            
             EmployeeInfoListForDel.DataContext = new Classes.Employee();
             Employee_loaded();
             }
