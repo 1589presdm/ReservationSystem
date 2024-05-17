@@ -93,22 +93,113 @@ namespace VarausjarjestelmaR3
 
         private void DeleteBtn (object sender, RoutedEventArgs e)
             {
+            //using (MySqlConnection connection = new MySqlConnection(connectionString))
+            //    {
+            //    connection.Open();
+            //    string query = "delete from toimipiste where toimipisteID = @toimipisteID ";
+
+            //    MySqlCommand command = new MySqlCommand(query, connection);
+            //    command.Parameters.AddWithValue("@toimipisteID", combListOfDelete.SelectedValue);
+            //    try
+            //        {
+            //        command.ExecuteNonQuery();
+            //        MessageBox.Show("Toimipiste " + combListOfDelete.Text + " poistettu ");
+            //        }
+            //    catch (Exception ex)
+            //        {
+            //        MessageBox.Show("Virhe: " + ex.Message);
+
+            //        }
+            //    }
+            MessageBoxResult result = MessageBox.Show("Haluatko varmasti poistaa tämän toimipisteen ja kaikki siihen liittyvät tiedot?", "Vahvista poisto", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.No)
+                {
+                return; // Peruuta poisto, jos käyttäjä ei halua jatkaa
+                }
+
             using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
                 connection.Open();
-                string query = "delete from toimipiste where toimipisteID = @toimipisteID ";
+                MySqlTransaction transaction = connection.BeginTransaction();
 
-                MySqlCommand command = new MySqlCommand(query, connection);
-                command.Parameters.AddWithValue("@toimipisteID", combListOfDelete.SelectedValue);
                 try
                     {
-                    command.ExecuteNonQuery();
-                    MessageBox.Show("Toimipiste " + combListOfDelete.Text + " poistettu ");
+
+
+                    // Poista toimipisteeseen liittyvät työntekijät
+                    using (MySqlCommand deleteEmployeesCommand = new MySqlCommand())
+                        {
+                        deleteEmployeesCommand.Connection = connection;
+                        deleteEmployeesCommand.Transaction = transaction;
+                        deleteEmployeesCommand.CommandText = "DELETE FROM toimipisteen_tyontekija WHERE toimipisteID = @BranchID";
+                        deleteEmployeesCommand.Parameters.AddWithValue("@BranchID", combListOfDelete.SelectedValue);
+                        deleteEmployeesCommand.ExecuteNonQuery();
+                        }
+
+                    // Poista toimipisteeseen liittyvät laskut
+                    using (MySqlCommand deleteInvoicesCommand = new MySqlCommand())
+                        {
+                        deleteInvoicesCommand.Connection = connection;
+                        deleteInvoicesCommand.Transaction = transaction;
+                        deleteInvoicesCommand.CommandText = "DELETE FROM lasku WHERE varausID IN (SELECT varausID FROM asiakkaan_varaus WHERE huoneen_numeroID IN (SELECT huoneen_numeroID FROM huoneet WHERE toimipisteID = @BranchID))";
+                        deleteInvoicesCommand.Parameters.AddWithValue("@BranchID", combListOfDelete.SelectedValue);
+                        deleteInvoicesCommand.ExecuteNonQuery();
+                        }
+
+                    // Poista toimipisteeseen liittyvät varaukset ja niihin liittyvät palvelut
+                    using (MySqlCommand deleteBookingsCommand = new MySqlCommand())
+                        {
+                        deleteBookingsCommand.Connection = connection;
+                        deleteBookingsCommand.Transaction = transaction;
+                        deleteBookingsCommand.CommandText = "DELETE FROM varauksen_palvelut WHERE varausID IN (SELECT varausID FROM asiakkaan_varaus WHERE huoneen_numeroID IN (SELECT huoneen_numeroID FROM huoneet WHERE toimipisteID = @BranchID))";
+                        deleteBookingsCommand.Parameters.AddWithValue("@BranchID", combListOfDelete.SelectedValue);
+                        deleteBookingsCommand.ExecuteNonQuery();
+                        }
+
+                    using (MySqlCommand deleteReservationsCommand = new MySqlCommand())
+                        {
+                        deleteReservationsCommand.Connection = connection;
+                        deleteReservationsCommand.Transaction = transaction;
+                        deleteReservationsCommand.CommandText = "DELETE FROM asiakkaan_varaus WHERE huoneen_numeroID IN (SELECT huoneen_numeroID FROM huoneet WHERE toimipisteID = @BranchID)";
+                        deleteReservationsCommand.Parameters.AddWithValue("@BranchID", combListOfDelete.SelectedValue);
+                        deleteReservationsCommand.ExecuteNonQuery();
+                        }
+                    // Poista toimipisteeseen liittyvät huoneet
+                    using (MySqlCommand deleteRoomsCommand = new MySqlCommand())
+                        {
+                        deleteRoomsCommand.Connection = connection;
+                        deleteRoomsCommand.Transaction = transaction;
+                        deleteRoomsCommand.CommandText = "DELETE FROM huoneet WHERE toimipisteID = @BranchID";
+                        deleteRoomsCommand.Parameters.AddWithValue("@BranchID", combListOfDelete.SelectedValue);
+                        deleteRoomsCommand.ExecuteNonQuery();
+                        }
+
+                    using (MySqlCommand deleteRoomsCommand = new MySqlCommand())
+                        {
+                        deleteRoomsCommand.Connection = connection;
+                        deleteRoomsCommand.Transaction = transaction;
+                        deleteRoomsCommand.CommandText = "DELETE FROM palvelu WHERE toimipisteID = @BranchID";
+                        deleteRoomsCommand.Parameters.AddWithValue("@BranchID", combListOfDelete.SelectedValue);
+                        deleteRoomsCommand.ExecuteNonQuery();
+                        }
+                    // Lopuksi poista itse toimipiste
+                    using (MySqlCommand deleteBranchCommand = new MySqlCommand())
+                        {
+                        deleteBranchCommand.Connection = connection;
+                        deleteBranchCommand.Transaction = transaction;
+                        deleteBranchCommand.CommandText = "DELETE FROM toimipiste WHERE toimipisteID = @BranchID";
+                        deleteBranchCommand.Parameters.AddWithValue("@BranchID", combListOfDelete.SelectedValue);
+                        deleteBranchCommand.ExecuteNonQuery();
+                        }
+
+                    transaction.Commit();
+                    MessageBox.Show("Toimipiste ja siihen liittyvät tiedot on poistettu onnistuneesti.", "Poisto onnistui", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 catch (Exception ex)
                     {
                     MessageBox.Show("Virhe: " + ex.Message);
 
+                    transaction.Rollback();
                     }
                 }
             offficeInfoListDel.DataContext = new Classes.Office();
