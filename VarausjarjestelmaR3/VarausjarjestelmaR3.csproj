@@ -226,6 +226,8 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="SQL\Varausjarjestelma-er-kaavio.erdplus" />
+    <None Include="SQL\Varausjarjestelma-relaatio-kaavio.erdplus" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -238,11 +240,19 @@
     <Resource Include="Icons\reservation.png" />
     <Resource Include="Icons\service.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="SQL\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Icons\logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="SQL\varausjarjestelma-er-kaavio-kuvana.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="SQL\varausjarjestelma-relaatio-kuvana.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SQL\vuokratoimistot_luontisriptit.sql" />
+    <Content Include="SQL\vuokratoimistot_tietokanta_tiedot.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
