@@ -9,11 +9,11 @@
     <Canvas Height="190" Width="590" >
         <StackPanel HorizontalAlignment="Left" Canvas.Left="22" VerticalAlignment="Center" Width="153" Canvas.Top="15" Height="172" >
             <Label  Margin="0,0,20,3" Content="Työtekijän nimi" />
-            <Label Margin="0,0,20,3" Content="osoite"  />
-            <Label  Margin="0,0,20,3" Content="puhelin" />
-            <Label  Margin="0,0,20,3" Content="kayttajaID"  />
-            <Label  Margin="0,0,20,3" Content="salasana" />
-            <Label Margin="0,0,20,50" Content="Käyttö oikeus"/>
+            <Label Margin="0,0,20,3" Content="Osoite"  />
+            <Label  Margin="0,0,20,3" Content="Puhelin" />
+            <Label  Margin="0,0,20,3" Content="KayttajaID"  />
+            <Label  Margin="0,0,20,3" Content="Salasana" />
+            <Label Margin="0,0,20,50" Content="Käyttöoikeus"/>
         </StackPanel>
         <StackPanel HorizontalAlignment="Left" Canvas.Left="199" VerticalAlignment="Center" Width="291" Canvas.Top="15" Height="182"  >
             <TextBox x:Name="Nimi" Margin="0,0,20,5" Text="{Binding Nimi}" Height="25" />

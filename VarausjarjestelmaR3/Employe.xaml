@@ -7,12 +7,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Loaded="OnLoaded">
     <TabControl>
-        <!-- Toimipisteiden hallinta välilehti -->
+        <!-- Käyttäjien hallinta -välilehti -->
         <TabItem Header="Käyttäjät">
             <TabControl Margin="-1,0,1,0">
-                <!-- Toimipisteiden lisääminen välilehti -->
+                <!-- Käyttäjien lisääminen -välilehti -->
                 <TabItem Header="Lisää">
-
                     <StackPanel Height="349" Margin="68,0,55,0" Name="mainBox">
                         <UserControl Height="208" Width="683" Name="UserControlAddSec" ></UserControl>
                         <Canvas Height="100" RenderTransformOrigin="0.5,0.5">
@@ -22,22 +21,21 @@
 
                 </TabItem>
 
-                <!-- Toimipisteiden poistaminen välilehti -->
-                <TabItem Header="Poista" HorizontalAlignment="Right" Width="43" Name="deleteSection">
+                <!-- Käyttäjien poistaminen -välilehti -->
+                <TabItem Header="Poista" HorizontalAlignment="Right" Name="deleteSection">
                     <Canvas>
-
                         <ComboBox x:Name="combListOfDelete" Height="24" Width="212"  SelectedValue="{Binding TyontekijaID}"  SelectedValuePath="TyontekijaID" DisplayMemberPath="Nimi" Canvas.Left="334" Canvas.Top="61" HorizontalAlignment="Left" VerticalAlignment="Center"  />
                         <Label Content="Valitse käyttäjä:" HorizontalAlignment="Left" VerticalAlignment="Center" Width="199" Height="26" Canvas.Left="100" Canvas.Top="61"/>
-                        <Button Name="deleteBtn" Content="poistaa" HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="75" Canvas.Left="346" Canvas.Top="343" Click="DeleteBtn" Visibility="Collapsed" Background="#FFEDF3F3"/>
+                        <Button Name="deleteBtn" Content="Poista käyttäjä" HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="120" Canvas.Left="346" Canvas.Top="343" Click="DeleteBtn" Visibility="Collapsed" Background="#FFEDF3F3"/>
                         <Button Content="Hae tiedot" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="570" Canvas.Top="61" Click="ShowEmployeeBtn" Background="#FFEDF3F3" />
                         <ContentControl x:Name="toimiposteContentControl" Grid.Column="1" Height="195" Width="595" Canvas.Left="100" Canvas.Top="125" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                     </Canvas>
 
                 </TabItem>
 
-                <!-- Toimipisteiden muokkaaminen välilehti -->
+                <!-- Käyttäjien muokkaaminen -välilehti -->
                 <TabItem Header="Muokkaa" Name="changeSection">
-                    <!-- Toimipisteiden muokkaamisen näkymä ja toiminnallisuus -->
+                    <!-- Käyttäjien muokkaamisen näkymä ja toiminnallisuus -->
                     <Canvas>
                         <ComboBox x:Name="combListOfChange" Height="24" Width="212"  SelectedValue="{Binding TyontekijaID}"  SelectedValuePath="TyontekijaID" DisplayMemberPath="Nimi" Canvas.Left="334" Canvas.Top="61" HorizontalAlignment="Left" VerticalAlignment="Center"  />
                         <Label Content="Valitse käyttäjä:" HorizontalAlignment="Left" VerticalAlignment="Center" Width="199" Height="26" Canvas.Left="100" Canvas.Top="61"/>
@@ -48,7 +46,7 @@
                 </TabItem>
 
                 <TabItem Header="Historia" Name="historySection">
-                    <!-- Toimipisteiden muokkaamisen näkymä ja toiminnallisuus -->
+                    <!-- Käyttäjien muokkaamisen näkymä ja toiminnallisuus -->
                     <Canvas>
                         <ComboBox Name="combListOfHistory" Height="24" Width="212"  SelectedValue="{Binding TyontekijaID}"  SelectedValuePath="TyontekijaID" DisplayMemberPath="Nimi" Canvas.Left="334" Canvas.Top="61" HorizontalAlignment="Left" VerticalAlignment="Center"  />
                         <Label Content="Ketä etsit?" HorizontalAlignment="Left" VerticalAlignment="Center" Width="199" Height="26" Canvas.Left="100" Canvas.Top="61"/>
@@ -88,8 +86,6 @@
                                 </GridView>
                             </ListView.View>
                         </ListView>
-
-
                     </Canvas>
 
                 </TabItem>
