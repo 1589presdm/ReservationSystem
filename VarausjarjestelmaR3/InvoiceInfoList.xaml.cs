@@ -375,6 +375,8 @@ namespace VarausjarjestelmaR3
                 writer.WriteLine($"LASKU");
                 writer.WriteLine();
                 writer.WriteLine($"Laskunumero: {invoice.Laskunumero}");
+                writer.WriteLine($"Laskutuspäivä: {DateTime.Now.ToString("dd.MM.yyyy")}");
+                writer.WriteLine($"Eräpäivä: {DateTime.Now.AddDays(30).ToString("dd.MM.yyyy")}");
 
                 //Laskutustapa
                 writer.WriteLine($"Laskutustapa: {invoice.Laskutustapa}");
