@@ -162,27 +162,93 @@ namespace VarausjarjestelmaR3
 
         private void DeleteBtn (object sender, RoutedEventArgs e)
             {
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            //using (MySqlConnection connection = new MySqlConnection(connectionString))
+            //    {
+            //    connection.Open();
+            //    string query = "delete from asiakas where asiakasID = @asiakasID;";
+
+            //    MySqlCommand command = new MySqlCommand(query, connection);
+            //    command.Parameters.AddWithValue("@asiakasID", combListOfDelete.SelectedValue);
+            //    try
+            //        {
+            //        command.ExecuteNonQuery();
+
+            //        MessageBox.Show("Asiakas " + combListOfDelete.Text + " poistettu ");
+            //        this.DataContext = null;
+            //        }
+            //    catch (Exception ex)
+            //        {
+            //        MessageBox.Show("Virhe: " + ex.Message);
+
+            //        }
+            //    }
+            MessageBoxResult result = MessageBox.Show("Haluatko varmasti poistaa tämän asiakkaan ja kaikki siihen liittyvät tiedot?", "Vahvista poisto", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.Yes)
                 {
-                connection.Open();
-                string query = "delete from asiakas where asiakasID = @asiakasID;";
-
-                MySqlCommand command = new MySqlCommand(query, connection);
-                command.Parameters.AddWithValue("@asiakasID", combListOfDelete.SelectedValue);
-                try
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
                     {
-                    command.ExecuteNonQuery();
+                    connection.Open();
+                    MySqlTransaction transaction = connection.BeginTransaction();
 
-                    MessageBox.Show("Asiakas " + combListOfDelete.Text + " poistettu ");
-                    this.DataContext = null;
-                    }
-                catch (Exception ex)
-                    {
-                    MessageBox.Show("Virhe: " + ex.Message);
+                    try
+                        {
+                        // Poista asiakkaaseen liittyvät laskut
+                        using (MySqlCommand deleteInvoicesCommand = new MySqlCommand())
+                            {
+                            deleteInvoicesCommand.Connection = connection;
+                            deleteInvoicesCommand.Transaction = transaction;
+                            deleteInvoicesCommand.CommandText = "DELETE FROM lasku WHERE asiakasID = @CustomerID";
+                            deleteInvoicesCommand.Parameters.AddWithValue("@CustomerID", combListOfDelete.SelectedValue);
+                            deleteInvoicesCommand.ExecuteNonQuery();
+                            }
+
+                        // Poista asiakkaaseen liittyvät varaukset ja niihin liittyvät palvelut
+                        using (MySqlCommand deleteBookingsCommand = new MySqlCommand())
+                            {
+                            deleteBookingsCommand.Connection = connection;
+                            deleteBookingsCommand.Transaction = transaction;
+                            deleteBookingsCommand.CommandText = "DELETE FROM varauksen_palvelut WHERE varausID IN (SELECT varausID FROM asiakkaan_varaus WHERE asiakasID = @CustomerID)";
+                            deleteBookingsCommand.Parameters.AddWithValue("@CustomerID", combListOfDelete.SelectedValue);
+                            deleteBookingsCommand.ExecuteNonQuery();
+                            }
+
+                        using (MySqlCommand deleteReservationsCommand = new MySqlCommand())
+                            {
+                            deleteReservationsCommand.Connection = connection;
+                            deleteReservationsCommand.Transaction = transaction;
+                            deleteReservationsCommand.CommandText = "DELETE FROM asiakkaan_varaus WHERE asiakasID = @CustomerID";
+                            deleteReservationsCommand.Parameters.AddWithValue("@CustomerID", combListOfDelete.SelectedValue);
+                            deleteReservationsCommand.ExecuteNonQuery();
+                            }
+
+                        // Poista itse asiakas
+                        using (MySqlCommand deleteCustomerCommand = new MySqlCommand())
+                            {
+                            deleteCustomerCommand.Connection = connection;
+                            deleteCustomerCommand.Transaction = transaction;
+                            deleteCustomerCommand.CommandText = "DELETE FROM asiakas WHERE asiakasID = @CustomerID";
+                            deleteCustomerCommand.Parameters.AddWithValue("@CustomerID", combListOfDelete.SelectedValue);
+                            deleteCustomerCommand.ExecuteNonQuery();
+                            }
+
+                        transaction.Commit();
+                        MessageBox.Show("Asiakas ja siihen liittyvät tiedot on poistettu onnistuneesti.", "Poisto onnistui", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                    catch (Exception ex)
+                        {
+                        Console.WriteLine("Virhe: " + ex.Message);
+                        transaction.Rollback();
+                        MessageBox.Show("Poisto epäonnistui. Tarkista virhekoodi ja yritä uudelleen.", "Virhe", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
 
                     }
                 }
-            customerInfoListForDel.DataContext = new Classes.Customer();
+            else
+                {
+
+                }
+         
+                customerInfoListForDel.DataContext = new Classes.Customer();
             Laod_Customers();
 
 

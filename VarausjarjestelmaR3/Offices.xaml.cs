@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using VarausjarjestelmaR3.Classes;
 
 namespace VarausjarjestelmaR3
     {
@@ -334,25 +335,77 @@ namespace VarausjarjestelmaR3
         // Metodi, joka poistaa valitun huoneen tietokannasta
         private void DeleteRoomBtn (object sender, RoutedEventArgs e)
             {
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
+
+            MessageBoxResult result = MessageBox.Show("Kaikki huoneen varaukset poistetaan pysyväti! Haluatko varmasti poistaa tämän huoneen?", "Vahvista poisto", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
                 {
-                connection.Open();
-                string query = "delete from huoneet where huoneen_numeroID = @huoneen_numeroID ";
-
-                MySqlCommand command = new MySqlCommand(query, connection);
-                command.Parameters.AddWithValue("@huoneen_numeroID", RoomcombListOfDelete.SelectedValue);
-
-                try
+                // Poista huone tietokannasta
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
                     {
-                    command.ExecuteNonQuery();
+                    connection.Open();
+                    MySqlTransaction transaction = connection.BeginTransaction();
 
-                    MessageBox.Show("Huone " + RoomcombListOfDelete.Text + " poistettu ");
+                    try
+                        {
+
+
+                        using (MySqlCommand command = new MySqlCommand())
+                            {
+                            command.Connection = connection;
+                            command.Transaction = transaction;
+                            command.CommandText = "DELETE FROM lasku WHERE varausID IN (SELECT varausID FROM asiakkaan_varaus WHERE huoneen_numeroID = @RoomID)";
+                            command.Parameters.AddWithValue("@RoomID", RoomcombListOfDelete.SelectedValue);
+                            command.ExecuteNonQuery();
+                            }
+                        // Ensin poistetaan varaukset ja niihin liittyvät palvelut
+                        using (MySqlCommand command = new MySqlCommand())
+                            {
+                            command.Connection = connection;
+                            command.Transaction = transaction;
+                            command.CommandText = "DELETE FROM varauksen_palvelut WHERE varausID IN (SELECT varausID FROM asiakkaan_varaus WHERE huoneen_numeroID = @RoomID)";
+                            command.Parameters.AddWithValue("@RoomID", RoomcombListOfDelete.SelectedValue);
+                            command.ExecuteNonQuery();
+                            }
+
+                        using (MySqlCommand command = new MySqlCommand())
+                            {
+                            command.Connection = connection;
+                            command.Transaction = transaction;
+                            command.CommandText = "DELETE FROM asiakkaan_varaus WHERE huoneen_numeroID = @RoomID";
+                            command.Parameters.AddWithValue("@RoomID", RoomcombListOfDelete.SelectedValue);
+                            command.ExecuteNonQuery();
+                            }
+
+                        // Lopuksi poistetaan huone
+                        using (MySqlCommand command = new MySqlCommand())
+                            {
+                            command.Connection = connection;
+                            command.Transaction = transaction;
+                            command.CommandText = "DELETE FROM huoneet WHERE huoneen_numeroID = @RoomID";
+                            command.Parameters.AddWithValue("@RoomID", RoomcombListOfDelete.SelectedValue);
+                            command.ExecuteNonQuery();
+                            }
+
+                        transaction.Commit();
+                        MessageBox.Show("tila on poistettu onnistuneesti.", "Poisto onnistui", MessageBoxButton.OK, MessageBoxImage.Information);
+
+
+                        }
+                    catch (Exception ex)
+                        {
+                        MessageBox.Show("Virhe: " + ex.Message);
+                        transaction.Rollback();
+                        }
                     }
-                catch (Exception ex)
-                    {
-                    MessageBox.Show("Virhe: " + ex.Message);
-                    }
+
                 }
+            else
+                {
+                MessageBox.Show("Poisto peruutettu.", "Toiminto peruutettu", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+
+
             RoomInfoListForDel.DataContext= new Classes.Room();
             Offices_Loaded();
 
