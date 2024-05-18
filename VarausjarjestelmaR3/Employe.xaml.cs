@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,7 +24,9 @@ namespace VarausjarjestelmaR3
     /// </summary>
     public partial class Employe : UserControl
         {
+        string employeeID;
         Classes.Employee employee;
+        Classes.Office employeeOffice = new Classes.Office();
         EmployeeInfoList EmployeeInfoList = new EmployeeInfoList();
         EmployeeInfoList EmployeeInfoListForChange = new EmployeeInfoList();
         EmployeeInfoList EmployeeInfoListForDel = new EmployeeInfoList();
@@ -51,6 +54,25 @@ namespace VarausjarjestelmaR3
             using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
                 connection.Open();
+                string query = "select toimipisteID, toimipiste_nimi from toimipiste";
+
+                MySqlCommand command = new MySqlCommand(query, connection);
+                var Reader = command.ExecuteReader();
+                List<Classes.Office> toimipistet = new List<Classes.Office>() { };
+
+                while (Reader.Read())
+                    {
+                    toimipistet.Add(new Classes.Office() { ToimipisteID = Reader.GetInt32("toimipisteID"), ToimipisteNimi = Reader.GetString("toimipiste_nimi") });
+
+                    }
+                EmployeeInfoList.ComOffice.ItemsSource = toimipistet;
+                EmployeeInfoListForChange.ComOffice.ItemsSource = toimipistet;
+                EmployeeInfoListForDel.ComOffice.ItemsSource = toimipistet;
+                }
+
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+                {
+                connection.Open();
                 string query = "select tyontekijaID, nimi from tyontekija";
 
                 MySqlCommand command = new MySqlCommand(query, connection);
@@ -72,7 +94,6 @@ namespace VarausjarjestelmaR3
 
         private void AddNewEmployee (object sender, RoutedEventArgs e)
             {
-
             // Suoritetaan tietokantakysely ja lisätään uusi toimipiste
             using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
@@ -87,11 +108,12 @@ namespace VarausjarjestelmaR3
                 command.Parameters.AddWithValue("@kayttajaID", EmployeeInfoList.KayttajaID.Text);
                 command.Parameters.AddWithValue("@salasana", EmployeeInfoList.Salasana.Text);
                 command.Parameters.AddWithValue("@kaytto_oikeus", EmployeeInfoList.KayttoOikeus.Text);
+                
                 try
                     {
                     command.ExecuteNonQuery();
+                    employeeID = EmployeeInfoList.KayttajaID.Text;
                     MessageBox.Show("Työntekijä lisätty onnistuneesti.");
-                    EmployeeInfoList.DataContext = new Employe();
                     }
                 catch (Exception ex)
                     {
@@ -99,16 +121,41 @@ namespace VarausjarjestelmaR3
                     }
                 }
 
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+                {
+                connection.Open();
+                string query = "INSERT INTO toimipisteen_tyontekija (toimipisteID, tyontekijaID) " +
+                                    "SELECT @toimipisteID, tyontekijaID FROM tyontekija WHERE kayttajaID = @kayttajaID";
+
+                MySqlCommand command = new MySqlCommand(query, connection);
+
+                command.Parameters.AddWithValue("@toimipisteID", EmployeeInfoList.ComOffice.SelectedValue);
+                command.Parameters.AddWithValue("@kayttajaID", employeeID);
+
+                try
+                    {
+                    command.ExecuteNonQuery();
+                    EmployeeInfoList.DataContext = new Employe();
+                    }
+                catch (Exception ex)
+                    {
+                    MessageBox.Show("Virhe: " + ex.Message);
+                    }
+                }
+            employeeID = "";
+
+
             Employee_loaded();
 
             }
+
 
         private void ShowEmployeeBtn (object sender, RoutedEventArgs e)
             {
             using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
                 connection.Open();
-                string query = "select * from tyontekija where tyontekijaID = @tyontekijaID ";
+                string query = "SELECT tyontekija.*, toimipiste.toimipisteID, toimipiste.toimipiste_nimi  FROM tyontekija  INNER JOIN toimipisteen_tyontekija ON tyontekija.tyontekijaID = toimipisteen_tyontekija.tyontekijaID   INNER JOIN toimipiste ON toimipisteen_tyontekija.toimipisteID = toimipiste.toimipisteID WHERE tyontekija.tyontekijaID = @tyontekijaID ";
 
 
                 MySqlCommand command = new MySqlCommand(query, connection);
@@ -129,17 +176,20 @@ namespace VarausjarjestelmaR3
                 var Reader = command.ExecuteReader();
                 while (Reader.Read())
                     {
-                    employee = new Classes.Employee() { Nimi = Reader.GetString("nimi"), Osoite = Reader.GetString("osoite"), Puhelin = Reader.GetString("puhelin"), KayttajaID = Reader.GetString("kayttajaID"), Salasana = Reader.GetString("salasana"), KayttoOikeus = Reader.GetInt32("kaytto_oikeus") };
+                    employee = new Classes.Employee() { Nimi = Reader.GetString("nimi"), Osoite = Reader.GetString("osoite"), Puhelin = Reader.GetString("puhelin"), KayttajaID = Reader.GetString("kayttajaID"), Salasana = Reader.GetString("salasana"), KayttoOikeus = Reader.GetInt32("kaytto_oikeus"), office = new Office { ToimipisteID = Reader.GetInt32("toimipisteID"), ToimipisteNimi = Reader.GetString("toimipiste_nimi") } };
                     }
                 if (changeSection.IsSelected)
                     {
                     EmployeeInfoListForChange.DataContext = employee;
+                    EmployeeInfoListForChange.ComOffice.SelectedValue = employee.office.ToimipisteID;
                     toimiposteContentControlsec.Content = EmployeeInfoListForChange;
                     ChangeBtn.Visibility = Visibility.Visible;
+
                     }
                 else if (deleteSection.IsSelected) 
                     {
                     EmployeeInfoListForDel.DataContext = employee;
+                    EmployeeInfoListForDel.ComOffice.SelectedValue = employee.office.ToimipisteID;
                     toimiposteContentControl.Content = EmployeeInfoListForDel;
                     deleteBtn.Visibility = Visibility.Visible;
                     }
@@ -215,27 +265,77 @@ namespace VarausjarjestelmaR3
 
         private void Chnage (object sender, RoutedEventArgs e)
             {
+            //using (MySqlConnection connection = new MySqlConnection(connectionString))
+            //    {
+            //    connection.Open();
+
+            //    string query = "UPDATE tyontekija SET nimi = @nimi, osoite = @osoite, puhelin = @puhelin, kayttajaID = @kayttajaID, salasana = @salasana, kaytto_oikeus = @kaytto_oikeus  WHERE tyontekijaID = @tyontekijaID;";
+
+            //    MySqlCommand command = new MySqlCommand(query, connection);
+            //    command.Parameters.AddWithValue("@nimi", EmployeeInfoListForChange.Nimi.Text);
+            //    command.Parameters.AddWithValue("@osoite", EmployeeInfoListForChange.Osoite.Text);
+            //    command.Parameters.AddWithValue("@puhelin", EmployeeInfoListForChange.Puhelin.Text);
+            //    command.Parameters.AddWithValue("@kayttajaID", EmployeeInfoListForChange.KayttajaID.Text);
+            //    command.Parameters.AddWithValue("@salasana", EmployeeInfoListForChange.Salasana.Text);
+            //    command.Parameters.AddWithValue("@kaytto_oikeus", EmployeeInfoListForChange.KayttoOikeus.Text);
+            //    command.Parameters.AddWithValue("@tyontekijaID", combListOfChange.SelectedValue);
+            //    try 
+            //        {
+            //        command.ExecuteNonQuery();
+            //        MessageBox.Show("muokattu!");
+            //        }
+            //    catch (Exception ex)
+            //        {
+            //        MessageBox.Show("Virhe: " + ex.Message);
+            //        }
+            //    }
             using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
                 connection.Open();
-                
-                string query = "UPDATE tyontekija SET nimi = @nimi, osoite = @osoite, puhelin = @puhelin, kayttajaID = @kayttajaID, salasana = @salasana, kaytto_oikeus = @kaytto_oikeus  WHERE tyontekijaID = @tyontekijaID;";
 
-                MySqlCommand command = new MySqlCommand(query, connection);
-                command.Parameters.AddWithValue("@nimi", EmployeeInfoListForChange.Nimi.Text);
-                command.Parameters.AddWithValue("@osoite", EmployeeInfoListForChange.Osoite.Text);
-                command.Parameters.AddWithValue("@puhelin", EmployeeInfoListForChange.Puhelin.Text);
-                command.Parameters.AddWithValue("@kayttajaID", EmployeeInfoListForChange.KayttajaID.Text);
-                command.Parameters.AddWithValue("@salasana", EmployeeInfoListForChange.Salasana.Text);
-                command.Parameters.AddWithValue("@kaytto_oikeus", EmployeeInfoListForChange.KayttoOikeus.Text);
-                command.Parameters.AddWithValue("@tyontekijaID", combListOfChange.SelectedValue);
-                try 
+                MySqlTransaction transaction = connection.BeginTransaction(); // Aloitetaan transaktio
+
+                try
                     {
-                    command.ExecuteNonQuery();
-                    MessageBox.Show("muokattu!");
+                    // Päivitetään työntekijän tiedot
+                    string queryEmployee = @"
+            UPDATE tyontekija 
+            SET nimi = @nimi, 
+                osoite = @osoite, 
+                puhelin = @puhelin, 
+                kayttajaID = @kayttajaID, 
+                salasana = @salasana, 
+                kaytto_oikeus = @kaytto_oikeus 
+            WHERE tyontekijaID = @tyontekijaID;";
+
+                    MySqlCommand commandEmployee = new MySqlCommand(queryEmployee, connection, transaction);
+                    commandEmployee.Parameters.AddWithValue("@nimi", EmployeeInfoListForChange.Nimi.Text);
+                    commandEmployee.Parameters.AddWithValue("@osoite", EmployeeInfoListForChange.Osoite.Text);
+                    commandEmployee.Parameters.AddWithValue("@puhelin", EmployeeInfoListForChange.Puhelin.Text);
+                    commandEmployee.Parameters.AddWithValue("@kayttajaID", EmployeeInfoListForChange.KayttajaID.Text);
+                    commandEmployee.Parameters.AddWithValue("@salasana", EmployeeInfoListForChange.Salasana.Text);
+                    commandEmployee.Parameters.AddWithValue("@kaytto_oikeus", EmployeeInfoListForChange.KayttoOikeus.Text);
+                    commandEmployee.Parameters.AddWithValue("@tyontekijaID", combListOfChange.SelectedValue);
+                    commandEmployee.ExecuteNonQuery();
+
+                    // Päivitetään toimipisteen_tyontekija taulu
+                    string queryOffice = @"
+            UPDATE toimipisteen_tyontekija 
+            SET toimipisteID = @toimipisteID 
+            WHERE tyontekijaID = @tyontekijaID;";
+
+                    MySqlCommand commandOffice = new MySqlCommand(queryOffice, connection, transaction);
+                    commandOffice.Parameters.AddWithValue("@toimipisteID", EmployeeInfoListForChange.ComOffice.SelectedValue);
+                    commandOffice.Parameters.AddWithValue("@tyontekijaID", combListOfChange.SelectedValue);
+                    commandOffice.ExecuteNonQuery();
+
+                    transaction.Commit(); // Hyväksytään transaktio
+
+                    MessageBox.Show("Tietojen päivitys onnistui!");
                     }
                 catch (Exception ex)
                     {
+                    transaction.Rollback(); // Perutaan transaktio virheen sattuessa
                     MessageBox.Show("Virhe: " + ex.Message);
                     }
                 }

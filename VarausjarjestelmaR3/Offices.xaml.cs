@@ -93,24 +93,6 @@ namespace VarausjarjestelmaR3
 
         private void DeleteBtn (object sender, RoutedEventArgs e)
             {
-            //using (MySqlConnection connection = new MySqlConnection(connectionString))
-            //    {
-            //    connection.Open();
-            //    string query = "delete from toimipiste where toimipisteID = @toimipisteID ";
-
-            //    MySqlCommand command = new MySqlCommand(query, connection);
-            //    command.Parameters.AddWithValue("@toimipisteID", combListOfDelete.SelectedValue);
-            //    try
-            //        {
-            //        command.ExecuteNonQuery();
-            //        MessageBox.Show("Toimipiste " + combListOfDelete.Text + " poistettu ");
-            //        }
-            //    catch (Exception ex)
-            //        {
-            //        MessageBox.Show("Virhe: " + ex.Message);
-
-            //        }
-            //    }
             MessageBoxResult result = MessageBox.Show("Haluatko varmasti poistaa tämän toimipisteen ja kaikki siihen liittyvät tiedot?", "Vahvista poisto", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (result == MessageBoxResult.No)
                 {
@@ -409,7 +391,6 @@ namespace VarausjarjestelmaR3
                     HuoneContentControl.Content = RoomInfoListForDel;
                     RoomDeleteBtn.Visibility = Visibility.Visible;
                     }
-
                 else if (RoomChangeSec.IsSelected)
                     {
                     RoomInfoListForChange.DataContext = room;
