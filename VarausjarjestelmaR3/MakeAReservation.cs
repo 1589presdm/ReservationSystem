@@ -73,12 +73,12 @@ namespace VarausjarjestelmaR3
             {
                 if (availability.Any(x => !x.Available && x.Room.HuoneenNumeroID == room.HuoneenNumeroID))
                 {
-                    room.Color = Brushes.Red;
+                    room.Color = (SolidColorBrush)new BrushConverter().ConvertFrom("#f7dddc");                   
                     room.CanBeReserved = false;
                 }
                 else
                 {
-                    room.Color = Brushes.Green;
+                    room.Color = (SolidColorBrush)new BrushConverter().ConvertFrom("#d3e3d7");
                     room.CanBeReserved = true;
                 }
             }

@@ -258,6 +258,8 @@
     <Resource Include="SQL\varausjarjestelma-relaatio-kuvana.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Icons\report.png" />
+    <Resource Include="Icons\users.png" />
     <Content Include="SQL\vuokratoimistot_luontisriptit.sql" />
     <Content Include="SQL\vuokratoimistot_tietokanta_tiedot.sql" />
   </ItemGroup>

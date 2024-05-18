@@ -9,73 +9,69 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="5*"/>
-            <RowDefinition Height="2*"/>
             <RowDefinition Height="9*"/>
             <RowDefinition Height="5*"/>
             <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 
             <!--Asiakas alasvetovalikko-->
-            <ComboBox x:Name="ComCustomer" Margin="0,20,10,50" Height="25" DisplayMemberPath="Nimi" 
+            <ComboBox x:Name="ComCustomer" Margin="0,0,0,0" Height="25" DisplayMemberPath="Nimi" 
           SelectedValuePath="Nimi" IsEditable="True" IsReadOnly="True" Text="Asiakas"/>
 
             <!--Paikkakunta alasvetovalikko-->
-            <ComboBox x:Name="ComMunicipality" Margin="20,20,0,50" Height="25" DisplayMemberPath="Paikkakunta" 
+            <ComboBox x:Name="ComMunicipality" Margin="15,0,0,0" Height="25" DisplayMemberPath="Paikkakunta" 
                       SelectedValuePath="Paikkakunta" SelectionChanged="MunicipalityCom_Changed" IsEditable="True" IsReadOnly="True" Text="Paikkakunta"/>
 
             <!--Toimipiste alasvetovalikko-->
-            <ComboBox x:Name="ComOffices" Margin="20,20,0,50" Height="25" DisplayMemberPath="ToimipisteNimi" SelectedValuePath="ToimipisteNimi"
+            <ComboBox x:Name="ComOffices" Margin="10,0,0,0" Height="25" DisplayMemberPath="ToimipisteNimi" SelectedValuePath="ToimipisteNimi"
                       IsEditable="True" IsReadOnly="True" Text="Toimipiste"/>
 
             <!--Alkupäivän valinta-->
-            <Label Content="Mistä" Margin="10,20,0,50"/>
-            <DatePicker x:Name="StartDateP" Margin="0,20,10,50" Height="25"/>
+            <Label Content="Mistä" Margin="10,0,0,0" VerticalAlignment="Center"/>
+            <DatePicker x:Name="StartDateP" Height="25"/>
 
             <!--Lopetuspäivän valinta-->
-            <Label Content="Mihin" Margin="0,20,0,50"/>
-            <DatePicker x:Name="EndDateP" Margin="0,20,20,50" Height="25"/>
+            <Label Content="Mihin" Margin="10,0,0,0" VerticalAlignment="Center"/>
+            <DatePicker x:Name="EndDateP" Height="25"/>
 
-            <Button Content="Etsi" Margin="0,20,0,50" Width="40" Height="25" Click="SearchBtn_Click" Background="#FFEDF3F3"/>
+            <Button Content="Etsi" Margin="10,0,0,0" Width="40" Height="25" Click="SearchBtn_Click" Background="#FFEDF3F3"/>
         </StackPanel>
 
-
-        <Canvas Grid.Row="1">
-            <Label Grid.Row="1" Content="Tilat"/>
-            <Label Content="Palvelut" Canvas.Left="430" Canvas.Top="2" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-        </Canvas>
-
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
-            <!--Tilojen listbox-->
-            <ListBox Margin="5" x:Name="OfficesLB">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Nimi}" Background="{Binding Color}">
-                        </TextBlock>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+            <GroupBox Header="Tilat">
+                <!--Tilojen listbox-->
+                <ListBox Margin="5" x:Name="OfficesLB">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Nimi}" Background="{Binding Color}">
+                            </TextBlock>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </GroupBox>
 
-            <!--Palveluiden listbox-->
-            <ListBox Margin="5" x:Name="ServicesLB" Grid.Column="1" SelectionMode="Multiple">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <CheckBox Content="{Binding Tuote}" IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Checked="ServicesCheckBox_Checked"/>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+            <GroupBox Header="Palvelut" Grid.Column="1">
+                <!--Palveluiden listbox-->
+                <ListBox Margin="5" x:Name="ServicesLB"  SelectionMode="Multiple">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox Content="{Binding Tuote}" IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Checked="ServicesCheckBox_Checked"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </GroupBox>
         </Grid>
 
-
         <!--Lisätiedot-->
-        <TextBox x:Name="AdditionalInfoTB" Grid.Row="3" Margin="5,2,5,5" Text="Lisätiedot" VerticalScrollBarVisibility="Auto"/>
-        
+        <TextBox x:Name="AdditionalInfoTB" Grid.Row="2" Text="Lisätiedot" Margin="11,2,11,5" VerticalScrollBarVisibility="Auto"/>
+
         <Button Grid.Row="4" Content="Varaa" HorizontalAlignment="Right" Width="70" Margin="10" Click="ReserveBtn_Click" Background="#FFEDF3F3"/>
 
 
