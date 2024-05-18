@@ -14,8 +14,7 @@
             <Label  Margin="0,0,20,3" Content="KayttajaID"  />
             <Label  Margin="0,0,20,3" Content="Salasana" />
             <Label Margin="0,0,20,3" Content="Käyttöoikeus"/>
-            <Label Margin="0,0,20,50" Content="Käyttöoikeus"/>
-
+            <Label Margin="0,0,20,50" Content="Toimipiste"/>
         </StackPanel>
         <StackPanel HorizontalAlignment="Center" Canvas.Left="199" VerticalAlignment="Top" Width="291" Canvas.Top="5" Height="207"  >
             <TextBox x:Name="Nimi" Margin="0,0,20,5" Text="{Binding Nimi}" Height="25" />
