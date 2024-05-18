@@ -66,11 +66,12 @@
             <ListBox Margin="5" x:Name="ServicesLB" Grid.Column="1" SelectionMode="Multiple">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <CheckBox Content="{Binding Tuote}" IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected}"/>
+                        <CheckBox Content="{Binding Tuote}" IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Checked="ServicesCheckBox_Checked"/>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
         </Grid>
+
 
         <!--Lisätiedot-->
         <TextBox x:Name="AdditionalInfoTB" Grid.Row="3" Margin="5,2,5,5" Text="Lisätiedot" VerticalScrollBarVisibility="Auto"/>

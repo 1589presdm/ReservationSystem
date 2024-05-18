@@ -23,11 +23,12 @@ namespace VarausjarjestelmaR3
     public partial class MakeAReservation : UserControl
     {
         Repository repo = new Repository();
+        public MainView ParentWindow { get; set; }
 
-        public MakeAReservation()
+        public MakeAReservation(MainView parent)
         {
             InitializeComponent();
-
+            ParentWindow = parent;
             var customers = repo.GetAllCustomers();
 
             ComMunicipality.ItemsSource = GetDistinctMunicipalities();
@@ -36,6 +37,11 @@ namespace VarausjarjestelmaR3
 
         }
 
+        /// <summary>
+        /// Kun valitaan kunta, tulee näkyviin kunnan toimipisteet
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MunicipalityCom_Changed(object sender, RoutedEventArgs e)
         {
 
@@ -82,6 +88,11 @@ namespace VarausjarjestelmaR3
             ServicesLB.ItemsSource = repo.GetAllServicesByOffice(selected.ToimipisteID);
         }
 
+        /// <summary>
+        /// Tekee varauksen
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ReserveBtn_Click(object sender, RoutedEventArgs e)
         {
             if (OfficesLB.SelectedItem == null)
@@ -105,17 +116,18 @@ namespace VarausjarjestelmaR3
             reservation.Varauspaiva = DateTime.Now;
             reservation.Lisatiedot = AdditionalInfoTB.Text;
             reservation.Asiakas = ((Customer)ComCustomer.SelectedItem);
-            reservation.Tyontekija.TyontekijaID = 2;
+            reservation.Tyontekija.TyontekijaID = ParentWindow.CurrentUser != null ? ParentWindow.CurrentUser.TyontekijaID : 0;
 
             repo.AddReservation(reservation);
 
             foreach (var item in ServicesLB.SelectedItems)
             {
-                var reservationService = new ReservationService();
+                ReservationService reservationService = new ReservationService();
                 reservationService.Palvelu = (Service)item;
                 reservationService.VarausID = reservation.VarausID;
-                reservationService.Kpl = 1;
-                
+                reservationService.Kpl = ((Service)item).Maara;
+
+
                 repo.AddReservationServices(reservationService);
             }
             
@@ -147,6 +159,18 @@ namespace VarausjarjestelmaR3
             }        
 
             return distinct;
+        }
+
+        /// <summary>
+        /// Kun valitaan palvelu, uusi näkymä avautuu jossa valitaan määrä
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ServicesCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            var cb = e.OriginalSource as CheckBox;
+            SelectServiceAmount selectAmount = new SelectServiceAmount((Service)cb.DataContext);
+            selectAmount.ShowDialog();
         }
 
     }

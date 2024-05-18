@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using VarausjarjestelmaR3.Classes;
 
 namespace VarausjarjestelmaR3
 {
@@ -19,6 +20,7 @@ namespace VarausjarjestelmaR3
     /// </summary>
     public partial class MainView : Window
     {
+        public Employee CurrentUser { get; set; }
         public MainView()
         {
             InitializeComponent();
@@ -26,7 +28,7 @@ namespace VarausjarjestelmaR3
 
         private void MakeAReservationBtn_Click(object sender, RoutedEventArgs e)
         {
-            contentControl.Content = new MakeAReservation();
+            contentControl.Content = new MakeAReservation(this);
         }
 
         private void ReservationsBtn_Click(object sender, RoutedEventArgs e)
