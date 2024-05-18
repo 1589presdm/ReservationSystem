@@ -108,7 +108,7 @@
             <!--raportit painike-->
             <Button Margin="10,0,10,0" BorderThickness="0" Style="{StaticResource MyButton}"  Name="Reports"  Visibility="Visible" Click="ReportsBtn_Click">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="/Icons/invoices.png" Width="25" Height="25">
+                    <Image Source="/Icons/report.png" Width="25" Height="25">
                         <Image.Effect>
                             <DropShadowEffect Opacity="0.1" BlurRadius="3" ShadowDepth="2"/>
                         </Image.Effect>
@@ -128,7 +128,7 @@
             </Button>
             <Button Margin="10,0,10,0"  BorderThickness="0" Style="{StaticResource MyButton}"  Name="Acces"  Visibility="Visible" Click="EmployeeBtn_Click">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="icons/customers.png" Width="25" Height="25">
+                    <Image Source="icons/users.png" Width="25" Height="25">
                         <Image.Effect>
                             <DropShadowEffect Opacity="0.1" BlurRadius="3" ShadowDepth="2"/>
                         </Image.Effect>

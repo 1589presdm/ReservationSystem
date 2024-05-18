@@ -22,6 +22,7 @@ namespace VarausjarjestelmaR3
     /// </summary>
     public partial class SelectServiceAmount : Window
     {
+
         Repository repo = new Repository();
 
         public Service SelectedService { get; set; }

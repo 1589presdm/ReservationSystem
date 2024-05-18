@@ -51,7 +51,7 @@ namespace VarausjarjestelmaR3
                 string query = "select kayttajaID, salasana, kaytto_oikeus, tyontekijaID from tyontekija where kayttajaID = @user and salasana = @pass";
                 MySqlCommand mySqlCommand = new MySqlCommand(query, connection);
                 mySqlCommand.Parameters.AddWithValue("@user", userName.Text);
-                mySqlCommand.Parameters.AddWithValue("@pass", Pass.Text);
+                mySqlCommand.Parameters.AddWithValue("@pass", Pass.Password.ToString());
                 var Reader = mySqlCommand.ExecuteReader();
 
                 try
@@ -63,7 +63,7 @@ namespace VarausjarjestelmaR3
                         string pass = Reader.GetString("salasana");
                         int Access = Reader.GetInt32("kaytto_oikeus");
                         int employeeID = Reader.GetInt32("tyontekijaID");
-                        if (user == userName.Text && pass == Pass.Text)
+                        if (user == userName.Text && pass == Pass.Password.ToString())
                         {
                             this.Close();
                             mainView.check_user(Access);
