@@ -18,7 +18,7 @@
                 <Label Content="Salasana" Margin="88,10,80,0"/>
                 <PasswordBox Name="Pass" Width="250" Height="25"/>
                 <Canvas>
-                    <Button Content="Kirjaudu" Height="25" Width="155" Click="makeconnetion" Background="#FFEDF3F3" Canvas.Left="299" Canvas.Top="21" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <Button Content="Kirjaudu" Height="25" Width="155" Click="makeconnetion" Background="#FFEDF3F3" Canvas.Left="165" Canvas.Top="21"/>
 
                     <Button Content="Ohita kirjautuminen" Click="LoginBtn_Click" Visibility="Hidden" Background="#FFEDF3F3" Canvas.Left="44" Canvas.Top="21" HorizontalAlignment="Left" VerticalAlignment="Center" Width="155" Height="25"/>
                 </Canvas>
