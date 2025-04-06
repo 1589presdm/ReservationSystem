@@ -22,7 +22,7 @@ The application is structured with **role-based access**, where standard users a
 
 - **Institution**: Karelia University of Applied Sciences (AMK Karelia)
 - **Course Type**: Student project
-- **Team**: 5 students
+- **Team**: 6 students
 - **Platform**: Desktop application
 - **Database**: MySQL / MariaDB (via HeidiSQL)
 - **Language**: C# (.NET)
@@ -108,3 +108,16 @@ This is a student project.
 Not intended for production use without further development.
 
 ---
+
+## Project Team
+
+This reservation system was developed as a student project at **Karelia University of Applied Sciences (AMK Karelia)**  
+by a group of **six students** during the spring semester of 2024.
+
+**Team members:**
+- [Berg Ida-Maria](https://github.com/IdaMariaB)
+- [Karoliina Sallmen](https://github.com/KaroliinaSallmen)
+- [Zamil Yaser Idrees](https://github.com/Idreesyaser)
+- [Dmitrii Presniakov](https://github.com/1589presdm)
+- Paula Timonen
+- Ansa Allt
