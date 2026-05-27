@@ -104,13 +104,13 @@ Make sure the user has appropriate privileges.
 <img src="docs/screenshots/reservation-list.png" alt="Reservation list" width="850">
 
 ### Customer management
-<img src="docs/screenshots/customer-management.png" alt="Customer management" width="850">
+<img src="docs/screenshots/delete-customer.png" alt="Customer management" width="850">
 
 ### Customer reservation history
 <img src="docs/screenshots/customer-reservation-history.png" alt="Customer reservation history" width="850">
 
 ### Employee management
-<img src="docs/screenshots/employee-management.png" alt="Employee management" width="850">
+<img src="docs/screenshots/employees.png" alt="Employee management" width="850">
 
 ### Services list
 <img src="docs/screenshots/services-list.png" alt="Services list" width="850">
