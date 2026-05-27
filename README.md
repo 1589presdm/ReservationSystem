@@ -1,7 +1,7 @@
 # Reservation Management System
 
-A reservation management desktop application developed as a student project at **Karelia University of Applied Sciences (AMK Karelia)**.  
-Created by a **team of five students** to simulate real-world business software with user roles, database integration, and intuitive UI.
+A reservation management desktop application developed as a student project at Karelia University of Applied Sciences (AMK Karelia).  
+Created by a team of five students to simulate real-world business software with user roles, database integration, and intuitive UI.
 
 ---
 
@@ -14,7 +14,7 @@ This application allows users to manage:
 - Services and users
 - Invoicing and reports
 
-The application is structured with **role-based access**, where standard users and administrators have different permissions.
+The application is structured with role-based access, where standard users and administrators have different permissions.
 
 ---
 
@@ -35,7 +35,7 @@ The application is structured with **role-based access**, where standard users a
 | ----- | -------- | -------- |
 | Admin | `admin`  | `admin`  |
 
-> ⚠️ The admin account is for setup only and must be deleted before deployment.
+The admin account is for setup only and must be deleted before deployment.
 
 ---
 
@@ -92,6 +92,37 @@ Make sure the user has appropriate privileges.
 
 ---
 
+## Screenshots
+
+### Login screen
+<img src="docs/screenshots/login-screen.png" alt="Login screen" width="850">
+
+### Reservation workflow
+<img src="docs/screenshots/create-reservation.png" alt="Reservation conflict validation" width="850">
+
+### Reservation list
+<img src="docs/screenshots/reservation-list.png" alt="Reservation list" width="850">
+
+### Customer management
+<img src="docs/screenshots/customer-management.png" alt="Customer management" width="850">
+
+### Customer reservation history
+<img src="docs/screenshots/customer-reservation-history.png" alt="Customer reservation history" width="850">
+
+### Employee management
+<img src="docs/screenshots/employee-management.png" alt="Employee management" width="850">
+
+### Services list
+<img src="docs/screenshots/services-list.png" alt="Services list" width="850">
+
+### Generated report
+<img src="docs/screenshots/generated-report.png" alt="Generated report" width="650">
+
+### Generated invoice
+<img src="docs/screenshots/invoice.png" alt="Generated invoice" width="650">
+
+---
+
 ## Getting Started
 
 1. Clone or download the repository
@@ -111,8 +142,8 @@ Not intended for production use without further development.
 
 ## Project Team
 
-This reservation system was developed as a student project at **Karelia University of Applied Sciences (AMK Karelia)**  
-by a group of **six students** during the spring semester of 2024.
+This reservation system was developed as a student project at Karelia University of Applied Sciences (AMK Karelia)  
+by a group of six students during the spring semester of 2024.
 
 **Team members:**
 - [Berg Ida-Maria](https://github.com/IdaMariaB)
